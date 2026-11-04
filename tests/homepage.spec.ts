@@ -62,7 +62,10 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   }
   const openState = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(openState.violations).toEqual([]);
-  await expect(page.getByRole("link", { name: "Escríbeme", exact: true })).toHaveAttribute("href", contact.email!.href);
+  const gmail = page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" });
+  await expect(gmail).toHaveAttribute("href", new RegExp(`^https://mail\\.google\\.com/mail/\\?view=cm&fs=1&to=${encodeURIComponent(contact.email!.label)}`));
+  await expect(gmail).toHaveAttribute("target", "_blank");
+  await expect(page.getByRole("link", { name: "O escríbeme desde tu app de correo" })).toHaveAttribute("href", contact.email!.href);
   await expect(page.getByRole("link", { name: "Descargar CV" })).toHaveCount(0);
   const brokenAnchors = await page.locator('a[href^="#"]').evaluateAll((links) => links.map((link) => link.getAttribute("href")!).filter((href) => !document.getElementById(href.slice(1))));
   expect(brokenAnchors).toEqual([]);
@@ -74,7 +77,7 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.getByRole("link", { name: "Contacto", exact: true }).first()).toHaveCSS("transition-duration", "0s");
   await mkdir(captureDirectory, { recursive: true });
-  await page.getByRole("link", { name: "Escríbeme", exact: true }).focus();
+  await page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" }).focus();
   await page.locator("#contacto").screenshot({ path: `${captureDirectory}/portfolio-${testInfo.project.name}-contact.png` });
 });
 
@@ -181,4 +184,15 @@ test("R2: copiar correo confirma éxito y permite recuperarse de un rechazo", as
   await page.getByRole("button", { name: "Copiar correo", exact: true }).click();
   await expect(page.getByRole("status")).toContainText(`No se pudo copiar. Puedes seleccionar el correo: ${contact.email!.label}`);
   await expect(page.getByRole("button", { name: "Copiar correo", exact: true })).toBeEnabled();
+});
+
+test("navegación: cada enlace lleva a su sección y la marca vuelve al inicio", async ({ page }, testInfo) => {
+  await page.goto("/");
+  const offset = testInfo.project.name === "desktop" ? 88 : 24;
+  for (const id of ["contacto", "servicios", "sobre-mi", "proyectos"]) {
+    await page.locator(`nav a[href="#${id}"]`).click();
+    await expect.poll(() => page.locator(`#${id}`).evaluate(element => Math.round(element.getBoundingClientRect().top)), { timeout: 4000 }).toBe(offset);
+  }
+  await page.getByRole("link", { name: "Max Acosta" }).click();
+  await expect.poll(() => page.evaluate(() => scrollY), { timeout: 4000 }).toBe(0);
 });

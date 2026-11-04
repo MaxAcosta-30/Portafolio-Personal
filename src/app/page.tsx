@@ -175,7 +175,8 @@ export default function Home() {
             <div className="contact-actions">
               {contact.email && <>
                 <p className="contact-email">{contact.email.label}</p>
-                <div className="contact-buttons"><a className="button" href={contact.email.href}>{portfolioLabels.emailAction}<Icon name="arrow" /></a><CopyEmail email={contact.email.label} /></div>
+                <div className="contact-buttons"><a className="button" href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contact.email.label)}&su=${encodeURIComponent(content.emailSubject)}`} target="_blank" rel="noopener noreferrer">{portfolioLabels.emailAction}<span className="sr-only"> por Gmail (se abre en una pestaña nueva)</span><Icon name="external" /></a><CopyEmail email={contact.email.label} /></div>
+                <a className="text-link contact-mailto" href={contact.email.href}>{content.emailAppAction}</a>
               </>}
               <ul className="contact-links">{contact.professionalLinks.map(link => <li key={link.href}><a className="text-link" href={link.href}>{link.label}<Icon name="external" /></a></li>)}</ul>
             </div>

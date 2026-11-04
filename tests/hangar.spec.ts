@@ -42,7 +42,7 @@ test("recorrido desde la portada, fuentes y navegación con teclado", async ({ p
   await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: "Contacto", exact: true }).click();
   expect(new URL(page.url()).pathname).toBe("/");
   expect(new URL(page.url()).hash).toBe("#contacto");
-  await expect(page.getByRole("link", { name: "Escríbeme", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" })).toBeVisible();
 });
 
 test("diagramas legibles, accesibilidad y capturas responsive", async ({ page }, testInfo) => {
