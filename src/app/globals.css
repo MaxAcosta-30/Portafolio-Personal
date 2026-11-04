@@ -16,6 +16,7 @@
     @apply font-semibold text-balance;
   }
 
+  h4 { text-wrap: balance; }
   p { text-wrap: pretty; }
   button, input { font: inherit; }
   button, a, input, summary { -webkit-tap-highlight-color: transparent; }
@@ -60,7 +61,7 @@
     &:active:not(:disabled):not([aria-disabled="true"]) {
       @apply border-accent bg-accent-fill;
       box-shadow: none;
-      transform: translateY(0) scale(0.98);
+      transform: translateY(0) scale(0.96);
     }
     .icon { transition: transform var(--duration-state) var(--ease-state); }
     &[aria-pressed="true"] {
@@ -98,7 +99,7 @@
   .nav-link {
     @apply flex min-h-target items-center justify-between gap-2 px-3 py-2 text-label text-muted;
     border-inline-start: var(--indicator-width) solid transparent;
-    transition: background-color var(--duration-state) var(--ease-state);
+    transition: color var(--duration-state) var(--ease-state);
     @media (hover: hover) { &:hover { @apply text-foreground; } }
     &[aria-current="location"] {
       @apply border-accent font-semibold text-accent;
@@ -119,7 +120,7 @@
   .portfolio-heading { @apply mb-8 text-heading; }
   .portfolio-nav-link {
     @apply inline-flex min-h-target min-w-target items-center justify-center px-3 py-2 text-label font-semibold text-foreground;
-    transition: background-color var(--duration-state) var(--ease-state);
+    transition: color var(--duration-state) var(--ease-state);
     @media (hover: hover) { &:hover { @apply text-accent; } }
     &:active { @apply text-accent-active; }
   }
@@ -157,6 +158,8 @@
     @variant lg { position: sticky; top: var(--scroll-offset); }
   }
   .specimen { @apply border-y border-border bg-surface px-4 py-6 md:px-6; }
+  /* Trazo 2px junto a texto semibold (botones y enlaces); 1.5px por defecto. */
+  :is(.button, .text-link, .case-action, .row-primary) { --icon-stroke: 2; }
   .icon {
     width: var(--icon-size);
     height: var(--icon-size);
