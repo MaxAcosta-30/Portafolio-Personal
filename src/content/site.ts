@@ -6,6 +6,7 @@ export const navigation = {
   brand: { label: profile.name, href: "/" },
   items: [
     { label: "Proyectos", sectionId: "proyectos" },
+    { label: "Sobre mí", sectionId: "sobre-mi" },
     { label: "Contacto", sectionId: "contacto" },
   ],
   resumeLabel: resume.label,
@@ -94,7 +95,6 @@ export const caseStudySections = [
   { field: "results", label: "Resultados comprobables" },
 ] as const;
 
-export const projectLinkLabels = { repository: "Ver repositorio", demo: "Abrir demo" };
 
 /** Metadata de sitio. Reemplazar siteUrl con el dominio real antes de publicar. */
 export const siteMetadata = {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/portfolio";
 import { TaskFlowDiagram, ObservabilityStack, SecurityStack } from "@/components/taskflow-diagrams";
@@ -110,9 +111,9 @@ export default function TaskFlowCaseStudy() {
             <p className="case-copy">{content.architecture.text}</p>
             <figure aria-labelledby="request-diagram-title" className="case-diagram">
               <figcaption id="request-diagram-title" className="mb-6 font-medium">{content.architecture.requestTitle}</figcaption>
-              <TaskFlowDiagram label={content.architecture.requestTitle} nodes={content.architecture.request} />
+              <ArchitectureDiagram id="taskflow-request" label={content.architecture.requestTitle} nodes={content.architecture.request} />
               <h3 className="mt-8 mb-6 font-medium">{content.architecture.automationTitle}</h3>
-              <TaskFlowDiagram label={content.architecture.automationTitle} nodes={content.architecture.automation} />
+              <ArchitectureDiagram id="taskflow-automation" label={content.architecture.automationTitle} nodes={content.architecture.automation} />
               <p className="mt-6 max-w-measure text-label text-muted">{content.architecture.caption}</p>
             </figure>
             <h3 className="mt-6 text-title">{content.architecture.modelTitle}</h3>

@@ -23,6 +23,7 @@ const plexMono = localFont({
 });
 
 const baseUrl = siteMetadata.siteUrl;
+const publicBaseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || null;
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -57,7 +58,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@maxacostado3020",
     title: profile.name,
     description:
       "Portafolio de Max Alexander Acosta Valencia, desarrollador Full Stack con foco en backend, APIs y sistemas en tiempo real.",
@@ -86,14 +86,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               "@type": "Person",
               name: profile.name,
               alternateName: "Max Acosta",
-              url: baseUrl,
-              image: `${baseUrl}/og-image.png`,
+              ...(publicBaseUrl ? { url: publicBaseUrl } : {}),
               email: siteMetadata.email,
               jobTitle: profile.role,
-              worksFor: {
-                "@type": "Organization",
-                name: "Tecnológico Nacional de México, campus Culiacán",
-              },
               knowsAbout: siteMetadata.keywords,
               sameAs: [
                 "https://github.com/MaxAcosta-30",
@@ -109,12 +104,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               "@context": "https://schema.org",
               "@type": "WebSite",
               name: siteMetadata.siteName,
-              url: baseUrl,
-              potentialAction: {
-                "@type": "SearchAction",
-                target: `${baseUrl}/#contacto`,
-                query: "contacto",
-              },
+              ...(publicBaseUrl ? { url: publicBaseUrl } : {}),
             }),
           }}
         />

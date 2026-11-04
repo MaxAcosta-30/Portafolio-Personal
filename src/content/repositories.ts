@@ -24,6 +24,8 @@ export function repositoryEvidence(id: keyof typeof repositories, path = "README
 export function repositoryLink(id: keyof typeof repositories): SourcedLink {
   return {
     label: "Ver repositorio",
+    // Public visibility rechecked through GitHub on 2026-10-29.
+    visibility: "public",
     href: `https://github.com/MaxAcosta-30/${repositories[id].name}`,
     evidence: [repositoryEvidence(id)],
   };

@@ -1,13 +1,18 @@
 import Link from "next/link";
+import { HomeMotion } from "@/components/home-motion";
+import { ProjectTechnicalPreview } from "@/components/project-technical-preview";
 import { SiteHeader } from "@/components/portfolio";
 import { Icon } from "@/components/ui";
 import { LinkPreferenciasCookies } from "@/components/cookie-consent";
-import { contact, profile } from "@/content/profile";
+import { CopyEmail } from "@/components/copy-email";
+import type { SourcedLink } from "@/content/types";
+import { contact, experience, profile, resume } from "@/content/profile";
 import { engineeringSystems, featuredCaseStudies } from "@/content/projects";
-import { homepage, portfolioLabels, projectLinkLabels, siteMetadata } from "@/content/site";
+import { portfolioLabels, siteMetadata } from "@/content/site";
+import { homeDesign as content } from "@/content/home-design";
 
 export const metadata = {
-  title: `${profile.name} · ${profile.role}`,
+  title: { absolute: `${profile.name} · ${profile.role}` },
   description: profile.introduction.text,
   alternates: {
     canonical: `${siteMetadata.siteUrl}/`,
@@ -30,110 +35,116 @@ export const metadata = {
     card: "summary_large_image",
     title: `${profile.name} · ${profile.role}`,
     description: profile.introduction.text,
-    images: [`${siteMetadata.siteUrl}/og-image.png`],
+    images: [`${siteMetadata.siteUrl}/og-image.svg`],
   },
 } as const;
 
+function Pipeline() {
+  return <figure className="home-pipeline blueprint" aria-labelledby="pipeline-title">
+    <figcaption><h2 id="pipeline-title">{content.pipeline.title}</h2><p>{content.pipeline.description}</p></figcaption>
+    <ol className="pipeline-stages">
+      {content.pipeline.steps.map((step, index) => <li key={step.code}>
+        <div className="pipeline-track" aria-hidden="true"><span className="pipeline-point" />{index < 3 && <svg><defs><marker id={`pipeline-tip-${step.code}`} markerWidth="6" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 4L0 8" /></marker></defs><line className="pipeline-base" x1="0" y1="10" x2="100%" y2="10" /><g className="pipeline-flow"><line x1="0" y1="10" x2="100%" y2="10" markerEnd={`url(#pipeline-tip-${step.code})`} /></g></svg>}{index < 3 && <span className="pipeline-mobile-flow" />}</div>
+        <code>{step.code}</code><h3>{step.title}</h3><p>{step.detail}</p>
+      </li>)}
+    </ol>
+    <ol className="pipeline-layers" aria-label="Capas del despliegue de Hangar">{content.pipeline.layers.map((layer, index) => <li key={layer.title}><div><span>{layer.title}</span><span>{layer.technology}</span></div>{index < content.pipeline.layers.length - 1 && <Icon name="arrow" />}</li>)}</ol>
+    <p className="pipeline-note">{content.pipeline.note}</p>
+  </figure>;
+}
+
+function RepositoryLink({ repository, name, wholeRow = false }: { repository: SourcedLink | null; name: string; wholeRow?: boolean }) {
+  if (!repository || repository.visibility !== "public") return <span className="repository-status">{repository?.visibility === "private" ? "Repositorio privado" : "Repositorio no disponible"}</span>;
+  return <a className={`text-link ${wholeRow ? "row-primary" : "row-secondary"}`} href={repository.href}>Ver repositorio<span className="sr-only"> de {name}</span>{wholeRow ? <span className="t-learn-chevron"><Icon name="external" /></span> : <Icon name="external" />}</a>;
+}
+
 export default function Home() {
-  const featured = featuredCaseStudies.filter((p) => p.status !== "draft");
-  const systems = engineeringSystems.filter((p) => p.status === "ready");
-
-  return (
-    <>
-      <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
-      <SiteHeader />
-      <main id="contenido" tabIndex={-1} className="page-container">
-
-        {/* Hero */}
-        <section aria-labelledby="hero-title" className="mb-[4rem]">
-          <h1 id="hero-title" className="text-display">{profile.name}</h1>
-          <p className="mt-[1rem] max-w-measure text-body">{profile.introduction.text}</p>
-          <div className="mt-[2rem]">
-            <a className="button" href="#contacto">Contactar<Icon name="arrow" /></a>
+  const featured = featuredCaseStudies.filter(project => project.status !== "draft");
+  const systems = engineeringSystems.filter(project => project.status === "ready");
+  return <>
+    <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
+    <SiteHeader compact />
+    <HomeMotion />
+    <main id="contenido" tabIndex={-1} className="page-container home-content">
+      <section className="home-hero" aria-labelledby="hero-title">
+        <div className="hero-copy">
+          <p className="hero-eyebrow">{content.headerRole}</p>
+          <h1 id="hero-title">{content.headline}</h1>
+          <p className="hero-introduction">{content.introduction}</p>
+          <div className="hero-actions">
+            <Link className="button" href={content.cases.hangar}>{content.caseAction}<Icon name="arrow" /></Link>
+            <a className="button button-secondary" href="#contacto">Contacto</a>
           </div>
-        </section>
-
-        {/* Casos de estudio */}
-        <section id="proyectos" aria-labelledby="casos-title" className="portfolio-section mb-[4rem]">
-          <h2 id="casos-title" className="portfolio-heading">Casos de estudio</h2>
-          {featured.map((project) => (
-            <article key={project.id} id={project.id} className="py-[2rem] border-b border-border last:border-b-0">
-              <h3 className="text-heading">{project.name}</h3>
-              <p className="mt-[0.5rem] max-w-measure text-body">{project.summary?.text ?? ""}</p>
-              <div style={{ fontFamily: "var(--font-mono)", marginTop: "1rem" }}>
-                {project.stack.map((t) => (
-                  <span key={t.name} className="inline-block mr-[0.75rem] mb-[0.5rem] px-[0.5rem] py-[0.2rem] border border-control rounded-control text-label" style={{ fontSize: "0.875rem" }}>
-                    {t.name}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-[1.5rem]">
-                <Link className="text-link" href={`/proyectos/${project.id}`}>
-                  {project.id === "hangar" ? "Leer el caso de Hangar" : "Leer el caso de TaskFlow Pro"}<Icon name="arrow" />
-                </Link>
-              </div>
-            </article>
-          ))}
-        </section>
-
-        {/* Sistemas secundarios (lista compacta) */}
-        <section id="sistemas-backend" aria-labelledby="sistemas-title" className="mb-[4rem]">
-          <h2 id="sistemas-title" className="portfolio-heading">Ingeniería y sistemas backend</h2>
-          <p className="max-w-measure text-body text-muted mb-[2rem]">Sistemas autodirigidos con enfoque en backend, seguridad y arquitectura.</p>
-          <ul className="space-y-[1rem] border-t border-border pt-[1.5rem]">
-            {systems.map((project) => (
-              <li key={project.id} id={project.id} className="py-[1rem] border-b border-border last:border-b-0">
-                <div className="flex flex-wrap items-baseline gap-[1rem]">
-                  <h4 className="text-title font-semibold">{project.name}</h4>
-                  <p className="text-label text-muted">{project.engineeringFocus?.text ?? project.summary?.text ?? ""}</p>
-                </div>
-                <div style={{ fontFamily: "var(--font-mono)", marginTop: "0.5rem" }}>
-                  {project.stack.map((t) => (
-                    <span key={t.name} className="inline-block mr-[0.75rem] mb-[0.5rem] px-[0.5rem] py-[0.2rem] border border-control rounded-control text-label" style={{ fontSize: "0.875rem" }}>
-                      {t.name}
-                    </span>
-                  ))}
-                </div>
-                {project.repository && (
-                  <div className="mt-[0.75rem]">
-                    <a className="text-link" href={project.repository.href}>{projectLinkLabels.repository}<Icon name="external" /></a>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Contacto */}
-        <section id="contacto" aria-labelledby="contacto-title" className="contact-surface py-section">
-          <div className="page-container grid gap-[1.5rem] md:grid-cols-12 md:gap-gutter">
-            <div className="md:col-span-6">
-              <h2 id="contacto-title" className="text-heading">Contacto</h2>
-              <p className="mt-[0.5rem] max-w-measure text-on-accent">{homepage.contact.invitation}</p>
-              {contact.email && <>
-                <a className="button button-secondary mt-[1rem]" href={contact.email.href}>{portfolioLabels.emailAction}<Icon name="arrow" /></a>
-                <p className="mt-[1rem] text-on-accent text-label">{contact.email.label}</p>
-              </>}
-            </div>
-            <div className="md:col-span-5 md:col-start-7">
-              <p className="text-on-accent text-label">{portfolioLabels.profiles}</p>
-              <ul className="mt-[0.5rem] flex flex-wrap gap-x-[1rem] gap-y-[0.5rem]">
-                {contact.professionalLinks.map((link) => (
-                  <li key={link.href}><a className="inverse-link" href={link.href}>{link.label}<Icon name="external" /></a></li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-      </main>
-      <footer className="page-container flex flex-wrap items-center justify-between gap-x-[1rem] gap-y-[1rem] py-[1.5rem] border-t border-border">
-        <div><p className="text-label font-semibold">{profile.name}</p><p className="mt-[0.25rem] text-label text-muted">{portfolioLabels.footer}</p></div>
-        <div className="flex flex-wrap items-center gap-x-[1rem] gap-y-[0.5rem]">
-          <LinkPreferenciasCookies />
-          <a className="text-link text-label" href="#inicio">{portfolioLabels.backToTop}</a>
         </div>
-      </footer>
-    </>
-  );
+        <Pipeline />
+      </section>
+      <section id="proyectos" className="home-section" aria-labelledby="casos-title">
+        <div className="home-section-heading"><h2 id="casos-title">{content.casesTitle}</h2><p>{content.casesDescription}</p></div>
+        {featured.map(project => {
+          const caseHref = content.cases[project.id as keyof typeof content.cases];
+          return <article id={project.id} key={project.id} className="featured-row project-row t-learn">
+            <div className="featured-copy">
+              <p className="featured-kicker">{content.caseKicker}</p>
+              <h3 aria-label={project.name}>{caseHref ? <Link className="row-primary" href={caseHref} aria-label={`${content.caseLink} de ${project.name}`}>{project.name}<span className="t-learn-chevron"><Icon name="arrow" /></span></Link> : project.name}</h3>
+              {project.summary && <p className="project-description">{project.summary.text}</p>}
+              <dl className="featured-facts">
+                {project.problem && <div><dt>{content.caseProblem}</dt><dd>{project.problem.text}</dd></div>}
+                {project.contribution && <div><dt>{portfolioLabels.contribution}</dt><dd>{project.contribution.text}</dd></div>}
+              </dl>
+              <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
+              <div className="project-actions"><span className="case-action" aria-hidden={caseHref ? true : undefined}>{caseHref ? content.caseLink : "Próximamente"}{caseHref && <Icon name="arrow" />}</span><RepositoryLink repository={project.repository} name={project.name} />{project.demo && <a className="text-link row-secondary" href={project.demo.href}>Abrir demo<Icon name="external" /></a>}</div>
+            </div>
+            <ProjectTechnicalPreview projectId={project.id} projectName={project.name} />
+          </article>;
+        })}
+      </section>
+      <section id="sistemas-backend" className="home-section" aria-labelledby="sistemas-title">
+        <div className="home-section-heading"><h2 id="sistemas-title">{content.systemsTitle}</h2><p>{content.systemsDescription}</p></div>
+        <ul className="bento">{systems.map(project => <li id={project.id} key={project.id} className="bento-cell project-row t-learn">
+          <h3>{project.name}</h3>
+          {project.engineeringFocus && <p className="bento-focus">{project.engineeringFocus.text}</p>}
+          {project.summary && <p className="bento-summary">{project.summary.text}</p>}
+          <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
+          <RepositoryLink repository={project.repository} name={project.name} wholeRow />
+        </li>)}</ul>
+      </section>
+      <section id="sobre-mi" className="home-section about-grid" aria-labelledby="sobre-mi-title">
+        <div className="about-intro">
+          <h2 id="sobre-mi-title">{content.about.title}</h2>
+          <div className="about-copy">{content.about.paragraphs.map(paragraph => <p key={paragraph.text}>{paragraph.text}</p>)}{resume.file && <a className="text-link" href={resume.file.href} download>{resume.label}<Icon name="arrow" /></a>}</div>
+        </div>
+        <div className="about-side">
+          <section id="experiencia" aria-labelledby="experiencia-title">
+            <h3 id="experiencia-title" className="about-subtitle">{content.experienceTitle}</h3>
+            {experience.filter(item => item.status === "ready").map(item => <article className="experience-row" key={item.organization}>
+              <div><h4>{item.organization}</h4><p>{item.dates}</p></div>
+              <p className="experience-role">{item.role}</p>
+              {item.description && <p className="experience-description">{item.description.text}</p>}
+            </article>)}
+          </section>
+          <section id="tecnologias" aria-labelledby="tecnologias-title">
+            <h3 id="tecnologias-title" className="about-subtitle">{content.technologies.title}</h3>
+            <dl className="technology-groups">{content.technologies.groups.map(group => <div key={group.label}><dt>{group.label}</dt><dd><ul>{group.items.map(item => <li key={item}>{item}</li>)}</ul></dd></div>)}</dl>
+          </section>
+        </div>
+      </section>
+      <section id="contacto" className="home-section home-contact" aria-labelledby="contacto-title">
+        <div className="contact-panel blueprint">
+          <div>
+            <p className="featured-kicker">{contact.title}</p>
+            <h2 id="contacto-title">{content.contactTitle}</h2>
+            <p className="contact-description">{content.contactDescription}</p>
+          </div>
+          <div className="contact-actions">
+            {contact.email && <>
+              <p className="contact-email">{contact.email.label}</p>
+              <div className="contact-buttons"><a className="button" href={contact.email.href}>{portfolioLabels.emailAction}<Icon name="arrow" /></a><CopyEmail email={contact.email.label} /></div>
+            </>}
+            <ul className="contact-links">{contact.professionalLinks.map(link => <li key={link.href}><a className="text-link" href={link.href}>{link.label}<Icon name="external" /></a></li>)}</ul>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer className="home-footer page-container"><p>{profile.name}<span>{portfolioLabels.footer}</span></p><div><LinkPreferenciasCookies /><a className="text-link text-label" href="#inicio">{portfolioLabels.backToTop}</a></div></footer>
+  </>;
 }

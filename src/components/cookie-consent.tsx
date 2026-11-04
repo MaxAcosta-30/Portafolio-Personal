@@ -1,76 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { Icon } from "@/components/ui";
-
-const CONSENT_KEY = "cookie_consent_v1";
-
-function readConsent(): boolean | null {
-  if (typeof window === "undefined") return null;
-  const stored = localStorage.getItem(CONSENT_KEY);
-  if (stored === null) return null;
-  return stored === "true";
-}
+import Link from "next/link";
+import { useSyncExternalStore } from "react";
+import { getConsent, serverConsent, setConsent, subscribeConsent } from "./consent-store";
 
 export function CookieConsent() {
-  const [open, setOpen] = useState<boolean | null>(() => readConsent() === null);
-
-  const accept = () => {
-    localStorage.setItem(CONSENT_KEY, "true");
-    setOpen(false);
-  };
-
-  const reject = () => {
-    localStorage.setItem(CONSENT_KEY, "false");
-    setOpen(false);
-  };
-
-  return (
-    <>
-      {open === true && (
-        <div
-          className="fixed bottom-0 left-0 right-0 z-[50] bg-surface border-t border-border p-page flex flex-col gap-3 md:flex-row md:items-end md:justify-between md:p-[1.5rem]"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="cookie-title"
-        >
-          <div className="space-y-2 max-w-md">
-            <h3 id="cookie-title" className="text-title font-semibold">
-              Cookies y medición
-            </h3>
-            <p className="text-body text-foreground">
-              Este sitio es estático y no recopila datos personales directamente.
-              Usa Google Analytics 4 para medir el tráfico y la interacción (páginas
-              visitadas, dispositivo, navegador, ubicación aproximada). Esa medición
-              requiere cookies de terceros. ¿Las aceptas?
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2 justify-end md:justify-start">
-            <button onClick={reject} className="button-secondary">
-              Rechazar
-            </button>
-            <button onClick={accept} className="button">
-              Aceptar
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
+  const consent = useSyncExternalStore(subscribeConsent, getConsent, serverConsent);
+  if (consent !== null) return null;
+  const hasAnalytics = Boolean(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID);
+  return <aside className="consent-area" aria-labelledby="cookie-title"><div className="consent-panel">
+    <h2 id="cookie-title" tabIndex={-1}>Tú decides sobre la medición</h2>
+    <p>{hasAnalytics ? "Con tu permiso, Google Analytics medirá las visitas y la interacción. Puedes rechazarlo y seguir navegando." : "La medición de visitas no está configurada. Puedes guardar tu preferencia para Google Analytics."}</p>
+    <div className="mt-4 flex flex-wrap gap-3"><button className="button button-secondary" onClick={() => setConsent("false")}>Rechazar</button><button className="button" onClick={() => setConsent("true")}>Aceptar</button></div>
+    <Link className="text-link mt-2 text-label" href="/legal/cookies">Información sobre cookies</Link>
+  </div></aside>;
 }
-
 export function LinkPreferenciasCookies() {
-  return (
-    <button
-      onClick={() => {
-        localStorage.removeItem(CONSENT_KEY);
-        window.location.reload();
-      }}
-      className="text-link text-label"
-      aria-label="Preferencias de cookies"
-    >
-      Preferencias de cookies
-      <Icon name="arrow" />
-    </button>
-  );
+  return <button className="text-link text-label" onClick={() => { setConsent(null); requestAnimationFrame(() => document.getElementById("cookie-title")?.focus()); }}>Preferencias de cookies</button>;
 }

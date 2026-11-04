@@ -28,7 +28,6 @@ const colors = [
   { name: "Separador", token: "border", className: "bg-border", use: "División decorativa" },
   { name: "Control", token: "control", className: "bg-control", use: "Límites perceptibles" },
   { name: "Acento", token: "accent", className: "bg-accent", use: "Acción y foco" },
-  { name: "Selección", token: "selected", className: "bg-selected", use: "Elemento elegido" },
 ];
 
 const typeSamples = [
@@ -133,7 +132,7 @@ export default function DesignSystemPage() {
               <h2 id="composicion-title" className="section-heading">Composición</h2>
               <p className="section-description">Una retícula de doce columnas organiza el escritorio. En pantallas pequeñas, el contenido conserva su orden en una sola columna.</p>
               <div className="grid grid-cols-12 gap-1" aria-hidden="true">
-                {Array.from({ length: 12 }, (_, index) => <div key={index} className="h-12 bg-selected" />)}
+                {Array.from({ length: 12 }, (_, index) => <div key={index} className="h-12 bg-control" />)}
               </div>
               <dl className="mt-4 grid gap-4 border-b border-border pb-8 md:grid-cols-3">
                 <div><dt className="text-label text-muted">Ancho máximo</dt><dd className="mt-1 font-mono text-label">77.5rem / 1240px</dd></div>

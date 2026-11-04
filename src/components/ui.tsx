@@ -34,7 +34,7 @@ export function Field({
       />
       {helper && <p id={`${id}-helper`} className="text-label text-muted">{helper}</p>}
       {error && (
-        <p id={`${id}-error`} className="text-label" role="alert" style={{ color: "var(--color-error)" }}>
+        <p id={`${id}-error`} className="text-label" role="alert" style={{ color: "var(--color-accent)" }}>
           {error}
         </p>
       )}

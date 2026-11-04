@@ -20,19 +20,23 @@ export function IsolationDiagram() {
   const data = content.isolation;
   return <figure aria-labelledby="isolation-diagram-title" className="min-w-0">
     <figcaption id="isolation-diagram-title" className="mb-6 font-medium">{data.diagramTitle}</figcaption>
-    <div className="grid grid-cols-2 gap-4 md:gap-8">
-      {data.apps.map((app) => <div key={app.title} className="min-w-0">
-        <div className="border border-control bg-surface p-4">
-          <p className="font-medium">{app.title}</p>
-          <p className="mt-2 text-label text-muted">{app.network}</p>
-        </div>
-        <div aria-hidden="true" className="mx-auto h-8 w-0 border-l border-control" />
-      </div>)}
-    </div>
-    <div className="border-y border-control bg-selected p-4 text-center">
-      <p className="font-medium text-accent">{data.sharedNetwork}</p>
-      <p className="mt-1 text-label text-muted">{data.sharedDetail}</p>
-    </div>
+    <svg className="isolation-svg" viewBox="0 0 280 250" role="img" aria-labelledby="isolation-svg-title isolation-svg-description">
+      <title id="isolation-svg-title">{data.diagramTitle}</title>
+      <desc id="isolation-svg-description">{data.text} {data.limit}</desc>
+      <defs><marker id="isolation-tip" markerWidth="6" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L6 4L0 8" /></marker></defs>
+      {data.apps.map((app, index) => {
+        const x = index === 0 ? 4 : 152;
+        return <g key={app.title}>
+          <rect x={x} y="8" width="124" height="82" rx="2" />
+          <text x={x + 62} y="39">{app.title}</text>
+          <text x={x + 62} y="63" className="isolation-network-label">{app.network}</text>
+          <line x1={x + 62} y1="94" x2={x + 62} y2="150" markerEnd="url(#isolation-tip)" />
+        </g>;
+      })}
+      <rect x="4" y="156" width="272" height="78" rx="2" />
+      <text x="140" y="187">{data.sharedNetwork}</text>
+      <text x="140" y="211" className="isolation-network-label">{data.sharedDetail}</text>
+    </svg>
     <p className="mt-4 text-label text-muted">{data.caption}</p>
   </figure>;
 }

@@ -1,55 +1,48 @@
 ---
-name: Minimalista con propósito
-description: Sistema visual del portafolio de Max Alexander Acosta Valencia
+name: Ingeniería a la vista
+description: Portafolio oscuro de Max Acosta, basado en xmcp y la presentación de producto de Tequs
 colors:
-  background: "#f7f5f0"
-  surface: "#ffffff"
-  foreground: "#1a1a18"
-  muted: "#5a5a55"
-  border: "#d8d6d0"
-  control: "#8a8a82"
-  accent: "#195c52"
-  accent-hover: "#124b43"
-  accent-active: "#0d3933"
+  background: "#0a0a0a"
+  surface: "#121212"
+  surface-muted: "#171b19"
+  foreground: "#ededed"
+  muted: "#a8a8a8"
+  border: "rgba(255, 255, 255, 0.10)"
+  control: "#737b78"
+  accent: "#92cbbd"
+  accent-fill: "#195c52"
+  accent-hover: "#b3e4d6"
+  accent-active: "#c9eee4"
   on-accent: "#ffffff"
-  focus-ring: "#195c52"
+  selected: "#1a302b"
+  focus-ring: "#92cbbd"
 typography:
   display:
     fontFamily: "IBM Plex Sans, Arial, sans-serif"
-    fontSize: "2.25rem"
+    fontSize: "clamp(2.5rem, 1.6rem + 4vw, 4.75rem)"
     fontWeight: 600
-    lineHeight: 1.2
-  heading:
-    fontFamily: "IBM Plex Sans, Arial, sans-serif"
-    fontSize: "1.5rem"
-    fontWeight: 600
-    lineHeight: 1.25
-  title:
-    fontFamily: "IBM Plex Sans, Arial, sans-serif"
-    fontSize: "1.125rem"
-    fontWeight: 600
-    lineHeight: 1.35
+    lineHeight: 1.04
+    letterSpacing: "-0.03em"
   body:
     fontFamily: "IBM Plex Sans, Arial, sans-serif"
-    fontSize: "1rem"
+    fontSize: "17px"
     fontWeight: 400
-    lineHeight: 1.7
+    lineHeight: 1.6
   label:
-    fontFamily: "IBM Plex Mono, monospace"
-    fontSize: "0.875rem"
+    fontFamily: "IBM Plex Sans, Arial, sans-serif"
+    fontSize: "12px"
     fontWeight: 400
     lineHeight: 1.5
 rounded:
-  none: "0"
-  control: "0.125rem"
+  control: "0.5rem"
+  surface: "0.875rem"
 spacing:
   unit: "0.25rem"
   gutter: "1.5rem"
-  section: "4rem"
   target: "2.75rem"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
+    backgroundColor: "{colors.accent-fill}"
     textColor: "{colors.on-accent}"
     rounded: "{rounded.control}"
     padding: "0.5rem 1rem"
@@ -58,151 +51,126 @@ components:
     textColor: "{colors.accent}"
     rounded: "{rounded.control}"
     padding: "0.5rem 1rem"
-    border: "1px solid {colors.control}"
-  text-link:
-    textColor: "{colors.accent}"
-    underline: "1px solid {colors.accent}"
-    underlineOffset: "0.2em"
 ---
 
-# Sistema de diseño — Minimalista con propósito
+# Sistema de diseño — Ingeniería a la vista
 
 ## Overview
 
-Dirección visual aprobada por el propietario: **minimalista con mucho espacio en blanco, pocos elementos, interfaz limpia, donde cada detalle tiene un propósito.** Cada elemento visible debe justificar su existencia. Si no ayuda al lector a entender, navegar o actuar, se elimina.
+**Creative North Star: "Ingeniería a la vista"** — evolucionada en R3 para vender.
 
-El carácter viene de la tipografía, el ritmo del espacio y la precisión de los detalles, no de la decoración. Una sola acción principal por pantalla.
+La ingeniería sigue explicándose con contenido real (pipeline, diagramas,
+fragmentos de código fijados a una revisión), pero ahora con jerarquía y
+profundidad: titular grande, paneles elevados y un bento para los sistemas.
+Plex y el acento verde-agua se conservan como identidad.
+
+**Key Characteristics:**
+
+- Tema oscuro por defecto y tema claro según `prefers-color-scheme`.
+- Dos niveles de elevación con sombras multicapa; glass solo en el header.
+- Plex Sans para lectura y Mono para identificadores, etiquetas y stack.
+- Movimiento discreto: elevación en hover, entrada de secciones, pipeline una vez.
 
 ## Colors
 
-| Token | Valor | Uso |
-| --- | --- | --- |
-| background | `#f7f5f0` | Lienzo principal, claro cálido (no blanco puro frío) |
-| surface | `#ffffff` | Superficies de apoyo; se usa solo cuando sea necesario |
-| foreground | `#1a1a18` | Texto casi negro, lectura principal |
-| muted | `#5a5a55` | Contexto secundario, notas, etiquetas |
-| border | `#d8d6d0` | Línea fina de 1px; separación decorativa, no identifica un control |
-| control | `#8a8a82` | Borde perceptible de campos y controles secundarios |
-| accent | `#195c52` | Acción principal, enlaces, foco, un solo estado destacado |
-| accent-hover | `#124b43` | Respuesta a hover, solo dispositivos con hover |
-| accent-active | `#0d3933` | Respuesta a pulsación |
-| on-accent | `#ffffff` | Texto sobre acción de acento |
-| focus-ring | `#195c52` | Contorno de foco visible |
-
-Un solo color de acento, usado con moderación (enlaces, foco, un estado). No hay modo oscuro definido en esta fase; solo si se puede mantener igual de limpio.
+Fuente única: `src/styles/tokens.css`. El frontmatter refleja el tema oscuro.
+El tema claro redefine los mismos tokens dentro de
+`@media (prefers-color-scheme: light)`: fondo `#f6f7f6`, superficie `#ffffff`,
+texto `#151716`, muted `#5a5e5c`, acento `#1d6b5f` (oscurecido para AA sobre
+blanco). `accent` es para texto, foco y líneas; `accent-fill` para botones con
+texto blanco. No intercambiarlos. No hay botón de tema: sigue al sistema.
 
 ## Typography
 
-IBM Plex Sans es la voz principal del diseño. IBM Plex Mono se limita a detalles técnicos (stack, rutas, comandos, etiquetas). Máximo dos familias, tres pesos (400, 600 y opcionalmente 500). Se evitan Inter, Roboto y Arial.
+Plex Sans y Mono locales. Display y heading son fluidos con `clamp()`.
 
-| Rol | Tamaño | Peso | Interlineado | Uso |
-| --- | --- | --- | --- | --- |
-| display | 2.25rem | 600 | 1.2 | Título principal, hero |
-| heading | 1.5rem | 600 | 1.25 | Secciones |
-| title | 1.125rem | 600 | 1.35 | Subtítulos, nombres de proyecto |
-| body | 1rem | 400 | 1.7 | Párrafos de lectura |
-| label | 0.875rem | 400 | 1.5 | Detalles técnicos, stack, medidas |
+| Rol | Valor | Interlineado |
+| --- | --- | --- |
+| Display | clamp(2.5rem, 1.6rem + 4vw, 4.75rem), 600, -0.03em | 1.04 |
+| Heading | clamp(1.5rem, 1.3rem + 0.9vw, 2rem) | 1.2 |
+| Title | 20px | 1.35 |
+| Body | 17px | 1.6 |
+| Label | 12px (mínimo 13px en descripciones técnicas) | 1.5 |
 
-El contraste lo da el tamaño y el peso, no el color. Cuerpo dentro de 60–70 caracteres por línea. `text-wrap: balance` en encabezados, `text-wrap: pretty` en párrafos. Fuentes servidas localmente desde `src/assets/fonts/` (WOFF2), `display: swap`, sin peticiones externas.
+Etiquetas de sección (`featured-kicker`, `about-subtitle`, eyebrow) en Mono
+12px con acento. Hero alineado a la izquierda, máximo 18ch; lectura hasta 64ch.
 
 ## Layout
 
-- Ancho máximo de lectura: columna estrecha para textos (aprox. 60–70 caracteres por línea); ancho mayor solo para diagramas.
-- Espacio: ritmo vertical generoso basado en una escala única (4px base). El espacio vacío es parte del diseño, no un hueco por rellenar.
-- Base de espaciado: 4px. Pasos principales: 4, 8, 12, 16, 24, 32, 48, 80px.
-- Separación entre secciones: 4rem en escritorio, proporcional en móvil.
-- Contenedor de página: márgenes laterales, contenido centrado, sin llenar el ancho completo innecesariamente.
-- Más espacio antes de un título que entre título y explicación.
+Base de 4px, gutter 24px, margen de página 20px (40px desde lg), ancho máximo
+1240px. Breakpoints 768px y 1024px.
+
+- Hero: eyebrow, titular, introducción y acciones a la izquierda; debajo, el
+  pipeline de Hangar en un panel elevado (96px de separación en escritorio).
+- Casos destacados: copy 5/12 sobre el fondo y panel técnico 7/12; el lado
+  alterna en lg. Diagrama compacto horizontal solo desde 80rem.
+- Otros proyectos: bento asimétrico de 12 columnas, filas 7/5 y 5/7.
+- Sobre mí: intro fija (sticky) 5/12; experiencia y tecnologías 6/12.
+- Contacto: panel de cierre 7/5 con correo visible, acciones y enlaces.
 
 ## Elevation & Depth
 
-Sin sombras. Sin glassmorphism. Sin tarjetas. La separación se hace con espacio y, como mucho, líneas finas de 1px. No hay elevación en botones ni hover lift.
+- `--shadow-raised`: celdas del bento y panel técnico en reposo.
+- `--shadow-floating`: paneles del hero y contacto, y estado hover.
+- En oscuro, cada sombra lleva un filo de luz interior superior; en claro son
+  sombras suaves tintadas.
+- Se usan con `box-shadow: var(--shadow-*)`, no con utilidades de Tailwind,
+  para que cambien con el tema.
+- `.blueprint`: retícula de puntos con máscara, solo en los paneles del hero y
+  contacto.
+- Header: glass (`color-mix` 72% + blur 14px) y fijo desde md. Fondo sólido si
+  no hay `backdrop-filter` o con `prefers-reduced-transparency`.
 
 ## Shapes
 
-Radio cero o mínimo, aplicado de forma consistente. Figuras rectangulares. Controles con radio mínimo (2px). No hay tarjetas anidadas ni iconos en cajas ornamentales.
+Dos radios concéntricos: `control` 8px (botones, campos, bloque de código) y
+`surface` 14px (paneles y celdas). Sin tarjetas anidadas: el código es un pozo
+hundido dentro del panel, no otra tarjeta. Los SVG de diagramas aún usan
+`rx="2"` (pendiente de alinear).
 
 ## Components
 
-### Botones
-
-API nativa de botón, `type="button"` por defecto. Variantes primary y secondary. No es polimórfico; acciones navegan con `<a>`, cambios de estado con `<button>`. Altura y ancho mínimos target (44px), padding de escala, radio control.
-
-| Estado | Tratamiento |
-| --- | --- |
-| Default | Primary: fondo acento / texto on-accent. Secondary: fondo transparente / borde control / texto acento |
-| Hover | Primary: acento-hover. Secondary: fondo surface-muted, borde acento |
-| Active | Primary: acento-active. Secondary: fondo seleccionado, texto acento-active |
-| Focus visible | Contorno acento de 2px, separado 3px |
-| Disabled | Deshabilitado nativo, fondo deshabilitado, texto muted |
-
-No se reduce opacidad ni se elimina contraste. No hay escala en pulsación.
-
-### Enlaces
-
-`.text-link`: texto subrayado con `text-underline-offset` centralizado, foco visible y target táctil. Enlace externo incluye icono y conserva navegación en la misma pestaña.
-
-### Iconografía
-
-Casi ninguna. Solo si comunica algo que el texto no puede. SVG de 20px, trazo único 1.5, `currentColor`, `aria-hidden`, `focusable=false`. Siempre acompañados de texto.
-
-### Campos y estados
-
-Input nativo con label estático arriba (no flotante), helper visible siempre, `aria-describedby`, `aria-invalid`. Error con mensaje específico debajo del campo, no solo color rojo. Sin sombras ni fondos de color en el campo. Trazo fino (1px) como borde, radio mínimo. El único color es el acento en estado activo y el color de error.
-
-### Navegación
-
-Enlaces de texto simples, pocos ítems, sin iconos decorativos. Estado activo claro. Enlace de salto al contenido. Funciona sin JavaScript.
-
-### Proyectos
-
-Presentados como listas editoriales (título, una línea de descripción, stack en mono, año) en lugar de cuadrículas de tarjetas. El caso de estudio ocupa su propia página.
-
-## Movimiento
-
-Discreto. Solo opacidad y transformaciones, 150–250ms, sin rebotes. GSAP únicamente para explicar el pipeline o la arquitectura de los casos de estudio. Todo con `prefers-reduced-motion`. Sin animación en el hero más allá de una aparición discreta. Si una animación no ayuda a entender, se elimina.
-
-## Mobile
-
-Misma jerarquía, una columna, mismo espacio relativo. No es una versión recortada.
-
-## Prueba del propósito
-
-Para cada elemento de la propuesta (navegación, hero, cada sección, cada detalle visual), responder:
-
-> "¿Qué hace este elemento por quien lo lee?"
-
-Si la respuesta es "se ve bien" o "es lo que se suele poner", se elimina.
-
-## Cómo evitar el minimalismo de plantilla
-
-Minimalista no debe significar "clon de portfolio de Vercel/Notion". Qué hace distinto a este diseño:
-
-- Una decisión tipográfica con carácter: IBM Plex Sans como voz principal, IBM Plex Mono solo para detalles técnicos.
-- Un detalle propio y funcional: tratamiento de diagramas en SVG de trazo fino y monocromo, con acento solo en el flujo clave.
-- Un ritmo de espacio reconocible: escala única basada en 4px, espacio vacío intencional.
-
-## Riesgos
-
-| Riesgo | Mitigación |
-| --- | --- |
-| Parecer vacío | Cada sección tiene un propósito definido; el espacio vacío es intencional, no falta de contenido |
-| Poca jerarquía | El contraste lo da tamaño y peso tipográfico; roles claramente diferenciados |
-| Pérdida de personalidad | La tipografía IBM Plex y el tono cálido del fondo dan carácter sin decoración |
-| Minimalismo genérico | Ningún elemento es "lo que se suele poner"; todo pasa la prueba del propósito |
+- Botones de 44px mínimo. En hover suben 1px, ganan `shadow-raised` y la
+  flecha avanza 2px; en active vuelven a 0 con `scale(0.98)`.
+- Celdas del bento y casos: toda la fila es enlace (`row-primary`); en hover
+  el panel sube 2–3px, la sombra pasa a `floating` y el borde toma tinte del
+  acento.
+- Pipeline, cookies y copiar correo mantienen el comportamiento de R2.
+- Movimiento: entrada de secciones de 400ms/12px y pipeline una vez por sesión.
+  Con `prefers-reduced-motion` las duraciones van a 0. Sin `transition: all`.
 
 ## Do's and Don'ts
 
-### Do
+- Mantener los hechos en contenido estructurado y las medidas en tokens.
+- Mostrar fuentes, limitaciones e identidad personal; no inventar métricas.
+- Preservar lectura móvil, foco y HTML semántico.
+- No copiar fotografías industriales, cifras, logos, prensa, chatbot ni 3D de Tequs.
+- No introducir nuevas páginas, servicios o despliegues en esta fase.
 
-- Usar los tokens y utilidades compartidos; ampliar la escala solo con necesidad.
-- Mostrar evidencia real y explicar decisiones, límites y autoría.
-- Mantener controles nativos, foco visible y estados con texto.
-- Conservar licencias y servir las fuentes desde el proyecto.
 
-### Don't
+## R2 · Fase A
 
-- Introducir colores, radios y duraciones independientes en cada componente.
-- Añadir terminales, telemetría, nodos o métricas ficticias como decoración.
-- Convertir el índice de referencia en un dashboard del portafolio.
-- Construir otras páginas o avanzar de fase sin el siguiente prompt.
+Se conserva la dirección oscura y minimalista y todos los tokens. Se amplía la home con Sobre mí (borrador del CV) y seis filas de tecnologías por función, sin tarjetas ni rankings. La navegación añade Sobre mí y un subrayado estático para la sección activa, con anclas nativas y desplazamiento suave desactivado al reducir movimiento. Las filas tienen un enlace primario extendido con foco en su perímetro; repositorios y demos conservan enlaces independientes. El pie reproduce el divisor interior del header. Copiar correo anuncia éxito o recuperación en una región viva. Las fotografías editoriales autorizadas se documentan en docs/R2_IMAGE_SOURCES.md para la Fase B; no se integran ni se añaden animaciones en esta fase.
+
+
+## R2 · Fase B
+
+La composición, la paleta y los tokens tipográficos existentes se conservan. Tras el ajuste del propietario, las filas ya no usan fotografías, créditos ni avisos editoriales. Presentan un diagrama SVG compacto y un fragmento real de código de 8 a 20 líneas, con archivo y fuente fijada a una revisión. Estos recursos permanecen visibles en el flujo normal: no hay una fila ni una altura reservadas para previews ocultas. Leer caso y Ver repositorio comparten tamaño de cuerpo y peso semibold. Sobre mí y su etiqueta de borrador se conservan intactos.
+
+El único momento secuenciado es el pipeline de la home: tres conectores y cuatro nodos, 960ms nominales, una vez por sesión cuando el almacenamiento está disponible. Los tokens de movimiento se centralizan en src/styles/tokens.css. Las secciones entran en 400ms y 12px sin ocultación previa a cargar GSAP. El hover usa 4px y 180ms de transitions.dev y el indicador de navegación solo opacity/transform. Reduced motion cancela las animaciones; sin JavaScript el HTML y los recursos técnicos siguen legibles.
+
+Los casos Hangar y TaskFlow Pro incorporan diagramas SVG de las secuencias ya documentadas, con alternativa textual ordenada para lectores de pantalla y trazado vertical en móvil. No se añaden servicios, conexiones ni promesas de aislamiento.
+
+
+### Ajuste de lectura de las vistas técnicas
+
+Los bloques de código conservan whitespace e indentación de la fuente, sin wrap, con scroll horizontal nativo, tabindex 0, aria-label y foco visible. Los diagramas compactos de las filas siguen el orden del flujo en una fila horizontal desde 1024px y una columna vertical por debajo; los casos detallados no cambian. Las etiquetas pequeñas mantienen al menos 12px y usan los colores semánticos legibles existentes.
+
+
+## R3 · Rediseño para vender
+
+Se evoluciona la dirección plana: tema claro y oscuro, elevación, radios de
+8/14px y tipografía fluida. Se rediseñan el hero, los casos (con Problema y
+Mi aportación ya respaldados en `projects.ts`), el bento de sistemas, el bloque
+Sobre mí, el contacto y el header. Se retira la etiqueta de borrador de Sobre
+mí. Las páginas de caso heredan los tokens; su maquetación aún es la de R2.

@@ -1,8 +1,10 @@
 # Portafolio digital — Max Alexander Acosta Valencia
 
-## Fase 6: caso de estudio de Hangar
+## Estado actual: rediseño de la home (Prompt R)
 
-Dirección aprobada: **B · Plano de sistemas**. `/` contiene la página principal:
+Dirección actual: **oscura y minimalista**, basada en xmcp y Tequs.
+Revisión y capturas: [REDISENO_REVIEW.md](docs/REDISENO_REVIEW.md).
+El propietario tiene pendiente la revisión visual final. `/` contiene la página principal:
 navegación, hero, proyectos destacados, seis sistemas backend, perfil, formación,
 Outlier como experiencia profesional, tecnologías por función y contacto directo.
 `/design-system` conserva la referencia de componentes y estados.
@@ -59,8 +61,8 @@ volver a compilar antes de ejecutarlos si cambió la UI. No requieren cuentas,
 credenciales ni servicios externos. Opcionalmente,
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` permite usar un Chromium ya instalado.
 
-La suite incluye 24 pruebas: 4 de contenido, 8 del sistema de diseño, 6 de la
-homepage y 6 de Hangar. Comprueba escritorio y móvil, axe en estados cerrados/abiertos,
+La suite incluye 32 pruebas: 4 de contenido, 8 del sistema de diseño, 8 de la
+homepage, 6 de Hangar y 6 de TaskFlow Pro. Comprueba escritorio y móvil, axe en estados cerrados/abiertos,
 navegación por teclado, anclas, contacto, targets táctiles y desbordamientos a
 320, 390, 768, 1024 y 1920px. Las pruebas de contenido comprueban
 coherencia y trazabilidad; no reemplazan la revisión de fuentes ni verifican

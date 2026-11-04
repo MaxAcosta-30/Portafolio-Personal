@@ -97,3 +97,24 @@ inventory-saas `f869b250f74f43a2d98669e9b52ba813596e5c06`.
 - La comprobación de la pestaña local abierta en la aplicación quedó pendiente:
   la revisión automática bloqueó su acceso por un límite de uso. Recargar y
   revisar visualmente los enlaces y detalles de proyectos en esa pestaña.
+
+
+## Revalidación para R2 · 29 de octubre de 2026
+
+La consulta del propietario mediante el conector de GitHub devolvió 13 repositorios públicos. Los ocho proyectos ya presentados siguen figurando con visibilidad pública; se registró esta condición explícitamente para los enlaces de la home. El repositorio adicional respecto a la revisión anterior es Portafolio-Personal: no se convierte en un nuevo proyecto destacado. Esta revalidación no ejecuta los proyectos ni acredita demos o métricas. Las referencias de implementación mantienen las revisiones fijadas en la auditoría anterior.
+
+
+## Fragmentos para la home · ajuste de vistas técnicas
+
+Al no encontrarse copias locales, el propietario confirmó usar su GitHub MaxAcosta-30. Se leyeron los archivos públicos mediante el conector GitHub, sin ejecutar el código ni copiar repositorios completos.
+
+| Proyecto | Archivo | Revisión | Líneas |
+| --- | --- | --- | --- |
+| Hangar | api/internal/workflows/deploy_workflow.go | 62f02735668eb66e65a06041eb4277525399f174 | 36–44: 9 líneas |
+| TaskFlow Pro | lib/socket/publisher.ts | 9b8a54b9c89a8f7d1b7e8ddc29e6d47a347c1c79 | 7–16: 10 líneas |
+
+Fragmentos contiguos conservados literalmente en src/content/project-previews.ts, con enlaces a sus líneas exactas. Revisión manual y búsqueda de patrones de credenciales en los dos fragmentos: sin secretos encontrados. El primero contiene opciones de timeout/reintentos; el segundo, imports, tipos y una función de publicación Redis con parámetros. No se copiaron valores de entorno ni configuración de conexión.
+
+Los diagramas compactos usan los nodos ya sustentados en los casos: Next.js → Go/Fiber → Temporal → Docker para la solicitud de despliegue; Usuario → API Route → Redis Pub/Sub → Socket.io para cambios del tablero. Routing de Hangar sigue explicado por separado en su caso; no se inventa una actividad independiente de Temporal.
+
+Verificación del ajuste: lint, typecheck, build y 46 pruebas del portafolio aprobados. Sin desbordamientos a 320, 390, 768, 1024 y 1920px; etiquetas de diagramas de al menos 13px efectivos. Sobre mí y home-design.ts comparados con la versión previa al ajuste: intactos. Capturas completas actualizadas en screenshots/full-desktop.png y screenshots/full-mobile.png.

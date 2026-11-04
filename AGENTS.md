@@ -50,5 +50,5 @@ El sitio no debe tener apariencia genérica producida por IA. Evita específicam
 |-------|-----------|---------------|-----------|
 | Impeccable | Sí | Critique, audit, polish, distill, document, animate, typeset, layout del proyecto | `SKILL.md` en `/home/maxa/.agents/skills/impeccable/SKILL.md` |
 | Make interfaces feel better | Sí | Revisión de detalle de interfaz (tipografía, superficies, animaciones, iconos, performance) | `SKILL.md` en `/home/maxa/.agents/skills/make-interfaces-feel-better/SKILL.md` |
-| Transitions.dev | No | No aplicable hasta que exista un `SKILL.md` citable en disco | Carpeta en `/home/maxa/.agents/skills/transitions-dev/` sin `SKILL.md` en la raíz |
-| GSAP skills | No | No aplicable hasta que existan `SKILL.md` citables en disco | Carpetas `gsap-core`, `gsap-frameworks`, `gsap-performance`, `gsap-plugins`, `gsap-react`, `gsap-scrolltrigger`, `gsap-timeline`, `gsap-utils` vacías (sin `SKILL.md`) |
+| Transitions.dev | Sí | Transiciones CSS (`transitions-dev`) y ajuste de motion tokens (`transitions-polish`) | `SKILL.md` en `/home/maxa/.agents/skills/transitions-dev/` y `transitions-polish/`, enlazadas en `~/.claude/skills/` |
+| GSAP skills | Sí | Animaciones de scroll y timelines con GSAP (ya es dependencia del proyecto) | `SKILL.md` en `gsap-core`, `gsap-frameworks`, `gsap-performance`, `gsap-plugins`, `gsap-react`, `gsap-scrolltrigger`, `gsap-timeline`, `gsap-utils`, enlazadas en `~/.claude/skills/` |

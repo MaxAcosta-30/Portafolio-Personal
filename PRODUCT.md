@@ -2,7 +2,7 @@
 
 <!-- impeccable:product-schema 1 -->
 
-Estado: contexto de producto actualizado en la fase 2M. Recoge hechos del brief del propietario y del repositorio; las decisiones abiertas se identifican expresamente. El propietario aprobó la dirección visual **minimalista con propósito**. `DESIGN.md` documenta su implementación.
+Estado: contexto de producto actualizado en la fase 2M. Recoge hechos del brief del propietario y del repositorio; las decisiones abiertas se identifican expresamente. El propietario autorizó la implementación del rediseño oscuro del Prompt R, basado en xmcp y Tequs; la revisión visual final queda a su criterio. `DESIGN.md` documenta su implementación.
 
 ## Platform
 
@@ -53,7 +53,7 @@ Comunicar ingeniería, precisión, sistemas, profundidad técnica, madurez, movi
 
 Restricciones expresas: evitar SaaS genérico, estética hacker, Matrix, cyberpunk, neón excesivo, terminal falsa como diseño principal y un portafolio artístico que dificulte evaluar ingeniería. También evitar gradientes arbitrarios, tarjetas anidadas, cuadrículas interminables de cards, redondeados excesivos, iconos repetidos en cajas, blobs, glassmorphism indiscriminado, tipografía enorme sin intención, dashboards decorativos y movimiento que perjudique lectura o UX.
 
-Dirección aprobada: minimalista con propósito. Fondo claro cálido, texto casi negro, un solo acento, tipografía protagonista, mucho espacio, sin tarjetas ni sombras, proyectos como listas editoriales, movimiento discreto. Los detalles de la implementación están centralizados en los tokens y documentados en `DESIGN.md`.
+Dirección vigente: oscura, minimalista y con el mecanismo real de Hangar como protagonista. Fondo casi negro, texto claro, un acento verde legible, Plex local, espacio, filas editoriales y movimiento discreto. Tequs sustituye a Tamal Sen; xmcp guía la composición. Los detalles de la implementación están centralizados en los tokens y documentados en `DESIGN.md`.
 
 ## Evidence on Hand
 

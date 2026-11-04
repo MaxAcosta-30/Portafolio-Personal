@@ -7,7 +7,7 @@ const captureDirectory = ".impeccable/review";
 
 test("recorrido desde la portada, fuentes y navegación con teclado", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: content.read }).click();
+  await page.getByRole("link", { name: "Leer caso de TaskFlow Pro" }).click();
   await expect(page).toHaveURL(/\/proyectos\/taskflow-pro\/?$/);
   await expect(page).toHaveTitle(/TaskFlow Pro · Caso de estudio/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("TaskFlow Pro");

@@ -14,6 +14,8 @@ export type SupportedText = {
 export type SourcedLink = {
   label: string;
   href: string;
+  /** Repository visibility verified separately from source evidence. */
+  visibility?: "public" | "private";
   evidence: readonly [Evidence, ...Evidence[]];
 };
 
