@@ -5,6 +5,7 @@ import { cvEvidence, supported } from "./evidence";
 export const navigation = {
   brand: { label: profile.name, href: "/" },
   items: [
+    { label: "Servicios", sectionId: "servicios" },
     { label: "Proyectos", sectionId: "proyectos" },
     { label: "Sobre mí", sectionId: "sobre-mi" },
     { label: "Contacto", sectionId: "contacto" },

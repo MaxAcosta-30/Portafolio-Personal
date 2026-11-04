@@ -182,7 +182,7 @@
     @supports not (backdrop-filter: blur(1px)) { background: var(--color-background); }
     @media (prefers-reduced-transparency: reduce) { background: var(--color-background); backdrop-filter: none; }
   }
-  .home-header-inner { @apply grid grid-cols-[1fr_auto] md:flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3; nav { @apply col-span-2 row-start-2 flex gap-2 md:col-auto md:row-auto; } }
+  .home-header-inner { @apply grid grid-cols-[1fr_auto] md:flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3; nav { @apply col-span-2 row-start-2 flex flex-wrap gap-x-1 md:col-auto md:row-auto; } }
   html:has(.home-header) { @variant md { --scroll-offset: 5.5rem; } }
   .home-brand { @apply flex min-h-target flex-col justify-center text-body font-medium; span { @apply text-label font-normal text-muted; } }
   .home-github { @apply col-start-2 row-start-1 text-label; }
@@ -231,6 +231,22 @@
   .project-description { @apply mt-3 max-w-measure text-title; }
   .technology-line { @apply mt-4 flex flex-wrap gap-x-4 gap-y-2 font-mono text-label text-muted; }
   .project-actions { @apply mt-5 flex flex-wrap items-center gap-x-6 gap-y-2; }
+  /* Servicios: lista editorial numerada (contraste con el bento de tarjetas). */
+  .service-list {
+    @apply border-t border-border; counter-reset: service;
+    > li {
+      @apply grid gap-3 border-b border-border py-8 md:grid-cols-12 md:gap-gutter; counter-increment: service;
+      > h3 { @apply text-title font-semibold md:col-span-4; &::before { content: counter(service, decimal-leading-zero); @apply mb-2 block font-mono text-label text-accent; } }
+      > p { @apply max-w-measure text-muted md:col-span-5; }
+    }
+  }
+  .service-proof {
+    @apply md:col-span-3;
+    > span { @apply font-mono text-label text-muted; }
+    ul { @apply mt-1 flex flex-col; }
+    li:not(:has(a)) { @apply py-2 text-label text-muted; }
+    a { @apply min-w-target text-label; }
+  }
   /* Bento asimétrico: en lg las filas alternan 7/5 y 5/7 columnas. */
   .bento { @apply grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:gap-5; }
   .bento-cell {

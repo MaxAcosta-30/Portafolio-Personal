@@ -50,6 +50,19 @@ export const homeDesign = {
   caseLink: "Leer caso",
   caseKicker: "Caso de estudio",
   caseProblem: "Problema",
+  // Oferta de servicios definida por Max. "proof" apunta a ids reales de projects.ts;
+  // no implica clientes ni trabajos comerciales previos.
+  services: {
+    title: "Qué construyo",
+    description: "Software a medida para negocios. Cada servicio se apoya en proyectos que puedes revisar aquí mismo.",
+    proofLabel: "Lo respaldan",
+    items: [
+      { title: "Sitios web y landing pages", text: "Páginas rápidas, accesibles y fáciles de mantener, pensadas para presentar tu negocio y convertir visitas en contactos.", proof: ["taskflow-pro"], note: "Este portafolio (Next.js)" },
+      { title: "Puntos de venta y sistemas de gestión", text: "Inventario, ventas, usuarios y permisos, con datos consistentes aunque varias personas operen al mismo tiempo.", proof: ["secure-inventory", "safeledger", "freelanceguard-erp"] },
+      { title: "APIs e integraciones", text: "APIs documentadas y seguras para conectar tu sistema con aplicaciones web, móviles u otros servicios.", proof: ["secure-vault", "fortressid", "sentinel-iot"] },
+      { title: "Aplicaciones en tiempo real", text: "Tableros, notificaciones y automatizaciones que se actualizan solas, con colas y procesos en segundo plano.", proof: ["taskflow-pro", "hangar"] },
+    ],
+  },
   casesTitle: "Trabajo seleccionado",
   casesDescription: "Dos proyectos autodirigidos. La arquitectura, las decisiones y los límites, explicados en detalle.",
   systemsTitle: "Otros proyectos",

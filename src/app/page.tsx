@@ -7,7 +7,7 @@ import { LinkPreferenciasCookies } from "@/components/cookie-consent";
 import { CopyEmail } from "@/components/copy-email";
 import type { SourcedLink } from "@/content/types";
 import { contact, experience, profile, resume } from "@/content/profile";
-import { engineeringSystems, featuredCaseStudies } from "@/content/projects";
+import { engineeringSystems, featuredCaseStudies, projects } from "@/content/projects";
 import { homepage, portfolioLabels, siteMetadata } from "@/content/site";
 import { homeDesign as content } from "@/content/home-design";
 
@@ -77,6 +77,17 @@ export default function Home() {
           </div>
         </div>
         <Pipeline />
+      </section>
+      <section id="servicios" className="home-section" aria-labelledby="servicios-title">
+        <div className="home-section-heading"><h2 id="servicios-title">{content.services.title}</h2><p>{content.services.description}</p></div>
+        <ol className="service-list">{content.services.items.map(service => <li key={service.title}>
+          <h3>{service.title}</h3>
+          <p>{service.text}</p>
+          <div className="service-proof"><span>{content.services.proofLabel}</span><ul>
+            {service.proof.map(id => projects.find(project => project.id === id)).filter(project => project !== undefined).map(project => <li key={project.id}><a className="text-link" href={`#${project.id}`}>{project.name}</a></li>)}
+            {"note" in service && <li>{service.note}</li>}
+          </ul></div>
+        </li>)}</ol>
       </section>
       <section id="proyectos" className="home-section" aria-labelledby="casos-title">
         <div className="home-section-heading"><h2 id="casos-title">{content.casesTitle}</h2><p>{content.casesDescription}</p></div>
