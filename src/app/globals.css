@@ -31,7 +31,7 @@
   [id] { scroll-margin-block-start: var(--scroll-offset); }
 
   @media (prefers-reduced-motion: reduce) {
-    :root { --duration-state: 0ms; }
+    :root { --duration-state: 0ms; --duration-fast: 0ms; }
     *, *::before, *::after { scroll-behavior: auto !important; }
   }
 
@@ -256,13 +256,14 @@
     @apply flex min-w-0 flex-col border border-border bg-surface p-6 lg:p-8;
     border-radius: var(--radius-surface);
     box-shadow: var(--shadow-raised);
-    transition: transform var(--duration-state) var(--learn-ease), box-shadow var(--duration-state) var(--learn-ease), border-color var(--duration-state) var(--learn-ease);
+    transition: transform var(--duration-fast) var(--ease-smooth-out), box-shadow var(--duration-fast) var(--ease-smooth-out), border-color var(--duration-fast) var(--ease-smooth-out);
     @variant lg { grid-column: span 5; &:nth-child(4n + 1), &:nth-child(4n) { grid-column: span 7; } }
     h3 { @apply font-mono text-label text-muted; }
     .technology-line { @apply mt-auto pt-6; }
     > a, > .repository-status { @apply mt-2 self-start text-label; }
     @media (hover: hover) {
       &:has(.row-primary:hover) {
+        transition-duration: var(--duration-state);
         border-color: color-mix(in oklab, var(--color-accent) 45%, var(--color-border));
         box-shadow: var(--shadow-floating);
         transform: translateY(-2px);
@@ -341,9 +342,9 @@
     @apply grid min-w-0 gap-6 border border-border bg-surface p-4 md:p-6 lg:col-span-7; align-items: start;
     border-radius: var(--radius-surface);
     box-shadow: var(--shadow-raised);
-    transition: transform var(--duration-state) var(--learn-ease), box-shadow var(--duration-state) var(--learn-ease);
+    transition: transform var(--duration-fast) var(--ease-smooth-out), box-shadow var(--duration-fast) var(--ease-smooth-out);
     .architecture-diagram rect { fill: var(--color-background); }
-    @media (hover: hover) { .project-row:has(.row-primary:hover) & { box-shadow: var(--shadow-floating); transform: translateY(-3px); } }
+    @media (hover: hover) { .project-row:has(.row-primary:hover) & { box-shadow: var(--shadow-floating); transform: translateY(-3px); transition-duration: var(--duration-state); } }
   }
   .project-technical figure { @apply min-w-0; }
   .project-technical figcaption { @apply mb-4 text-muted; font-size: max(var(--text-label), 0.8125rem); }
@@ -359,7 +360,7 @@
   }
   .compact-architecture .architecture-node-title { font-size: 16px; }
   .compact-architecture .compact-flow-vertical .architecture-node-title { font-size: 18px; }
-  .home-header .portfolio-nav-link { position: relative; &::after { content: ""; position: absolute; inset-inline: calc(var(--spacing) * 3); bottom: calc(var(--spacing) * 2); height: var(--border-width); background: var(--color-accent); opacity: 0; transform: scaleX(0.5); transition: transform var(--duration-state) var(--learn-ease), opacity var(--duration-state) var(--learn-ease); } &[aria-current="location"]::after { opacity: 1; transform: scaleX(1); } }
+  .home-header .portfolio-nav-link { position: relative; &::after { content: ""; position: absolute; inset-inline: calc(var(--spacing) * 3); bottom: calc(var(--spacing) * 2); height: var(--border-width); background: var(--color-accent); opacity: 0; transform: scaleX(0.5); transition: transform var(--duration-fast) var(--ease-smooth-out), opacity var(--duration-fast) var(--ease-smooth-out); } &[aria-current="location"]::after { opacity: 1; transform: scaleX(1); } }
   .architecture-diagram { @apply min-w-0; svg { @apply block w-full text-accent; } rect { fill: var(--color-surface); stroke: var(--color-control); stroke-width: var(--border-width); } line { stroke: currentColor; stroke-width: var(--border-width); } text { text-anchor: middle; font-family: var(--font-sans); } }
   .architecture-node-title { fill: var(--color-foreground); font-size: 20px; font-weight: var(--font-weight-medium); }
   .architecture-node-detail { fill: var(--color-muted); font-size: 16px; }

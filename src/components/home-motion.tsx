@@ -51,7 +51,12 @@ export function HomeMotion() {
               } else {
                 // Hide only at the instant a visible section starts its 400ms reveal.
                 // Excluding an already visible section avoids a hydration flash.
-                gsap.fromTo(element, { opacity: 0, y: parseFloat(styles.getPropertyValue("--distance-reveal")) }, { opacity: 1, y: 0, duration: seconds("--duration-reveal"), ease: "power2.out", clearProps: "opacity,transform" });
+                // Contenido en bloques escalonados (40ms; 80ms para piezas grandes, total < 300ms).
+                const items = element.querySelectorAll(":scope > .home-section-heading, .service-list > li, .featured-row, .bento > li, .about-intro, .about-side > section, .contact-panel");
+                const targets = items.length ? items : element;
+                const stagger = seconds(items.length > 4 ? "--duration-stagger" : "--duration-micro");
+                // power4.out = quint out, el equivalente GSAP de --ease-smooth-out.
+                gsap.fromTo(targets, { opacity: 0, y: parseFloat(styles.getPropertyValue("--distance-reveal")) }, { opacity: 1, y: 0, duration: seconds("--duration-reveal"), ease: "power4.out", stagger, clearProps: "opacity,transform" });
               }
             });
           }

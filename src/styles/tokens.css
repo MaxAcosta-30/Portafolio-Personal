@@ -76,7 +76,12 @@
     --learn-spread: 0deg;
     --learn-in: 180ms;
     --learn-out: 180ms;
-    --learn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Escala transitions.dev (transitions-polish). */
+    --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --duration-stagger: 40ms;
+    --duration-micro: 80ms;
+    --duration-fast: 250ms;
+    --learn-ease: var(--ease-smooth-out);
     --icon-size: 1.25rem;
     --icon-stroke: 1.5;
     --underline-offset: 0.2em;

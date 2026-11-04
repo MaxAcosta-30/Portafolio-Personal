@@ -136,7 +136,10 @@ hundido dentro del panel, no otra tarjeta. Los SVG de diagramas aún usan
   el panel sube 2–3px, la sombra pasa a `floating` y el borde toma tinte del
   acento.
 - Pipeline, cookies y copiar correo mantienen el comportamiento de R2.
-- Movimiento: entrada de secciones de 400ms/12px y pipeline una vez por sesión.
+- Movimiento (escala transitions.dev): entrada de secciones 400ms/12px con
+  `--ease-smooth-out` (GSAP `power4.out`) y contenido escalonado 40ms (80ms en
+  piezas grandes, total < 300ms); hover de elevación entra en 200ms y sale en
+  250ms; indicador de navegación 250ms; pipeline una vez por sesión.
   Con `prefers-reduced-motion` las duraciones van a 0. Sin `transition: all`.
 
 ## Do's and Don'ts
