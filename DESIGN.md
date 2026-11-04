@@ -1,28 +1,31 @@
 ---
-name: Ingeniería a la vista
+name: Sistema vivo
 description: Portafolio oscuro de Max Acosta, basado en xmcp y la presentación de producto de Tequs
 colors:
-  background: "#0a0a0a"
-  surface: "#121212"
-  surface-muted: "#171b19"
-  foreground: "#ededed"
-  muted: "#a8a8a8"
-  border: "rgba(255, 255, 255, 0.10)"
-  control: "#737b78"
-  accent: "#92cbbd"
-  accent-fill: "#195c52"
-  accent-hover: "#b3e4d6"
-  accent-active: "#c9eee4"
-  on-accent: "#ffffff"
-  selected: "#1a302b"
-  focus-ring: "#92cbbd"
+  background: "#050505"
+  surface: "#0e0e0e"
+  surface-muted: "#151515"
+  foreground: "#f4f4f2"
+  muted: "#9b9b98"
+  border: "rgb(255 255 255 / 0.09)"
+  control: "#6f6f6c"
+  accent: "#f4f4f2"
+  accent-fill: "#f4f4f2"
+  on-accent: "#0a0a0a"
+  focus-ring: "#f4f4f2"
+  light-background: "#ffffff"
+  light-surface: "#f7f7f6"
+  light-foreground: "#0b0b0b"
+  light-muted: "#5f5f5c"
+  light-accent-fill: "#0b0b0b"
+  light-on-accent: "#ffffff"
 typography:
   display:
     fontFamily: "IBM Plex Sans, Arial, sans-serif"
-    fontSize: "clamp(2.5rem, 1.6rem + 4vw, 4.75rem)"
+    fontSize: "clamp(2.75rem, 1.4rem + 5.6vw, 6rem)"
     fontWeight: 600
-    lineHeight: 1.04
-    letterSpacing: "-0.03em"
+    lineHeight: 0.98
+    letterSpacing: "-0.035em"
   body:
     fontFamily: "IBM Plex Sans, Arial, sans-serif"
     fontSize: "17px"
@@ -177,3 +180,32 @@ Se evoluciona la dirección plana: tema claro y oscuro, elevación, radios de
 Mi aportación ya respaldados en `projects.ts`), el bento de sistemas, el bloque
 Sobre mí, el contacto y el header. Se retira la etiqueta de borrador de Sobre
 mí. Las páginas de caso heredan los tokens; su maquetación aún es la de R2.
+
+
+## R4 · Sistema vivo (vigente)
+
+Sustituye a las direcciones anteriores donde contradigan.
+
+- **Paleta monocroma:** negro `#050505` / blanco `#ffffff` y grises; sin color
+  de acento (decisión del propietario). El "acento" es el propio texto; los
+  enlaces se distinguen por subrayado. Botón principal: blanco sobre negro en
+  oscuro, negro sobre blanco en claro.
+- **Tema:** oscuro por defecto, claro por `prefers-color-scheme`, y elección
+  manual con `ThemeToggle` que persiste en `localStorage` y se aplica antes de
+  pintar con `public/theme-init.js` (archivo externo por la CSP). El cambio se
+  revela en círculo desde el botón con View Transitions; sin animación con
+  movimiento reducido o sin soporte.
+- **Momento firmado:** el titular sube palabra a palabra tras una máscara
+  (solo transform), seguido de introducción y acciones (desplazamiento y
+  desenfoque, sin opacidad: el texto es legible desde el primer fotograma).
+- **Riel del sistema** (≥80rem): línea fija en el margen interior que se llena
+  con el scroll; un nodo por sección se enciende al alcanzarla. Decorativo
+  (`aria-hidden`).
+- **Entradas por tipo de sección:** servicios deslizan, celdas del bento se
+  descubren con máscara, cada caso entra al aparecer con el panel técnico
+  desde su lado y desenfoque, el contacto se enfoca. 400ms, `power4.out`.
+- **Luz bajo el cursor** en celdas, paneles técnicos y contacto
+  (`data-spotlight`), 7% del color del texto.
+- **Sin etiquetas sobre títulos** ni numeración de secciones; Mono solo para
+  código, stack, rutas y el correo.
+- Títulos de sección fluidos hasta 48px; display hasta 96px.

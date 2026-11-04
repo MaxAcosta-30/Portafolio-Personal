@@ -4,7 +4,7 @@ import { projectPreviews } from "@/content/project-previews";
 export function ProjectTechnicalPreview({ projectId, projectName }: { projectId: string; projectName: string }) {
   const preview = projectPreviews[projectId as keyof typeof projectPreviews];
   if (!preview) return null;
-  return <div className="project-technical">
+  return <div className="project-technical" data-spotlight>
     <figure className="technical-flow">
       <figcaption>{preview.diagramLabel}</figcaption>
       <CompactArchitectureDiagram id={`preview-${projectId}`} label={preview.diagramLabel} nodes={preview.nodes} />

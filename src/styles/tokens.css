@@ -1,20 +1,22 @@
-/* Source of truth: Oscuro minimalista con propósito. Tailwind consumes these tokens directly. */
+/* Source of truth · R4 "Sistema vivo": monocromo puro (negro, blanco y grises).
+   El tema oscuro es el valor por defecto; el claro se aplica por
+   prefers-color-scheme o por elección explícita (html[data-theme]). */
 @theme static {
   --color-*: initial;
-  --color-background: #0a0a0a;
-  --color-surface: #121212;
-  --color-foreground: #ededed;
-  --color-muted: #a8a8a8;
-  --color-border: rgba(255, 255, 255, 0.10);
-  --color-control: #737b78;
-  --color-accent: #92cbbd;
-  --color-accent-fill: #195c52;
-  --color-surface-muted: #171b19;
-  --color-selected: #1a302b;
-  --color-accent-hover: #b3e4d6;
-  --color-accent-active: #c9eee4;
-  --color-on-accent: #ffffff;
-  --color-focus-ring: #92cbbd;
+  --color-background: #050505;
+  --color-surface: #0e0e0e;
+  --color-foreground: #f4f4f2;
+  --color-muted: #9b9b98;
+  --color-border: rgb(255 255 255 / 0.09);
+  --color-control: #6f6f6c;
+  --color-accent: #f4f4f2;
+  --color-accent-fill: #f4f4f2;
+  --color-surface-muted: #151515;
+  --color-selected: #1f1f1f;
+  --color-accent-hover: #ffffff;
+  --color-accent-active: #d6d6d3;
+  --color-on-accent: #0a0a0a;
+  --color-focus-ring: #f4f4f2;
 
   --spacing: 0.25rem;
   --spacing-page: 1.25rem;
@@ -27,11 +29,12 @@
   --container-consent: 24rem;
 
   /* Fluid: 40px en 360px → 76px en ~1280px; heading 24px → 32px. */
-  --text-display: clamp(2.5rem, 1.6rem + 4vw, 4.75rem);
-  --text-display--line-height: 1.04;
-  --text-display--letter-spacing: -0.03em;
-  --text-heading: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);
-  --text-heading--line-height: 1.2;
+  --text-display: clamp(2.75rem, 1.4rem + 5.6vw, 6rem);
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.035em;
+  --text-heading: clamp(1.875rem, 1.3rem + 2.2vw, 3rem);
+  --text-heading--line-height: 1.08;
+  --text-heading--letter-spacing: -0.025em;
   --text-title: 20px;
   --text-title--line-height: 1.35;
   --text-body: 17px;
@@ -106,29 +109,57 @@
       --text-title: 20px;
     }
 
-    /* Tema claro: mismo acento, oscurecido para mantener AA sobre blanco. */
-    @media (prefers-color-scheme: light) {
-      --color-background: #f6f7f6;
-      --color-surface: #ffffff;
-      --color-surface-muted: #eef2f0;
-      --color-foreground: #151716;
-      --color-muted: #5a5e5c;
-      --color-border: rgb(0 0 0 / 0.09);
-      --color-control: #717976;
-      --color-accent: #1d6b5f;
-      --color-accent-fill: #195c52;
-      --color-accent-hover: #15544a;
-      --color-accent-active: #10433b;
-      --color-selected: #dcebe6;
-      --color-focus-ring: #1d6b5f;
+  }
+
+  /* Tema claro: blanco puro; el acento es el negro del texto. */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --color-background: #ffffff;
+      --color-surface: #f7f7f6;
+      --color-surface-muted: #efefed;
+      --color-foreground: #0b0b0b;
+      --color-muted: #5f5f5c;
+      --color-border: rgb(0 0 0 / 0.08);
+      --color-control: #767673;
+      --color-accent: #0b0b0b;
+      --color-accent-fill: #0b0b0b;
+      --color-accent-hover: #2a2a28;
+      --color-accent-active: #444441;
+      --color-selected: #ececea;
+      --color-focus-ring: #0b0b0b;
+      --color-on-accent: #ffffff;
       --shadow-raised:
-        0 1px 1px rgb(16 24 22 / 0.04),
-        0 2px 4px rgb(16 24 22 / 0.04),
-        0 12px 28px -8px rgb(16 24 22 / 0.1);
+        0 1px 1px rgb(0 0 0 / 0.04),
+        0 2px 4px rgb(0 0 0 / 0.04),
+        0 12px 28px -8px rgb(0 0 0 / 0.1);
       --shadow-floating:
-        0 1px 2px rgb(16 24 22 / 0.05),
-        0 8px 16px -4px rgb(16 24 22 / 0.06),
-        0 28px 56px -12px rgb(16 24 22 / 0.16);
+        0 1px 2px rgb(0 0 0 / 0.05),
+        0 8px 16px -4px rgb(0 0 0 / 0.06),
+        0 28px 56px -12px rgb(0 0 0 / 0.16);
     }
+  }
+  :root[data-theme="light"] {
+    --color-background: #ffffff;
+    --color-surface: #f7f7f6;
+    --color-surface-muted: #efefed;
+    --color-foreground: #0b0b0b;
+    --color-muted: #5f5f5c;
+    --color-border: rgb(0 0 0 / 0.08);
+    --color-control: #767673;
+    --color-accent: #0b0b0b;
+    --color-accent-fill: #0b0b0b;
+    --color-accent-hover: #2a2a28;
+    --color-accent-active: #444441;
+    --color-selected: #ececea;
+    --color-focus-ring: #0b0b0b;
+    --color-on-accent: #ffffff;
+    --shadow-raised:
+      0 1px 1px rgb(0 0 0 / 0.04),
+      0 2px 4px rgb(0 0 0 / 0.04),
+      0 12px 28px -8px rgb(0 0 0 / 0.1);
+    --shadow-floating:
+      0 1px 2px rgb(0 0 0 / 0.05),
+      0 8px 16px -4px rgb(0 0 0 / 0.06),
+      0 28px 56px -12px rgb(0 0 0 / 0.16);
   }
 }

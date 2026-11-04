@@ -73,7 +73,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={siteMetadata.language}>
+    <html lang={siteMetadata.language} suppressHydrationWarning>
+      <head>
+        {/* Bloqueante a propósito: fija data-theme antes de pintar para evitar el destello de tema. */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script src="/theme-init.js" />
+      </head>
       <body className={`${plexSans.variable} ${plexMono.variable} antialiased`}>
         <Analytics />
         {children}

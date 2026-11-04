@@ -48,7 +48,6 @@ export const homeDesign = {
   },
   cases: { hangar: hangarCaseStudy.href, "taskflow-pro": taskFlowCaseStudy.href },
   caseLink: "Leer caso",
-  caseKicker: "Caso de estudio",
   caseProblem: "Problema",
   // Oferta de servicios definida por Max. "proof" apunta a ids reales de projects.ts;
   // no implica clientes ni trabajos comerciales previos.

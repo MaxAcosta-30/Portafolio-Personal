@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Fragment } from "react";
+import { SystemRail } from "@/components/system-rail";
 import { HomeMotion } from "@/components/home-motion";
 import { ProjectTechnicalPreview } from "@/components/project-technical-preview";
 import { SiteHeader } from "@/components/portfolio";
@@ -65,11 +67,11 @@ export default function Home() {
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
     <SiteHeader compact />
     <HomeMotion />
+    <SystemRail sections={["servicios", "proyectos", "sistemas-backend", "sobre-mi", "contacto"]} />
     <main id="contenido" tabIndex={-1} className="page-container home-content">
       <section className="home-hero" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="hero-eyebrow">{content.headerRole}</p>
-          <h1 id="hero-title">{content.headline}</h1>
+          <h1 id="hero-title" className="hero-title">{content.headline.split(" ").map((word, index) => <Fragment key={index}>{index > 0 && " "}<span className="word"><span>{word}</span></span></Fragment>)}</h1>
           <p className="hero-introduction">{content.introduction}</p>
           <div className="hero-actions">
             <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<Icon name="arrow" /></a>
@@ -95,7 +97,6 @@ export default function Home() {
           const caseHref = content.cases[project.id as keyof typeof content.cases];
           return <article id={project.id} key={project.id} className="featured-row project-row t-learn">
             <div className="featured-copy">
-              <p className="featured-kicker">{content.caseKicker}</p>
               <h3 aria-label={project.name}>{caseHref ? <Link className="row-primary" href={caseHref} aria-label={`${content.caseLink} de ${project.name}`}>{project.name}<span className="t-learn-chevron"><Icon name="arrow" /></span></Link> : project.name}</h3>
               {project.summary && <p className="project-description">{project.summary.text}</p>}
               <dl className="featured-facts">
@@ -111,7 +112,7 @@ export default function Home() {
       </section>
       <section id="sistemas-backend" className="home-section" aria-labelledby="sistemas-title">
         <div className="home-section-heading"><h2 id="sistemas-title">{content.systemsTitle}</h2><p>{content.systemsDescription}</p></div>
-        <ul className="bento">{systems.map(project => <li id={project.id} key={project.id} className="bento-cell project-row t-learn">
+        <ul className="bento">{systems.map(project => <li id={project.id} key={project.id} className="bento-cell project-row t-learn" data-spotlight>
           <h3>{project.name}</h3>
           {project.engineeringFocus && <p className="bento-focus">{project.engineeringFocus.text}</p>}
           {project.summary && <p className="bento-summary">{project.summary.text}</p>}
@@ -140,9 +141,8 @@ export default function Home() {
         </div>
       </section>
       <section id="contacto" className="home-section home-contact" aria-labelledby="contacto-title">
-        <div className="contact-panel blueprint">
+        <div className="contact-panel blueprint" data-spotlight>
           <div>
-            <p className="featured-kicker">{contact.title}</p>
             <h2 id="contacto-title">{content.contactTitle}</h2>
             <p className="contact-description">{content.contactDescription}</p>
           </div>
