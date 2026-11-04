@@ -1,26 +1,16 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import localFont from "next/font/local";
+import { Big_Shoulders, Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 import { Analytics } from "@/components/analytics";
 import { CookieConsent } from "@/components/cookie-consent";
 import "./globals.css";
 
-const plexSans = localFont({
-  src: "../assets/fonts/plex-sans-latin.woff2",
-  variable: "--font-plex-sans",
-  weight: "100 700",
-  display: "swap",
-});
-
-const plexMono = localFont({
-  src: "../assets/fonts/plex-mono-latin.woff2",
-  variable: "--font-plex-mono",
-  weight: "400",
-  display: "swap",
-  preload: false,
-});
+// Dirección "Hangar en vivo": señalética industrial condensada + sans de lectura + mono para datos.
+const display = Big_Shoulders({ subsets: ["latin"], variable: "--font-display-face", display: "swap", adjustFontFallback: false });
+const sans = Instrument_Sans({ subsets: ["latin"], variable: "--font-sans-face", display: "swap" });
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap", preload: false });
 
 const baseUrl = siteMetadata.siteUrl;
 const publicBaseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || null;
@@ -73,13 +63,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={siteMetadata.language} suppressHydrationWarning>
+    <html lang={siteMetadata.language} className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         {/* Bloqueante a propósito: fija data-theme antes de pintar para evitar el destello de tema. */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script src="/theme-init.js" />
       </head>
-      <body className={`${plexSans.variable} ${plexMono.variable} antialiased`}>
+      <body className="antialiased">
         <Analytics />
         {children}
         <CookieConsent />

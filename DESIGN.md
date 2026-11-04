@@ -1,59 +1,35 @@
 ---
-name: Sistema vivo
-description: Portafolio oscuro de Max Acosta, basado en xmcp y la presentación de producto de Tequs
+name: Hangar en vivo
+description: Portafolio de Max Acosta — señalética industrial con un despliegue real de Hangar como elemento firma
 colors:
-  background: "#050505"
-  surface: "#0e0e0e"
-  surface-muted: "#151515"
-  foreground: "#f4f4f2"
-  muted: "#9b9b98"
-  border: "rgb(255 255 255 / 0.09)"
-  control: "#6f6f6c"
-  accent: "#f4f4f2"
-  accent-fill: "#f4f4f2"
-  on-accent: "#0a0a0a"
-  focus-ring: "#f4f4f2"
-  light-background: "#ffffff"
-  light-surface: "#f7f7f6"
-  light-foreground: "#0b0b0b"
-  light-muted: "#5f5f5c"
-  light-accent-fill: "#0b0b0b"
-  light-on-accent: "#ffffff"
+  background: "#111210"
+  surface: "#1a1b18"
+  foreground: "#e9e6dd"
+  muted: "#a3a097"
+  accent: "#f2c230"
+  accent-fill: "#f2c230"
+  on-accent: "#111210"
+  success: "#4ade80"
+  light-background: "#eceae3"
+  light-surface: "#f6f4ee"
+  light-foreground: "#16150f"
+  light-muted: "#5a574d"
+  light-accent-text: "#7a5d00"
+  light-success: "#15803d"
 typography:
   display:
-    fontFamily: "IBM Plex Sans, Arial, sans-serif"
-    fontSize: "clamp(2.75rem, 1.4rem + 5.6vw, 6rem)"
-    fontWeight: 600
-    lineHeight: 0.98
-    letterSpacing: "-0.035em"
+    fontFamily: "Big Shoulders (variable, opsz), mayúsculas, 800"
+    fontSize: "clamp(3.5rem, 0.6rem + 8.2vw, 9rem)"
+    lineHeight: 0.9
   body:
-    fontFamily: "IBM Plex Sans, Arial, sans-serif"
+    fontFamily: "Instrument Sans"
     fontSize: "17px"
-    fontWeight: 400
     lineHeight: 1.6
-  label:
-    fontFamily: "IBM Plex Sans, Arial, sans-serif"
-    fontSize: "12px"
-    fontWeight: 400
-    lineHeight: 1.5
+  mono:
+    fontFamily: "JetBrains Mono (código, registro, stack, correo)"
 rounded:
-  control: "0.5rem"
-  surface: "0.875rem"
-spacing:
-  unit: "0.25rem"
-  gutter: "1.5rem"
-  target: "2.75rem"
-components:
-  button-primary:
-    backgroundColor: "{colors.accent-fill}"
-    textColor: "{colors.on-accent}"
-    rounded: "{rounded.control}"
-    padding: "0.5rem 1rem"
-  button-secondary:
-    backgroundColor: "transparent"
-    textColor: "{colors.accent}"
-    rounded: "{rounded.control}"
-    padding: "0.5rem 1rem"
+  control: "0.25rem"
+  surface: "0.375rem"
 ---
 
 # Sistema de diseño — Ingeniería a la vista
@@ -209,3 +185,40 @@ Sustituye a las direcciones anteriores donde contradigan.
 - **Sin etiquetas sobre títulos** ni numeración de secciones; Mono solo para
   código, stack, rutas y el correo.
 - Títulos de sección fluidos hasta 48px; display hasta 96px.
+
+
+## R5 · Hangar en vivo (vigente; sustituye R3 y R4)
+
+Brief: negocios locales y reclutadores técnicos deben sentir **asombro de ver
+software funcionando**; personalidad *maquinista*; recuerdo: "su portafolio
+desplegaba una app mientras lo leía".
+
+- **Elemento firma (primer viewport):** `DeployConsole`. Simula el flujo real
+  de Hangar (202 → pending → DeployWorkflow → CloneRepository →
+  BuildDockerImage → RunContainer 128 MiB / 0.25 CPU → Traefik Host → success)
+  y el visitante despliega el nombre de su negocio como
+  `<slug>.hangar.local`. Rotulado como simulación. Consola oscura en ambos
+  temas (instrumento físico); sangra por la derecha desde 64rem.
+  El propietario pidió expresamente este recurso: anula para esta dirección la
+  prohibición de "terminal falsa como recurso principal".
+- **Tipografía:** Big Shoulders 800 en mayúsculas para display (hasta 144px,
+  >6:1 frente a 17px), Instrument Sans para lectura, JetBrains Mono solo para
+  datos. Fuentes de Google autoalojadas por `next/font`; las variables se
+  declaran en `<html>` y se publican en `:root` para el CSS plano.
+- **Color:** asfalto + amarillo señal dominante en acciones y estados; verde
+  solo para éxito. Claro diseñado: hormigón, tinta y ocre `#7a5d00` para
+  texto; el relleno de botón sigue amarillo con texto tinta.
+- **Ritmo y roturas de retícula:** consola a sangre, cinta de servicios a
+  sangre, banda amarilla en Sobre mí, contacto monumental. Cada sección tiene
+  forma propia: tablero de señalética (servicios), casos con visual vivo
+  (instrumentos de reintentos reales + estados para Hangar; tablero Ana/Luis
+  sincronizado vía `board:{id}` para TaskFlow), registro denso (sistemas).
+- **Movimiento:** entrada orquestada del hero (palabras tras máscara, consola,
+  registro que se escribe con clip-path); scroll: cinta con scrub, servicios
+  que entran en servicio al cruzar el 62% (una vez), registro escalonado,
+  desplazamiento de la banda. Todo sin opacidad sobre texto visible.
+- **Calidad:** sin JS se ve el despliegue terminado y todo encendido; con
+  movimiento reducido igual. Registro enfocable. Tokens de hover separados
+  para texto (`accent-hover`) y relleno (`accent-fill-hover`).
+- Estilos de la home en `src/app/home.css`; `globals.css` conserva lo
+  compartido con las páginas de caso.

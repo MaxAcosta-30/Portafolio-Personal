@@ -86,7 +86,9 @@ test("sin desbordamientos en móvil estrecho, tablet y pantalla grande", async (
     const overflow = await page.locator("body *").evaluateAll((elements) => elements.filter((element) => {
       if (element.closest("details:not([open])") && !element.closest("summary")) return false;
       if (element.classList.contains("skip-link") || element.classList.contains("sr-only")) return false;
-      const scroller = element.closest(".technical-code pre");
+      // La cinta de servicios desborda a propósito dentro de un contenedor recortado.
+      if (element.closest(".ticker")) return false;
+      const scroller = element.closest(".technical-code pre, .code-well pre");
       if (scroller && element !== scroller && getComputedStyle(scroller).overflowX === "auto") return false;
       const box = element.getBoundingClientRect();
       return box.width > 0 && (box.right > innerWidth + 1 || box.left < -1);
@@ -124,42 +126,20 @@ test("consentimiento y preferencias sin cubrir el contenido", async ({ page }) =
   await expect(panel).toHaveCount(0);
 });
 
-test("ajustes del hero: orden, columna, separación y legibilidad del pipeline", async ({ page }, testInfo) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  const geometry = await page.evaluate(() => {
-    const figure = document.querySelector<HTMLElement>(".home-pipeline")!;
-    const actions = document.querySelector<HTMLElement>(".hero-actions")!;
-    const header = document.querySelector<HTMLElement>(".home-header-inner")!;
-    const main = document.querySelector<HTMLElement>("main")!;
-    const f = figure.getBoundingClientRect(), a = actions.getBoundingClientRect();
-    const h = header.getBoundingClientRect(), m = main.getBoundingClientRect();
-    function luminance(rgb: string) {
-      const channels = rgb.match(/[\d.]+/g)!.slice(0, 3).map(Number).map(n => { const v = n / 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
-      return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
-    }
-    const bg = luminance(getComputedStyle(document.body).backgroundColor);
-    const paragraphs = [...figure.querySelectorAll<HTMLElement>(".pipeline-stages p, .pipeline-note")];
-    const sizes = paragraphs.map(el => parseFloat(getComputedStyle(el).fontSize));
-    const contrasts = paragraphs.map(el => { const l = luminance(getComputedStyle(el).color); return (Math.max(l, bg) + 0.05) / (Math.min(l, bg) + 0.05); });
-    const points = [...figure.querySelectorAll<HTMLElement>(".pipeline-point")].map(el => { const r = el.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, size: r.width }; });
-    const ends = [...figure.querySelectorAll(".pipeline-track svg")].map(el => el.getBoundingClientRect().right);
-    return { gap: f.top - a.bottom, headerX: h.x, mainX: m.x, headerWidth: h.width, mainWidth: m.width, headerPadding: getComputedStyle(header).paddingInlineStart, mainPadding: getComputedStyle(main).paddingInlineStart, caption: getComputedStyle(figure.querySelector("figcaption")!).textAlign, sizes, contrasts, points, ends };
-  });
-  expect(geometry.gap).toBeGreaterThan(0);
-  expect(geometry.headerX).toBeCloseTo(geometry.mainX);
-  expect(geometry.headerWidth).toBeCloseTo(geometry.mainWidth);
-  expect(geometry.headerPadding).toBe(geometry.mainPadding);
-  expect(geometry.caption).toBe("start");
-  geometry.sizes.slice(0, 4).forEach(size => expect(size).toBeGreaterThanOrEqual(13));
-  expect(geometry.sizes[4]).toBeGreaterThanOrEqual(12);
-  geometry.contrasts.forEach(ratio => expect(ratio).toBeGreaterThanOrEqual(4.5));
-  geometry.points.forEach(point => expect(point.size).toBeGreaterThanOrEqual(12));
-  if (testInfo.project.name === "desktop") {
-    expect(geometry.gap).toBeGreaterThanOrEqual(96);
-    expect(geometry.gap).toBeLessThanOrEqual(128);
-    geometry.points.forEach(point => expect(point.y).toBeCloseTo(geometry.points[0].y));
-    geometry.ends.forEach((end, i) => expect(end).toBeCloseTo(geometry.points[i + 1].x - 12));
-  }
+test("hero: la consola de Hangar despliega el negocio del visitante", async ({ page }, testInfo) => {
+  await page.goto("/");
+  const deploy = page.locator(".deploy");
+  await expect(deploy).toHaveAttribute("data-state", "success", { timeout: 10_000 });
+  // El elemento firma está en el primer viewport.
+  const box = (await deploy.boundingBox())!;
+  expect(box.y).toBeLessThan(page.viewportSize()!.height * (testInfo.project.name === "desktop" ? 0.5 : 1.6));
+  await page.getByLabel("Nombre de tu negocio").fill("Panadería Lupita");
+  await page.getByRole("button", { name: "Desplegar" }).click();
+  await expect(deploy).toHaveAttribute("data-state", "running");
+  await expect(deploy).toHaveAttribute("data-state", "success", { timeout: 10_000 });
+  await expect(deploy.locator(".result-url")).toHaveText("panaderia-lupita.hangar.local");
+  await expect(deploy.locator(".deploy-log li")).toHaveCount(11);
+  await expect(deploy.locator(".deploy-stages li[data-state='done']")).toHaveCount(4);
 });
 
 test("R2: secciones, navegación activa, filas completas y borde del pie", async ({ page }) => {
@@ -180,7 +160,7 @@ test("R2: secciones, navegación activa, filas completas y borde del pie", async
     width: element.getBoundingClientRect().width,
   }));
   expect(footer.inset).toBe(footer.padding);
-  expect(footer.width).toBe(await page.locator("main").evaluate(element => element.getBoundingClientRect().width));
+  expect(footer.width).toBe(await page.locator("main .page-container").first().evaluate(element => element.getBoundingClientRect().width));
   expect(await page.locator("a a").count()).toBe(0);
   await page.locator("#hangar .row-primary").focus();
   await expect(page.locator("#hangar")).toHaveCSS("outline-style", "solid");

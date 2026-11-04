@@ -1,4 +1,5 @@
 // Aplica el tema elegido antes del primer pintado (archivo externo: la CSP bloquea scripts inline).
+document.documentElement.classList.add("js");
 try {
   var theme = localStorage.getItem("theme");
   if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
