@@ -8,7 +8,7 @@ import { CopyEmail } from "@/components/copy-email";
 import type { SourcedLink } from "@/content/types";
 import { contact, experience, profile, resume } from "@/content/profile";
 import { engineeringSystems, featuredCaseStudies } from "@/content/projects";
-import { portfolioLabels, siteMetadata } from "@/content/site";
+import { homepage, portfolioLabels, siteMetadata } from "@/content/site";
 import { homeDesign as content } from "@/content/home-design";
 
 export const metadata = {
@@ -72,8 +72,8 @@ export default function Home() {
           <h1 id="hero-title">{content.headline}</h1>
           <p className="hero-introduction">{content.introduction}</p>
           <div className="hero-actions">
-            <Link className="button" href={content.cases.hangar}>{content.caseAction}<Icon name="arrow" /></Link>
-            <a className="button button-secondary" href="#contacto">Contacto</a>
+            <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<Icon name="arrow" /></a>
+            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}</a>
           </div>
         </div>
         <Pipeline />

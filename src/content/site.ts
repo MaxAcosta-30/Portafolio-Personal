@@ -20,7 +20,7 @@ export const homepage = {
     headline: "Desarrollo Full Stack con foco en backend y APIs.",
     introduction: profile.introduction,
     specialty: profile.focus,
-    primaryAction: { label: "Hablemos", sectionId: "contacto" },
+    primaryAction: { label: "Cuéntame tu proyecto", sectionId: "contacto" },
     secondaryAction: { label: "Ver proyectos", sectionId: "proyectos" },
   },
   projects: {

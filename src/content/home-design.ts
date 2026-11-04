@@ -4,7 +4,8 @@ import { hangarCaseStudy } from "./hangar-case-study";
 import { taskFlowCaseStudy } from "./taskflow-case-study";
 
 export const homeDesign = {
-  headline: "Desarrollo de software: backend, APIs y sistemas en tiempo real.",
+  // Propuesta de valor definida por Max (servicios que ofrece, no proyectos previos).
+  headline: "Construyo el software que tu negocio necesita.",
   headerRole: "Desarrollador de software Full Stack",
   about: {
     title: "Sobre mí",
@@ -25,7 +26,7 @@ export const homeDesign = {
       { label: "Calidad y pruebas", items: ["Vitest", "Playwright", "Pruebas de integración", "Observabilidad"], evidence: [repositoryEvidence("taskflow-pro", "package.json"), cvEvidence("Página 2 · Habilidades")] },
     ],
   },
-  introduction: "Soy Max Acosta, estudiante de Ingeniería en Sistemas Computacionales y desarrollador Full Stack.",
+  introduction: "Sitios web, landing pages, puntos de venta, APIs y sistemas a medida. Soy Max Acosta, desarrollador Full Stack y estudiante de Ingeniería en Sistemas Computacionales.",
   pipeline: {
     title: "Hangar: del repositorio a la aplicación",
     description: "Un pipeline de despliegue autoalojado, coordinado con Go y Temporal.",
@@ -46,7 +47,6 @@ export const homeDesign = {
     note: "El routing se configura dentro de RunContainer. Esquema del código, no una ejecución en vivo.",
   },
   cases: { hangar: hangarCaseStudy.href, "taskflow-pro": taskFlowCaseStudy.href },
-  caseAction: "Ver caso: Hangar",
   caseLink: "Leer caso",
   caseKicker: "Caso de estudio",
   caseProblem: "Problema",
@@ -57,5 +57,5 @@ export const homeDesign = {
   systemsDescription: "APIs y servicios backend centrados en seguridad, concurrencia, identidad y telemetría. Cada uno destaca la decisión técnica que lo define.",
   experienceTitle: "Experiencia profesional",
   contactTitle: "Conversemos sobre tu próximo proyecto.",
-  contactDescription: "Backend, una plataforma web o una integración. Cuéntame qué necesitas construir.",
+  contactDescription: "Una landing page, un sitio web, un punto de venta o una API. Cuéntame qué necesitas y te propongo cómo construirlo.",
 } as const;
