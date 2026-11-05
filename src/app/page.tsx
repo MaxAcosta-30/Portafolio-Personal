@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Fragment } from "react";
 import { HomeMotion } from "@/components/home-motion";
-import { DeployConsole } from "@/components/deploy-console";
+import { HeroVisual } from "@/components/hero/hero-visual";
+import { Logo } from "@/components/brand/logo";
+import { repositories } from "@/content/repositories";
 import { SyncBoard } from "@/components/sync-board";
 import { SiteHeader } from "@/components/portfolio";
 import { Icon } from "@/components/ui";
@@ -78,36 +79,41 @@ function TaskFlowVisual() {
 export default function Home() {
   const featured = featuredCaseStudies.filter(project => project.status !== "draft");
   const systems = engineeringSystems.filter(project => project.status === "ready");
-  const ticker = content.services.items.map(service => service.title);
+  const repositoryCount = Object.keys(repositories).length;
+  const words = content.headline.split(" ");
+  const headlineStart = words.slice(0, -1).join(" ");
+  const headlineEnd = words.at(-1);
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
-    <SiteHeader compact />
+    <SiteHeader />
     <HomeMotion />
     <main id="contenido" tabIndex={-1} className="home-content">
+      <div className="intro" aria-hidden="true"><Logo variant="draw" size={88} /></div>
       <section className="hero page-container" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <h1 id="hero-title" className="hero-title">{content.headline.split(" ").map((word, index) => <Fragment key={index}>{index > 0 && " "}<span className="word"><span>{word}</span></span></Fragment>)}</h1>
-          <p className="hero-introduction">{content.introduction}</p>
-          <div className="hero-actions">
+          <p className="hero-badge" data-step="0"><span className="pulse-dot" aria-hidden="true" />{content.badge}</p>
+          <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart} <em>{headlineEnd}</em></h1>
+          <p className="hero-introduction" data-step="2">{content.introduction}</p>
+          <div className="hero-actions" data-step="3">
             <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<Icon name="arrow" /></a>
-            <a className="text-link" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<Icon name="arrow" /></a>
+            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}</a>
           </div>
+          <dl className="hero-metrics" data-step="4">
+            <div><dt>proyectos en GitHub</dt><dd>{repositoryCount}</dd></div>
+            <div><dt>casos documentados</dt><dd>{featured.length}</dd></div>
+            <div><dt>stack principal</dt><dd className="metric-text">{content.mainStack}</dd></div>
+          </dl>
         </div>
-        <DeployConsole caseHref={content.cases.hangar} />
+        <HeroVisual />
       </section>
 
-      <div className="ticker" aria-hidden="true"><div className="ticker-track">{[0, 1].map(copy => <span key={copy}>{ticker.map(item => <Fragment key={item}>{item}<i /></Fragment>)}</span>)}</div></div>
-
-      <section id="servicios" className="home-section services page-container" aria-labelledby="servicios-title">
-        <header className="section-head"><h2 id="servicios-title">{content.services.title}</h2><p>{content.services.description}</p></header>
-        <ol className="service-list">{content.services.items.map(service => <li key={service.title}>
-          <span className="service-light" aria-hidden="true" />
+      <section id="servicios" className="services-strip" aria-labelledby="servicios-title">
+        <h2 id="servicios-title" className="sr-only">{content.services.title}</h2>
+        <ol className="page-container">{content.services.items.map((service, index) => <li key={service.title}>
+          <span className="strip-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
           <h3>{service.title}</h3>
           <p>{service.text}</p>
-          <div className="service-proof"><span>{content.services.proofLabel}</span><ul>
-            {service.proof.map(id => projects.find(project => project.id === id)).filter(project => project !== undefined).map(project => <li key={project.id}><a className="text-link" href={`#${project.id}`}>{project.name}</a></li>)}
-            {"note" in service && <li>{service.note}</li>}
-          </ul></div>
+          <div className="strip-proof"><span>{content.services.proofLabel}</span><ul>{service.proof.map(id => projects.find(project => project.id === id)).filter(project => project !== undefined).map(project => <li key={project.id}><a href={`#${project.id}`}>{project.name}</a></li>)}</ul></div>
         </li>)}</ol>
       </section>
 
@@ -140,6 +146,11 @@ export default function Home() {
           <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
           <RepositoryLink repository={project.repository} name={project.name} />
         </li>)}</ul>
+      </section>
+
+      <section id="proceso" className="home-section process page-container" aria-labelledby="proceso-title">
+        <header className="section-head"><h2 id="proceso-title">{content.process.title}</h2></header>
+        <ol className="process-list">{content.process.steps.map((step, index) => <li key={step.title}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
       </section>
 
       <section id="sobre-mi" className="home-section about" aria-labelledby="sobre-mi-title">

@@ -1,24 +1,35 @@
 /* Source of truth · R5 "Hangar en vivo": asfalto + amarillo señal (oscuro, por defecto)
    y hormigón + tinta (claro, diseñado aparte). El tema claro se aplica por
    prefers-color-scheme o por elección explícita (html[data-theme]). */
+/* Source of truth · R6 "Índigo nocturno". Marca solo oscura. */
 @theme static {
   --color-*: initial;
-  --color-background: #111210;
-  --color-surface: #1a1b18;
-  --color-surface-muted: #23241f;
-  --color-foreground: #e9e6dd;
-  --color-muted: #a3a097;
-  --color-border: rgb(233 230 221 / 0.12);
-  --color-control: #74726a;
-  --color-accent: #f2c230;
-  --color-accent-fill: #f2c230;
-  --color-accent-hover: #f7d562;
-  --color-accent-active: #ffe08a;
-  --color-accent-fill-hover: #f7d562;
-  --color-on-accent: #111210;
-  --color-selected: #2c2711;
-  --color-focus-ring: #f2c230;
-  --color-success: #4ade80;
+  /* Paleta de marca */
+  --color-ink: #0c0e14;
+  --color-graphite: #161a23;
+  --color-panel: #13161d;
+  --color-line: #262b37;
+  --color-fog: #9aa1b2;
+  --color-ivory: #eeebe3;
+  --color-iris: #8b92ff;
+  --color-amber: #f0b67f;
+  /* Roles semánticos que usa el resto del sitio */
+  --color-background: #0c0e14;
+  --color-surface: #161a23;
+  --color-surface-muted: #13161d;
+  --color-foreground: #eeebe3;
+  --color-muted: #9aa1b2;
+  --color-border: #262b37;
+  --color-control: #6b7287;
+  --color-accent: #8b92ff;
+  --color-accent-fill: #8b92ff;
+  --color-accent-hover: #a9aeff;
+  --color-accent-active: #c3c6ff;
+  --color-accent-fill-hover: #a3a9ff;
+  --color-on-accent: #0c0e14;
+  --color-selected: #1d2040;
+  --color-focus-ring: #a9aeff;
+  --color-success: #f0b67f;
 
   --spacing: 0.25rem;
   --spacing-page: 1.25rem;
@@ -30,15 +41,13 @@
   --container-hero: 24ch;
   --container-consent: 24rem;
 
-  /* Escala con contraste ≥6:1 entre display (hasta 152px) y cuerpo (17px). */
-  --text-mega: clamp(4rem, 0.5rem + 14vw, 15rem);
-  --text-mega--line-height: 0.82;
-  --text-display: clamp(3.5rem, 1rem + 8.4vw, 9.5rem);
-  --text-display--line-height: 0.86;
-  --text-display--letter-spacing: -0.015em;
-  --text-heading: clamp(2.5rem, 1.2rem + 4vw, 5rem);
-  --text-heading--line-height: 0.9;
-  --text-heading--letter-spacing: -0.01em;
+  /* Bricolage 700: display hasta 104px frente a cuerpo 17px (6.1:1). */
+  --text-display: clamp(3.25rem, 1.6rem + 7vw, 6.5rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.045em;
+  --text-heading: clamp(2.25rem, 1.4rem + 3.2vw, 4rem);
+  --text-heading--line-height: 0.95;
+  --text-heading--letter-spacing: -0.04em;
   --text-title: 21px;
   --text-title--line-height: 1.3;
   --text-body: 17px;
@@ -54,16 +63,16 @@
   --breakpoint-lg: 64rem;
   --radius-*: initial;
   --radius-none: 0;
-  /* Industrial: esquinas casi rectas. */
-  --radius-control: 0.25rem;
-  --radius-surface: 0.375rem;
+    --radius-control: 0.625rem;
+  --radius-surface: 1rem;
+  --radius-pill: 999px;
   --shadow-*: initial;
   --shadow-none: none;
   --ease-state: cubic-bezier(0.2, 0, 0, 1);
 }
 
 @theme inline {
-  --font-display: var(--font-display-face), "Arial Narrow", sans-serif;
+  --font-display: var(--font-display-face), system-ui, sans-serif;
   --font-sans: var(--font-sans-face), system-ui, sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, monospace;
 }
@@ -71,7 +80,7 @@
 @layer base {
   :root {
     /* @theme inline no publica variables: las familias se exponen aquí para CSS plano (home.css). */
-    --font-display: var(--font-display-face), "Arial Narrow", sans-serif;
+    --font-display: var(--font-display-face), system-ui, sans-serif;
     --font-mono: var(--font-mono-face), ui-monospace, monospace;
     --border-width: 1px;
     --indicator-width: 2px;
@@ -96,56 +105,12 @@
     --underline-offset: 0.2em;
     --scroll-offset: 1.5rem;
     --layer-skip: 10;
-    --shadow-raised: 0 1px 0 rgb(0 0 0 / 0.4), 0 10px 30px -12px rgb(0 0 0 / 0.6);
-    --shadow-floating: 0 2px 0 rgb(0 0 0 / 0.4), 0 30px 60px -20px rgb(0 0 0 / 0.75);
+    --shadow-raised: inset 0 1px 0 rgb(238 235 227 / 0.04), 0 12px 32px -14px rgb(0 0 0 / 0.7);
+    --shadow-floating: inset 0 1px 0 rgb(238 235 227 / 0.06), 0 30px 70px -24px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(139 146 255 / 0.06);
 
     @variant lg {
       --spacing-page: 2.5rem;
       --spacing-section: 9rem;
     }
-  }
-
-  /* Claro diseñado, no invertido: hormigón cálido, tinta, amarillo oscurecido para texto. */
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --color-background: #eceae3;
-      --color-surface: #f6f4ee;
-      --color-surface-muted: #e2dfd5;
-      --color-foreground: #16150f;
-      --color-muted: #5a574d;
-      --color-border: rgb(22 21 15 / 0.14);
-      --color-control: #77736a;
-      --color-accent: #7a5d00;
-      --color-accent-fill: #f2c230;
-      --color-accent-hover: #5c4600;
-      --color-accent-active: #3f3000;
-      --color-accent-fill-hover: #e0b020;
-      --color-on-accent: #16150f;
-      --color-selected: #f5e3a6;
-      --color-focus-ring: #16150f;
-      --color-success: #15803d;
-      --shadow-raised: 0 1px 0 rgb(22 21 15 / 0.08), 0 10px 24px -12px rgb(22 21 15 / 0.2);
-      --shadow-floating: 0 2px 0 rgb(22 21 15 / 0.08), 0 30px 50px -24px rgb(22 21 15 / 0.3);
-    }
-  }
-  :root[data-theme="light"] {
-    --color-background: #eceae3;
-    --color-surface: #f6f4ee;
-    --color-surface-muted: #e2dfd5;
-    --color-foreground: #16150f;
-    --color-muted: #5a574d;
-    --color-border: rgb(22 21 15 / 0.14);
-    --color-control: #77736a;
-    --color-accent: #7a5d00;
-    --color-accent-fill: #f2c230;
-    --color-accent-hover: #5c4600;
-    --color-accent-active: #3f3000;
-    --color-accent-fill-hover: #e0b020;
-    --color-on-accent: #16150f;
-    --color-selected: #f5e3a6;
-    --color-focus-ring: #16150f;
-    --color-success: #15803d;
-    --shadow-raised: 0 1px 0 rgb(22 21 15 / 0.08), 0 10px 24px -12px rgb(22 21 15 / 0.2);
-    --shadow-floating: 0 2px 0 rgb(22 21 15 / 0.08), 0 30px 50px -24px rgb(22 21 15 / 0.3);
   }
 }

@@ -48,14 +48,13 @@ test("lectura sin JavaScript y con movimiento reducido", async ({ browser, page 
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: page.viewportSize()! });
   const staticPage = await context.newPage();
   await staticPage.goto("http://127.0.0.1:3100/");
-  for (const selector of ["h1", ".deploy", ...["servicios", "proyectos", "sobre-mi", "tecnologias", "experiencia", "contacto"].map(id => `#${id}`)]) {
+  for (const selector of ["h1", ".hero-visual", ".hero-fallback", ...["servicios", "proyectos", "proceso", "sobre-mi", "tecnologias", "experiencia", "contacto"].map(id => `#${id}`)]) {
     await expect(staticPage.locator(selector)).toBeVisible();
     await expect(staticPage.locator(selector)).toHaveCSS("opacity", "1");
   }
-  // Sin JS el despliegue se ve terminado y los servicios encendidos.
-  await expect(staticPage.locator(".deploy-log li")).toHaveCount(11);
-  await expect(staticPage.locator(".deploy-result")).toBeVisible();
-  await expect(staticPage.locator(".service-list")).not.toHaveAttribute("data-live");
+  // Sin JS: logo estático, sin intro ni lienzo 3D.
+  await expect(staticPage.locator(".intro")).toBeHidden();
+  await expect(staticPage.locator(".hero-canvas")).toHaveCount(0);
   await staticPage.getByRole("navigation").getByRole("link", { name: "Sobre mí" }).click();
   await expect(staticPage).toHaveURL(/#sobre-mi$/);
   await staticPage.screenshot({ path: `screenshots/no-js-${testInfo.project.name}.png`, fullPage: true });
@@ -63,8 +62,10 @@ test("lectura sin JavaScript y con movimiento reducido", async ({ browser, page 
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.locator(".deploy")).toHaveAttribute("data-state", "success");
-  await expect(page.locator(".service-list")).not.toHaveAttribute("data-live");
+  // Movimiento reducido: sin intro y sin escena 3D (se queda el SVG estático).
+  await expect(page.locator(".intro")).toBeHidden();
+  await page.waitForTimeout(1500);
+  await expect(page.locator(".hero-canvas")).toHaveCount(0);
   await page.locator("#hangar").hover();
   await expect(page.locator("#hangar .t-learn-chevron")).toHaveCSS("transform", "none");
   for (const section of await page.locator(".home-section").all()) {

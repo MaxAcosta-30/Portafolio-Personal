@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { navigation, portfolioLabels } from "@/content/site";
 
-export function HomeNavigation() {
+export function HomeNavigation({ homeLinks = false }: { homeLinks?: boolean }) {
   const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
+    if (homeLinks) return;
     const sections = navigation.items.map(item => document.getElementById(item.sectionId));
     let frame = 0;
     function update() {
@@ -26,9 +27,9 @@ export function HomeNavigation() {
       removeEventListener("resize", schedule);
       cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [homeLinks]);
 
-  return <nav aria-label={portfolioLabels.navigation}>{navigation.items.map(item =>
-    <a key={item.sectionId} className="portfolio-nav-link" href={`#${item.sectionId}`} aria-current={active === item.sectionId ? "location" : undefined}>{item.label}</a>
+  return <nav className="nav-pill" aria-label={portfolioLabels.navigation}>{navigation.items.map(item =>
+    <a key={item.sectionId} className="nav-pill-link" href={`${homeLinks ? "/" : ""}#${item.sectionId}`} aria-current={active === item.sectionId ? "location" : undefined}>{item.label}</a>
   )}</nav>;
 }

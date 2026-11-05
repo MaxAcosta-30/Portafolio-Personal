@@ -6,7 +6,7 @@ import { caseStudySections, hangarFlow, homepage, navigation } from "../src/cont
 import { hangarCaseStudy } from "../src/content/hangar-case-study";
 
 test("navigation and project groups reference existing, unique content", () => {
-  const sections = ["servicios", homepage.projects.id, homepage.about.id, homepage.contact.id];
+  const sections = ["servicios", "proceso", homepage.projects.id, homepage.about.id, homepage.contact.id];
   expect(new Set(sections).size).toBe(sections.length);
   for (const action of [...navigation.items, homepage.hero.primaryAction, homepage.hero.secondaryAction]) {
     expect(sections).toContain(action.sectionId);

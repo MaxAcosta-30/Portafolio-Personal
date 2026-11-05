@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir } from "node:fs/promises";
 import { contact, profile } from "../src/content/profile";
+import { repositories } from "../src/content/repositories";
 import { homeDesign } from "../src/content/home-design";
 import { projects } from "../src/content/projects";
 
@@ -50,7 +51,7 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   await expect(page.getByRole("link", { name: "Saltar al contenido" })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("main")).toBeFocused();
-  for (const label of ["Proyectos", "Sobre mí", "Contacto"]) {
+  for (const label of ["Proyectos", "Proceso", "Sobre mí"]) {
     const link = page.getByRole("navigation").getByRole("link", { name: label, exact: true });
     await link.focus();
     await expect(link).toHaveCSS("outline-style", "solid");
@@ -75,7 +76,7 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   }).map((element) => element.textContent));
   expect(smallTargets).toEqual([]);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.getByRole("link", { name: "Contacto", exact: true }).first()).toHaveCSS("transition-duration", "0s");
+  await expect(page.getByRole("link", { name: "Proceso", exact: true }).first()).toHaveCSS("transition-duration", /^0s(, 0s)*$/);
   await mkdir(captureDirectory, { recursive: true });
   await page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" }).focus();
   await page.locator("#contacto").screenshot({ path: `${captureDirectory}/portfolio-${testInfo.project.name}-contact.png` });
@@ -91,6 +92,8 @@ test("sin desbordamientos en móvil estrecho, tablet y pantalla grande", async (
       if (element.classList.contains("skip-link") || element.classList.contains("sr-only")) return false;
       // La cinta de servicios desborda a propósito dentro de un contenedor recortado.
       if (element.closest(".ticker")) return false;
+      // La navegación en píldora se desplaza horizontalmente a propósito en pantallas estrechas.
+      if (element.closest(".nav-pill")) return false;
       const scroller = element.closest(".technical-code pre, .code-well pre");
       if (scroller && element !== scroller && getComputedStyle(scroller).overflowX === "auto") return false;
       const box = element.getBoundingClientRect();
@@ -129,20 +132,20 @@ test("consentimiento y preferencias sin cubrir el contenido", async ({ page }) =
   await expect(panel).toHaveCount(0);
 });
 
-test("hero: la consola de Hangar despliega el negocio del visitante", async ({ page }, testInfo) => {
+test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ page }, testInfo) => {
   await page.goto("/");
-  const deploy = page.locator(".deploy");
-  await expect(deploy).toHaveAttribute("data-state", "success", { timeout: 10_000 });
-  // El elemento firma está en el primer viewport.
-  const box = (await deploy.boundingBox())!;
-  expect(box.y).toBeLessThan(page.viewportSize()!.height * (testInfo.project.name === "desktop" ? 0.5 : 1.6));
-  await page.getByLabel("Nombre de tu negocio").fill("Panadería Lupita");
-  await page.getByRole("button", { name: "Desplegar" }).click();
-  await expect(deploy).toHaveAttribute("data-state", "running");
-  await expect(deploy).toHaveAttribute("data-state", "success", { timeout: 10_000 });
-  await expect(deploy.locator(".result-url")).toHaveText("panaderia-lupita.hangar.local");
-  await expect(deploy.locator(".deploy-log li")).toHaveCount(11);
-  await expect(deploy.locator(".deploy-stages li[data-state='done']")).toHaveCount(4);
+  await expect(page.locator(".hero-badge")).toHaveText("Disponible para proyectos · Culiacán y remoto");
+  await expect(page.locator(".hero-title em")).toHaveText("futuro.");
+  await expect(page.locator(".hero-metrics dd")).toHaveText([String(Object.keys(repositories).length), "2", "Go · .NET · Next.js"]);
+  await expect(page.getByRole("link", { name: "Cuéntame tu proyecto" })).toHaveAttribute("href", "#contacto");
+  await expect(page.getByRole("link", { name: "Ver casos reales" })).toHaveAttribute("href", "#proyectos");
+  // La alternativa SVG está en el HTML; la escena WebGL la sustituye cuando carga.
+  await expect(page.locator(".hero-fallback")).toHaveCount(1);
+  await expect(page.locator(".hero-visual")).toHaveAttribute("data-ready", "true", { timeout: 15_000 });
+  const box = (await page.locator(".hero-stage").boundingBox())!;
+  if (testInfo.project.name === "desktop") expect(box.y).toBeLessThan(page.viewportSize()!.height);
+  await expect(page.locator(".logs-card")).toContainText("✓ live");
+  await expect(page.locator(".services-strip > ol > li")).toHaveCount(4);
 });
 
 test("R2: secciones, navegación activa, filas completas y borde del pie", async ({ page }) => {
@@ -152,7 +155,7 @@ test("R2: secciones, navegación activa, filas completas y borde del pie", async
   for (const label of ["Backend", "Tiempo real", "Datos", "Seguridad", "Infraestructura", "Calidad y pruebas"]) {
     await expect(page.locator(".technology-groups dt").filter({ hasText: new RegExp(`^${label}$`) })).toBeVisible();
   }
-  for (const id of ["proyectos", "sobre-mi", "contacto"]) {
+  for (const id of ["proyectos", "proceso", "sobre-mi"]) {
     await page.locator(`#${id}`).scrollIntoViewIfNeeded();
     await page.locator(`#${id}`).evaluate(element => element.scrollIntoView());
     await expect(page.locator(`nav a[href="#${id}"]`)).toHaveAttribute("aria-current", "location");
@@ -189,7 +192,7 @@ test("R2: copiar correo confirma éxito y permite recuperarse de un rechazo", as
 test("navegación: cada enlace lleva a su sección y la marca vuelve al inicio", async ({ page }, testInfo) => {
   await page.goto("/");
   const offset = testInfo.project.name === "desktop" ? 88 : 24;
-  for (const id of ["contacto", "servicios", "sobre-mi", "proyectos"]) {
+  for (const id of ["proceso", "servicios", "sobre-mi", "proyectos"]) {
     await page.locator(`nav a[href="#${id}"]`).click();
     await expect.poll(() => page.locator(`#${id}`).evaluate(element => Math.round(element.getBoundingClientRect().top)), { timeout: 4000 }).toBe(offset);
   }

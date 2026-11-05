@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Big_Shoulders, Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 import { Analytics } from "@/components/analytics";
 import { CookieConsent } from "@/components/cookie-consent";
 import "./globals.css";
 
-// Dirección "Hangar en vivo": señalética industrial condensada + sans de lectura + mono para datos.
-const display = Big_Shoulders({ subsets: ["latin"], variable: "--font-display-face", display: "swap", adjustFontFallback: false });
-const sans = Instrument_Sans({ subsets: ["latin"], variable: "--font-sans-face", display: "swap" });
+// R6 "Índigo nocturno": Bricolage para titulares, Geist para texto, JetBrains Mono para datos.
+const display = Bricolage_Grotesque({ subsets: ["latin"], weight: "700", variable: "--font-display-face", display: "swap" });
+const sans = Geist({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-sans-face", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap", preload: false });
 
 const baseUrl = siteMetadata.siteUrl;
@@ -65,9 +65,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang={siteMetadata.language} className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Bloqueante a propósito: fija data-theme antes de pintar para evitar el destello de tema. */}
+        {/* Bloqueante a propósito: marca html.js y si la intro ya se vio, antes de pintar. */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="/theme-init.js" />
+        <script src="/boot.js" />
       </head>
       <body className="antialiased">
         <Analytics />

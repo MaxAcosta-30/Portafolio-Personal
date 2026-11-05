@@ -5,8 +5,10 @@ import { taskFlowCaseStudy } from "./taskflow-case-study";
 
 export const homeDesign = {
   // Propuesta de valor definida por Max (servicios que ofrece, no proyectos previos).
-  headline: "Construyo el software que tu negocio necesita.",
-  headerRole: "Desarrollador de software Full Stack",
+  headline: "Software que se siente futuro.",
+  // Confirmados por el propietario (2026-11-04).
+  badge: "Disponible para proyectos · Culiacán y remoto",
+  mainStack: "Go · .NET · Next.js",
   about: {
     title: "Sobre mí",
     paragraphs: [
@@ -51,6 +53,17 @@ export const homeDesign = {
   caseProblem: "Problema",
   // Oferta de servicios definida por Max. "proof" apunta a ids reales de projects.ts;
   // no implica clientes ni trabajos comerciales previos.
+  // Pasos definidos por el propietario.
+  process: {
+    title: "Proceso",
+    steps: [
+      { title: "Diagnóstico", text: "Entiendo tu negocio y lo que necesitas." },
+      { title: "Propuesta", text: "Alcance, tiempos y cotización por escrito." },
+      { title: "Diseño", text: "Ves cómo va a quedar antes de programar." },
+      { title: "Desarrollo", text: "Avances semanales que puedes probar." },
+      { title: "Entrega y soporte", text: "Publicación, capacitación y ajustes." },
+    ],
+  },
   services: {
     title: "Qué construyo",
     description: "Software a medida para negocios. Cada servicio se apoya en proyectos que puedes revisar aquí mismo.",

@@ -7,9 +7,15 @@ export const navigation = {
   items: [
     { label: "Servicios", sectionId: "servicios" },
     { label: "Proyectos", sectionId: "proyectos" },
+    { label: "Proceso", sectionId: "proceso" },
     { label: "Sobre mí", sectionId: "sobre-mi" },
-    { label: "Contacto", sectionId: "contacto" },
   ],
+  // PENDIENTE: el propietario debe dar su número de WhatsApp. Mientras tanto, la llamada se agenda por correo.
+  // Destino final: https://wa.me/52<número>?text=Hola%20Max%2C%20quiero%20cotizar%20un%20proyecto
+  call: {
+    label: "Agenda una llamada",
+    href: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contact.email?.label ?? "")}&su=${encodeURIComponent("Agendar una llamada")}`,
+  },
   resumeLabel: resume.label,
 };
 
@@ -22,7 +28,7 @@ export const homepage = {
     introduction: profile.introduction,
     specialty: profile.focus,
     primaryAction: { label: "Cuéntame tu proyecto", sectionId: "contacto" },
-    secondaryAction: { label: "Ver proyectos", sectionId: "proyectos" },
+    secondaryAction: { label: "Ver casos reales", sectionId: "proyectos" },
   },
   projects: {
     id: "proyectos",

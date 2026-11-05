@@ -5,9 +5,8 @@ import { useEffect } from "react";
 /**
  * Movimiento ligado al scroll de la home (mejora progresiva: sin JS o con
  * movimiento reducido todo queda visible y encendido).
- * 1. La cinta de servicios avanza con el scroll.
- * 2. Cada servicio "entra en servicio" al cruzar el centro de la pantalla.
- * 3. Las filas del registro se encienden en secuencia al aparecer.
+ * - Las filas del registro se encienden en secuencia al aparecer.
+ * - La frase de Sobre mí se desplaza con el scroll.
  */
 export function HomeMotion() {
   useEffect(() => {
@@ -34,19 +33,7 @@ export function HomeMotion() {
         const [{ gsap }, { ScrollTrigger }] = await Promise.all([import("gsap"), import("gsap/ScrollTrigger")]);
         if (disposed || preference.matches) return;
         gsap.registerPlugin(ScrollTrigger);
-        const services = root!.querySelector<HTMLElement>(".service-list");
         const context = gsap.context(() => {
-          const ticker = root!.querySelector(".ticker");
-          if (ticker) gsap.fromTo(".ticker-track", { xPercent: 0 }, { xPercent: -30, ease: "none", scrollTrigger: { trigger: ticker, start: "top bottom", end: "bottom top", scrub: 0.6 } });
-
-          if (services) {
-            services.dataset.live = "";
-            services.querySelectorAll<HTMLElement>(":scope > li").forEach(row => ScrollTrigger.create({
-              trigger: row, start: "top 62%", once: true,
-              onEnter: () => { row.dataset.on = ""; },
-            }));
-          }
-
           ScrollTrigger.batch(".registry-row", {
             start: "top 88%", once: true,
             onEnter: rows => gsap.fromTo(rows, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power4.out", stagger: 0.06, clearProps: "opacity,transform" }),
@@ -54,10 +41,7 @@ export function HomeMotion() {
 
           gsap.fromTo(".about-statement", { xPercent: 6 }, { xPercent: 0, ease: "none", scrollTrigger: { trigger: ".about-band", start: "top bottom", end: "center center", scrub: 0.6 } });
         }, root!);
-        revert = () => {
-          context.revert();
-          if (services) { delete services.dataset.live; services.querySelectorAll<HTMLElement>("[data-on]").forEach(row => delete row.dataset.on); }
-        };
+        revert = () => context.revert();
       } catch {
         // Si GSAP no carga, el HTML ya está completo y encendido.
       }

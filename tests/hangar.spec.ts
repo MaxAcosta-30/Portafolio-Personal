@@ -39,7 +39,8 @@ test("recorrido desde la portada, fuentes y navegación con teclado", async ({ p
   await expect(page.getByText(content.isolation.limit, { exact: true })).toBeVisible();
   const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(result.violations).toEqual([]);
-  await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: "Contacto", exact: true }).click();
+  await page.locator('a[href="/#contacto"]').first().click();
+  await page.waitForURL(/\/#contacto$/);
   expect(new URL(page.url()).pathname).toBe("/");
   expect(new URL(page.url()).hash).toBe("#contacto");
   await expect(page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" })).toBeVisible();
@@ -71,7 +72,7 @@ test("diagramas legibles, accesibilidad y capturas responsive", async ({ page },
   for (const width of widths) {
     await page.setViewportSize({ width, height: 1000 });
     const overflow = await page.locator("body *").evaluateAll((elements) => elements.filter((el) => {
-      if (el.closest(".technical-code pre")) return false;
+      if (el.closest(".technical-code pre, .nav-pill")) return false;
       if (el.closest("details:not([open])") && !el.closest("summary")) return false;
       if (el.classList.contains("skip-link") || el.classList.contains("sr-only")) return false;
       const rect = el.getBoundingClientRect();

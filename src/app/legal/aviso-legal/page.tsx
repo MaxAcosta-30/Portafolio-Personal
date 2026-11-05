@@ -15,7 +15,7 @@ export default function AvisoLegal() {
   return (
     <>
       <a className="skip-link" href="#contenido">Saltar al contenido</a>
-      <SiteHeader />
+      <SiteHeader homeLinks />
       <main id="contenido" tabIndex={-1} className="page-container">
         <header className="mb-[4rem] border-b border-border pb-[1.5rem]">
           <h1 className="text-display">Aviso legal</h1>
