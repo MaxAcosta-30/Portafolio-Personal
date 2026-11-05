@@ -8,7 +8,7 @@ import { CookieConsent } from "@/components/cookie-consent";
 import "./globals.css";
 
 // R6 "Índigo nocturno": Bricolage para titulares, Geist para texto, JetBrains Mono para datos.
-const display = Bricolage_Grotesque({ subsets: ["latin"], weight: "700", variable: "--font-display-face", display: "swap" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], weight: "600", variable: "--font-display-face", display: "swap" });
 const sans = Geist({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-sans-face", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap", preload: false });
 

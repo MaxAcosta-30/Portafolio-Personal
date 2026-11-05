@@ -43,7 +43,9 @@
 
 @layer components {
   .button {
-    @apply inline-flex min-h-target min-w-target items-center justify-center gap-2 rounded-control border border-accent-fill bg-accent-fill px-4 py-2 text-body font-semibold text-on-accent;
+    /* 14px Geist 500, padding 12px 18px; la altura mínima de 44px conserva el área táctil. */
+    @apply inline-flex min-h-target min-w-target items-center justify-center gap-2 rounded-control border border-accent-fill bg-accent-fill text-on-accent;
+    padding: 12px 18px; font-size: var(--text-ui); font-weight: 500; line-height: 1.2;
     cursor: pointer;
     transition-property: background-color, border-color, color, box-shadow, transform;
     transition-duration: var(--duration-state);
@@ -84,7 +86,7 @@
   }
 
   .text-link {
-    @apply inline-flex min-h-target items-center gap-2 font-semibold text-accent underline decoration-1;
+    @apply inline-flex min-h-target items-center gap-2 font-medium text-accent underline decoration-1;
     text-underline-offset: var(--underline-offset);
     transition: color var(--duration-state) var(--ease-state);
     @media (hover: hover) { &:hover { @apply text-accent-hover decoration-2; } }
@@ -196,7 +198,7 @@
   }
   .nav-pill-link {
     position: relative; display: inline-flex; align-items: center; min-height: var(--spacing-target); padding-inline: clamp(0.625rem, 0.3rem + 1.2vw, 1rem); white-space: nowrap;
-    font-size: clamp(0.8125rem, 0.75rem + 0.2vw, 0.875rem); font-weight: 500; color: var(--color-fog); border-radius: var(--radius-pill);
+    font-size: var(--text-ui); font-weight: 500; color: var(--color-fog); border-radius: var(--radius-pill);
     transition: color var(--duration-state) var(--ease-state), background-color var(--duration-state) var(--ease-state);
     @media (hover: hover) { &:hover { color: var(--color-ivory); } }
     &[aria-current="location"] { color: var(--color-ivory); background: var(--color-graphite); box-shadow: inset 0 0 0 1px var(--color-line); }
@@ -209,7 +211,7 @@
     &:active { scale: 0.96; }
   }
   .technology-line { @apply mt-4 flex flex-wrap gap-x-4 gap-y-2 font-mono text-label text-muted; }
-  .project-actions { @apply mt-5 flex flex-wrap items-center gap-x-6 gap-y-2; }
+  .project-actions { @apply mt-5 flex flex-wrap items-center gap-x-6 gap-y-2; font-size: var(--text-ui); }
   .home-footer { @apply flex flex-wrap items-center justify-between gap-6 py-8 text-label; position: relative; &::before { content: ""; position: absolute; inset-inline: var(--spacing-page); top: 0; border-top: var(--border-width) solid var(--color-border); } p span { @apply mt-1 block text-muted; } > div { @apply flex flex-wrap gap-x-6 gap-y-2; } }
   .consent-area { @apply mx-auto w-full max-w-site px-page pb-6; }
   .consent-panel { @apply ml-auto max-w-consent border border-control bg-surface p-5; h2 { @apply text-body font-medium; } p { @apply mt-2 text-label text-muted; } .button { @apply text-label; } }
@@ -223,7 +225,7 @@
   .row-primary:focus-visible { outline: none; }
   .project-row:has(.row-primary:focus-visible) { outline: var(--focus-width) solid var(--color-accent); outline-offset: var(--focus-offset); }
   .row-secondary { position: relative; z-index: 1; }
-  .case-action { @apply inline-flex min-h-target items-center gap-2 text-body font-semibold text-accent; }
+  .case-action { @apply inline-flex min-h-target items-center gap-2 font-medium text-accent; font-size: var(--text-ui); }
   .repository-status { @apply text-label text-muted md:col-span-3; }
   .project-row:has(.row-primary:hover) h3 { text-decoration: underline; text-underline-offset: var(--underline-offset); }
   .about-copy { @apply space-y-4; }

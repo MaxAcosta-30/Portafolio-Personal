@@ -87,6 +87,8 @@ test("sin desbordamientos en móvil estrecho, tablet y pantalla grande", async (
   await mkdir(captureDirectory, { recursive: true });
   for (const width of widths) {
     await page.setViewportSize({ width, height: 1000 });
+    // Las etiquetas de la escena 3D se recolocan en el siguiente fotograma tras el resize.
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const overflow = await page.locator("body *").evaluateAll((elements) => elements.filter((element) => {
       if (element.closest("details:not([open])") && !element.closest("summary")) return false;
       if (element.classList.contains("skip-link") || element.classList.contains("sr-only")) return false;
