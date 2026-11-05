@@ -1,19 +1,8 @@
-import { Icon } from "@/components/ui";
+import { SequenceList } from "./sequence-list";
 import { taskFlowCaseStudy as content, type FlowNode } from "@/content/taskflow-case-study";
 
-/** DOM order is the flow order, including when the layout stacks on small screens. */
 export function TaskFlowDiagram({ nodes, label, code = false }: { nodes: readonly FlowNode[]; label: string; code?: boolean }) {
-  return (
-    <ol aria-label={label} className="case-flow">
-      {nodes.map((node, index) => <li key={node.title} className="case-flow-step">
-        <div className="min-w-0 flex-1">
-          <p className={code ? "font-mono text-title text-accent" : "font-medium"}>{node.title}</p>
-          <p className="mt-2 text-label text-muted">{node.detail}</p>
-        </div>
-        {index < nodes.length - 1 && <span className="case-flow-arrow"><Icon name="arrow" /></span>}
-      </li>)}
-    </ol>
-  );
+  return <SequenceList steps={nodes} label={label} code={code} />;
 }
 
 export function ObservabilityStack() {

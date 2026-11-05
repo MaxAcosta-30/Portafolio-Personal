@@ -52,11 +52,12 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   await page.keyboard.press("Enter");
   await expect(page.getByRole("main")).toBeFocused();
   for (const label of ["Proyectos", "Proceso", "Sobre mí"]) {
+    if (testInfo.project.name === "mobile") await page.getByRole("button", { name: "Abrir menú" }).press("Enter");
     const link = page.getByRole("navigation").getByRole("link", { name: label, exact: true });
     await link.focus();
     await expect(link).toHaveCSS("outline-style", "solid");
-    await page.keyboard.press("Enter");
     const href = await link.getAttribute("href");
+    await page.keyboard.press("Enter");
     expect(new URL(page.url()).hash).toBe(href);
     const top = await page.locator(href!).evaluate((element) => element.getBoundingClientRect().top);
     expect(top).toBeGreaterThanOrEqual(0);
@@ -76,7 +77,7 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   }).map((element) => element.textContent));
   expect(smallTargets).toEqual([]);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(page.getByRole("link", { name: "Proceso", exact: true }).first()).toHaveCSS("transition-duration", /^0s(, 0s)*$/);
+  await expect(page.locator(".nav-pill-link").first()).toHaveCSS("transition-duration", /^0s(, 0s)*$/);
   await mkdir(captureDirectory, { recursive: true });
   await page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" }).focus();
   await page.locator("#contacto").screenshot({ path: `${captureDirectory}/portfolio-${testInfo.project.name}-contact.png` });
@@ -136,13 +137,19 @@ test("consentimiento y preferencias sin cubrir el contenido", async ({ page }) =
 
 test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ page }, testInfo) => {
   await page.goto("/");
-  await expect(page.locator(".hero-badge")).toHaveText("Disponible para proyectos · Culiacán y remoto");
+  await expect(page.locator(".hero .badge-long")).toHaveText("Disponible para proyectos · Culiacán y remoto");
+  await expect(page.locator(".hero .badge-short")).toHaveText("Disponible · Culiacán y remoto");
   await expect(page.locator(".hero-title em")).toHaveText("futuro.");
   await expect(page.locator(".hero-metrics dd")).toHaveText([String(Object.keys(repositories).length), "2", "Go · .NET · Next.js"]);
   await expect(page.getByRole("link", { name: "Cuéntame tu proyecto" })).toHaveAttribute("href", "#contacto");
   await expect(page.getByRole("link", { name: "Ver casos reales" })).toHaveAttribute("href", "#proyectos");
   // La alternativa SVG está en el HTML; la escena WebGL la sustituye cuando carga.
   await expect(page.locator(".hero-fallback")).toHaveCount(1);
+  // La escena 3D se monta con la primera interacción (no bloquea la carga).
+  await page.waitForTimeout(500);
+  await expect(page.locator(".hero-canvas")).toHaveCount(0);
+  await page.mouse.move(200, 300);
+  await page.mouse.move(400, 320);
   await expect(page.locator(".hero-visual")).toHaveAttribute("data-ready", "true", { timeout: 15_000 });
   const box = (await page.locator(".hero-stage").boundingBox())!;
   if (testInfo.project.name === "desktop") expect(box.y).toBeLessThan(page.viewportSize()!.height);
@@ -160,7 +167,7 @@ test("R2: secciones, navegación activa, filas completas y borde del pie", async
   for (const id of ["proyectos", "proceso", "sobre-mi"]) {
     await page.locator(`#${id}`).scrollIntoViewIfNeeded();
     await page.locator(`#${id}`).evaluate(element => element.scrollIntoView());
-    await expect(page.locator(`nav a[href="#${id}"]`)).toHaveAttribute("aria-current", "location");
+    await expect(page.locator(`.nav-pill a[href="#${id}"]`)).toHaveAttribute("aria-current", "location");
   }
   const footer = await page.locator(".home-footer").evaluate(element => ({
     padding: getComputedStyle(element).paddingInlineStart,
@@ -183,11 +190,12 @@ test("R2: secciones, navegación activa, filas completas y borde del pie", async
 test("R2: copiar correo confirma éxito y permite recuperarse de un rechazo", async ({ page }) => {
   await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async (value: string) => { Object.assign(window, { copiedEmail: value }); } } }));
   await page.getByRole("button", { name: "Copiar correo", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Correo copiado.");
+  await expect(page.locator(".copy-email [role=status]")).toHaveText("Correo copiado.");
   expect(await page.evaluate(() => (window as Window & { copiedEmail?: string }).copiedEmail)).toBe(contact.email!.label);
   await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async () => { throw new Error("Permission denied"); } } }));
+  await expect(page.getByRole("button", { name: "Copiar correo", exact: true })).toHaveText("Copiar correo");
   await page.getByRole("button", { name: "Copiar correo", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText(`No se pudo copiar. Puedes seleccionar el correo: ${contact.email!.label}`);
+  await expect(page.locator(".copy-email [role=status]")).toContainText(`No se pudo copiar. Puedes seleccionar el correo: ${contact.email!.label}`);
   await expect(page.getByRole("button", { name: "Copiar correo", exact: true })).toBeEnabled();
 });
 
@@ -195,7 +203,8 @@ test("navegación: cada enlace lleva a su sección y la marca vuelve al inicio",
   await page.goto("/");
   const offset = testInfo.project.name === "desktop" ? 88 : 24;
   for (const id of ["proceso", "servicios", "sobre-mi", "proyectos"]) {
-    await page.locator(`nav a[href="#${id}"]`).click();
+    if (testInfo.project.name === "mobile") await page.getByRole("button", { name: "Abrir menú" }).click();
+    await page.locator(`${testInfo.project.name === "mobile" ? ".mobile-menu" : ".nav-pill"} a[href="#${id}"]`).click();
     await expect.poll(() => page.locator(`#${id}`).evaluate(element => Math.round(element.getBoundingClientRect().top)), { timeout: 4000 }).toBe(offset);
   }
   await page.getByRole("link", { name: "Max Acosta" }).click();

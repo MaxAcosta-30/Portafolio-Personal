@@ -30,7 +30,7 @@ export function Logo({ variant = "static", size = 32, wordmark = false, label = 
     <path className="logo-a" d={LOGO_PATHS.a} pathLength={100} />
   </svg>;
 
-  return <span className={`logo ${className}`} data-variant={variant} role={variant === "deploy" ? "status" : undefined}>
+  return <span className={`logo ${className}`} data-variant={variant}>
     {variant === "spin" ? <span className="logo-spin-stage">{mark}</span> : mark}
     {wordmark && <span className="logo-word">max acosta</span>}
     {variant === "deploy" && <span className="logo-label">{label}</span>}

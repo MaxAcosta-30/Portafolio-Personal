@@ -53,6 +53,14 @@ function Plate({ plate, index, progress }: { plate: (typeof PLATES)[number]; ind
   </group>;
 }
 
+/** Arista emisiva: halo ancho y tenue + núcleo, idénticos para M y A. */
+function GlowEdge({ points, color }: { points: V[]; color: string }) {
+  return <>
+    <Line points={points} color={color} lineWidth={11} transparent opacity={0.18} toneMapped={false} depthWrite={false} />
+    <Line points={points} color={color} lineWidth={4.5} toneMapped={false} />
+  </>;
+}
+
 function CubeLogo() {
   const a = useRef<Group>(null);
   useFrame(({ clock }) => { if (a.current) a.current.position.y = 0.12 + Math.sin(clock.elapsedTime * 1.6) * 0.06; });
@@ -60,8 +68,9 @@ function CubeLogo() {
     <mesh><boxGeometry args={[2, 2, 2]} /><meshStandardMaterial color={IRIS} transparent opacity={0.06} depthWrite={false} /></mesh>
     {FAINT_EDGES.map((points, i) => <Line key={`f${i}`} points={points} color={FAINT} lineWidth={1.5} />)}
     {HIDDEN_EDGES.map((points, i) => <Line key={`h${i}`} points={points} color={HIDDEN} lineWidth={2.5} />)}
-    {M_EDGES.map((points, i) => <Line key={`m${i}`} points={points} color={IRIS} lineWidth={5} toneMapped={false} />)}
-    <group ref={a}>{A_EDGES.map((points, i) => <Line key={`a${i}`} points={points} color={AMBER} lineWidth={5} toneMapped={false} />)}</group>
+    {/* M y A comparten grosor, halo e intensidad: la A destaca por color y posición, no por peso. */}
+    {M_EDGES.map((points, i) => <GlowEdge key={`m${i}`} points={points} color={IRIS} />)}
+    <group ref={a}>{A_EDGES.map((points, i) => <GlowEdge key={`a${i}`} points={points} color={AMBER} />)}</group>
   </group>;
 }
 

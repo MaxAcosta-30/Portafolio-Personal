@@ -1,35 +1,28 @@
 ---
-name: Hangar en vivo
-description: Portafolio de Max Acosta — señalética industrial con un despliegue real de Hangar como elemento firma
+name: Índigo nocturno
+description: Portafolio de Max Acosta — marca oscura con cubo isométrico (M iris, A ámbar) y hero 3D
 colors:
-  background: "#111210"
-  surface: "#1a1b18"
-  foreground: "#e9e6dd"
-  muted: "#a3a097"
-  accent: "#f2c230"
-  accent-fill: "#f2c230"
-  on-accent: "#111210"
-  success: "#4ade80"
-  light-background: "#eceae3"
-  light-surface: "#f6f4ee"
-  light-foreground: "#16150f"
-  light-muted: "#5a574d"
-  light-accent-text: "#7a5d00"
-  light-success: "#15803d"
+  ink: "#0C0E14"
+  graphite: "#161A23"
+  panel: "#13161D"
+  line: "#262B37"
+  fog: "#9AA1B2"
+  ivory: "#EEEBE3"
+  iris: "#8B92FF"
+  amber: "#F0B67F"
 typography:
-  display:
-    fontFamily: "Big Shoulders (variable, opsz), mayúsculas, 800"
-    fontSize: "clamp(3.5rem, 0.6rem + 8.2vw, 9rem)"
-    lineHeight: 0.9
-  body:
-    fontFamily: "Instrument Sans"
-    fontSize: "17px"
-    lineHeight: 1.6
-  mono:
-    fontFamily: "JetBrains Mono (código, registro, stack, correo)"
+  display: { fontFamily: "Bricolage Grotesque 600", fontSize: "clamp(44px, 5vw, 68px)", lineHeight: 1, letterSpacing: "-0.04em" }
+  heading: { fontFamily: "Bricolage Grotesque 600", fontSize: "clamp(30px, 3.2vw, 46px)", letterSpacing: "-0.03em" }
+  title: { fontFamily: "Geist 500", fontSize: "21px" }
+  lead: { fontFamily: "Geist 400", fontSize: "17px", lineHeight: 1.6 }
+  body: { fontFamily: "Geist 400", fontSize: "16px" }
+  ui: { fontFamily: "Geist 500", fontSize: "14px" }
+  eyebrow: { fontFamily: "JetBrains Mono", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em" }
+  metric: { fontFamily: "Bricolage Grotesque 600", fontSize: "28px", color: "amber" }
 rounded:
-  control: "0.25rem"
-  surface: "0.375rem"
+  control: "0.625rem"
+  surface: "1rem"
+  pill: "999px"
 ---
 
 # Sistema de diseño — Ingeniería a la vista
@@ -222,3 +215,29 @@ desplegaba una app mientras lo leía".
   para texto (`accent-hover`) y relleno (`accent-fill-hover`).
 - Estilos de la home en `src/app/home.css`; `globals.css` conserva lo
   compartido con las páginas de caso.
+
+
+## R6 · Índigo nocturno (vigente; sustituye R3–R5)
+
+- **Marca solo oscura.** Tokens de paleta en `src/styles/tokens.css`; glows
+  iris 16% arriba a la derecha y ámbar 8% abajo a la izquierda (en `body`).
+- **Logo:** cubo isométrico; M en iris, A en ámbar, aristas ocultas `#3A4052`.
+  `<Logo variant="static|draw|assemble|deploy|spin">` en `components/brand`.
+  draw = intro de la primera visita; assemble = header; split de la A al
+  llegar a cada caso (ScrollTrigger); deploy = "Copiar correo"; spin = pie y 404.
+- **Jerarquía:** solo el H1 es grande. Etiquetas en mono 11px mayúsculas.
+- **Hero:** escena React Three Fiber (placas repo/build/live, cubo-logo con
+  M y A de igual grosor y halo, órbita ámbar, parallax, separación al hacer
+  scroll). Se monta con la primera interacción, DPR ≤ 2, pausa fuera de
+  pantalla; alternativa SVG estática sin JS, sin WebGL o con movimiento reducido.
+- **Secciones, cada una con su forma:** franja de servicios con divisores de
+  1px (en móvil, filas compactas); casos editoriales alternados con panel
+  técnico vivo; tabla densa de otros sistemas; línea de tiempo de Proceso que
+  se llena con el scroll; Sobre mí en 4/8 + retícula de tecnologías; contacto
+  centrado. Páginas de caso: listas de secuencia en lugar de cajas con flechas.
+- **Móvil:** menú `<dialog>` a pantalla completa (enlaces Bricolage 32px), CTA
+  "Agendar", badge corto. Sin JS vuelve la píldora de navegación.
+- **Movimiento:** GSAP + ScrollTrigger + Lenis, cargados con la primera
+  interacción. Botones con altura mínima de 44px (área táctil).
+- **Lighthouse (build estático, local):** móvil 90/100/100/100, escritorio
+  100/100/100/100 (rendimiento/accesibilidad/buenas prácticas/SEO).

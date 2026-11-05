@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     url: baseUrl,
     images: [
       {
-        url: `${baseUrl}/og-image.svg`,
+        url: `${baseUrl}/og-image.png`,
         width: 1200,
         height: 630,
         alt: `${profile.name} · Portafolio`,

@@ -8,6 +8,7 @@ export const homeDesign = {
   headline: "Software que se siente futuro.",
   // Confirmados por el propietario (2026-11-04).
   badge: "Disponible para proyectos · Culiacán y remoto",
+  badgeShort: "Disponible · Culiacán y remoto",
   mainStack: "Go · .NET · Next.js",
   about: {
     title: "Sobre mí",
@@ -56,6 +57,7 @@ export const homeDesign = {
   // Pasos definidos por el propietario.
   process: {
     title: "Proceso",
+    description: "Cinco pasos, del diagnóstico a la entrega.",
     steps: [
       { title: "Diagnóstico", text: "Entiendo tu negocio y lo que necesitas." },
       { title: "Propuesta", text: "Alcance, tiempos y cotización por escrito." },

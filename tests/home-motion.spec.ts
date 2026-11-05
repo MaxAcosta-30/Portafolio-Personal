@@ -75,19 +75,16 @@ test("lectura sin JavaScript y con movimiento reducido", async ({ browser, page 
   await page.screenshot({ path: `screenshots/reduced-motion-${testInfo.project.name}.png`, fullPage: true });
 });
 
-test("diagramas SVG legibles y con alternativa textual en ambos casos", async ({ page }) => {
+test("páginas de caso: secuencias en lista ordenada, sin cajas con flechas", async ({ page }) => {
   for (const project of ["hangar", "taskflow-pro"]) {
     await page.goto(`/proyectos/${project}`);
-    const diagrams = page.locator(".architecture-diagram");
-    await expect(diagrams).toHaveCount(2);
-    for (const diagram of await diagrams.all()) {
-      expect(await diagram.locator("ol[aria-label] li").count()).toBeGreaterThan(2);
-      const smallText = await diagram.locator("svg text").evaluateAll(elements => elements.filter(element => {
-        const text = element as SVGTextElement;
-        const matrix = text.getScreenCTM();
-        return element.getBoundingClientRect().width > 0 && matrix && parseFloat(getComputedStyle(text).fontSize) * matrix.a < 13;
-      }).map(element => element.textContent));
-      expect(smallText).toEqual([]);
+    const sequences = page.locator("ol.sequence[aria-label]");
+    expect(await sequences.count()).toBeGreaterThanOrEqual(3);
+    for (const sequence of await sequences.all()) {
+      expect(await sequence.locator("li").count()).toBeGreaterThanOrEqual(3);
+      const sizes = await sequence.locator(".sequence-title, .sequence-detail").evaluateAll(elements => elements.map(element => parseFloat(getComputedStyle(element).fontSize)));
+      sizes.forEach(size => expect(size).toBeGreaterThanOrEqual(13));
     }
+    await expect(page.locator(".case-flow-arrow, .architecture-diagram svg, .isolation-svg")).toHaveCount(0);
   }
 });
