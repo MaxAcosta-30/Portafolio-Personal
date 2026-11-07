@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { HomeMotion } from "@/components/home-motion";
 import { HeroVisual } from "@/components/hero/hero-visual";
 import { Logo } from "@/components/brand/logo";
 import { repositories } from "@/content/repositories";
 import { SyncBoard } from "@/components/sync-board";
-import { SiteHeader } from "@/components/portfolio";
+import { ButtonArrow, SiteHeader } from "@/components/portfolio";
+import { CountUp } from "@/components/count-up";
+import { ContactForm } from "@/components/contact-form";
 import { Icon } from "@/components/ui";
 import { LinkPreferenciasCookies } from "@/components/cookie-consent";
 import { CopyEmail } from "@/components/copy-email";
@@ -58,12 +61,18 @@ function CodeWell({ id, name }: { id: keyof typeof projectPreviews; name: string
   </figure>;
 }
 
+/** Valor numérico con contador ("10 min" cuenta hasta 10 y conserva la unidad). */
+function Metric({ value }: { value: string }) {
+  const match = /^(\d+)(.*)$/.exec(value);
+  return match ? <CountUp value={Number(match[1])} suffix={match[2]} /> : value;
+}
+
 /** Visual de Hangar: la política de reintentos real convertida en lectura de instrumentos. */
 function HangarVisual() {
   const { configuration, configurationNote, states } = hangarCaseStudy.workflow;
   return <div className="case-visual">
     <p className="visual-head"><span className="mono-label">hangar · política de reintentos</span><span className="mono-label visual-live">temporal</span></p>
-    <dl className="gauges">{configuration.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
+    <dl className="gauges">{configuration.map(item => <div key={item.label}><dt>{item.label}</dt><dd><Metric value={item.value} /></dd></div>)}</dl>
     <ol className="state-track" aria-label="Estados de un despliegue">{states.map(state => <li key={state.title}><span>{state.title}</span>{state.detail}</li>)}</ol>
     <p className="visual-note">{configurationNote}</p>
     <CodeWell id="hangar" name="Hangar" />
@@ -90,23 +99,30 @@ export default function Home() {
     <SiteHeader />
     <HomeMotion />
     <main id="contenido" tabIndex={-1} className="home-content">
-      <div className="intro" aria-hidden="true"><Logo variant="draw" size={88} /></div>
+      {/* Preloader: solo en la primera visita y con movimiento permitido; CSS puro, 1.2s como máximo. */}
+      <div className="intro" aria-hidden="true">
+        <Logo variant="draw" size={88} />
+        <p className="intro-phrase"><span>compilando ideas…</span><span>desplegando…</span></p>
+      </div>
       <section className="hero page-container" aria-labelledby="hero-title">
+        <div className="hero-frame">
+        <span className="frame-mark" data-corner="tl" aria-hidden="true">+</span><span className="frame-mark" data-corner="tr" aria-hidden="true">+</span><span className="frame-mark" data-corner="bl" aria-hidden="true">+</span><span className="frame-mark" data-corner="br" aria-hidden="true">+</span>
         <div className="hero-copy">
           <p className="hero-badge" data-step="0"><span className="pulse-dot" aria-hidden="true" /><span className="badge-long">{content.badge}</span><span className="badge-short" aria-hidden="true">{content.badgeShort}</span></p>
           <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart} <em>{headlineEnd}</em></h1>
           <p className="hero-introduction" data-step="2">{content.introduction}</p>
           <div className="hero-actions" data-step="3">
-            <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<Icon name="arrow" /></a>
-            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}</a>
+            <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>
+            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<ButtonArrow /></a>
           </div>
           <dl className="hero-metrics" data-step="4">
-            <div><dt>proyectos en GitHub</dt><dd>{repositoryCount}</dd></div>
-            <div><dt>casos documentados</dt><dd>{featured.length}</dd></div>
+            <div><dt>proyectos en GitHub</dt><dd><CountUp value={repositoryCount} /></dd></div>
+            <div><dt>casos documentados</dt><dd><CountUp value={featured.length} /></dd></div>
             <div><dt>stack principal</dt><dd className="metric-text">{content.mainStack}</dd></div>
           </dl>
         </div>
         <HeroVisual />
+        </div>
       </section>
 
       <section id="servicios" className="services-strip" aria-labelledby="servicios-title">
@@ -127,7 +143,7 @@ export default function Home() {
           return <article id={project.id} key={project.id} className="featured-row project-row t-learn">
             <div className="featured-copy">
               <div className="case-meta"><Logo size={34} className="case-logo" /><span className="mono-label">Caso {String(index + 1).padStart(2, "0")}</span></div>
-              <h3 aria-label={project.name}>{caseHref ? <Link className="row-primary" href={caseHref} aria-label={`${content.caseLink} de ${project.name}`}>{project.name}<span className="t-learn-chevron"><Icon name="arrow" /></span></Link> : project.name}</h3>
+              <h3 aria-label={project.name}>{caseHref ? <Link className="row-primary" href={caseHref} aria-label={`${content.caseLink} de ${project.name}`}><ViewTransition name={`case-title-${project.id}`} share="case-morph" default="none"><span className="case-title-text">{project.name}</span></ViewTransition><span className="t-learn-chevron"><Icon name="arrow" /></span></Link> : project.name}</h3>
               {project.summary && <p className="project-description">{project.summary.text}</p>}
               <dl className="featured-facts">
                 {project.problem && <div><dt>{content.caseProblem}</dt><dd>{project.problem.text}</dd></div>}
@@ -193,24 +209,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contacto: cierre centrado con brillo iris. */}
+      {/* Contacto: el formulario es la acción principal; el correo queda como alternativa. */}
       <section id="contacto" className="home-section contact" aria-labelledby="contacto-title">
         <div className="page-container contact-inner">
-          <p className="hero-badge"><span className="pulse-dot" aria-hidden="true" />{content.badgeShort}</p>
-          <h2 id="contacto-title" className="contact-title">{content.contactTitle}</h2>
-          <p className="contact-description">{content.contactDescription}</p>
-          {contact.email && <>
-            <p className="contact-email">{contact.email.label}</p>
-            <div className="contact-buttons"><a className="button" href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contact.email.label)}&su=${encodeURIComponent(content.emailSubject)}`} target="_blank" rel="noopener noreferrer">{portfolioLabels.emailAction}<span className="sr-only"> por Gmail (se abre en una pestaña nueva)</span><Icon name="external" /></a><CopyEmail email={contact.email.label} /></div>
-            <a className="text-link contact-mailto" href={contact.email.href}>{content.emailAppAction}</a>
-          </>}
-          <ul className="contact-links">{contact.professionalLinks.map(link => <li key={link.href}><a className="text-link" href={link.href}>{link.label}<Icon name="external" /></a></li>)}</ul>
+          <div className="contact-intro">
+            <p className="hero-badge"><span className="pulse-dot" aria-hidden="true" />{content.badgeShort}</p>
+            <h2 id="contacto-title" className="contact-title">{content.contactTitle}</h2>
+            <p className="contact-description">{content.contactDescription}</p>
+            {contact.email && <div className="contact-alt">
+              <p className="mono-label">{content.emailAlternative}</p>
+              <p className="contact-email">{contact.email.label}</p>
+              <div className="contact-buttons"><CopyEmail email={contact.email.label} /><a className="text-link contact-mailto" href={contact.email.href}>{content.emailAppAction}</a></div>
+            </div>}
+            <ul className="contact-links">{contact.professionalLinks.map(link => <li key={link.href}><a className="text-link" href={link.href}>{link.label}<Icon name="external" /></a></li>)}</ul>
+          </div>
+          <ContactForm email={contact.email?.label ?? ""} />
         </div>
       </section>
     </main>
     <footer className="home-footer page-container">
       <div className="footer-brand"><Logo variant="spin" size={30} /><p>{profile.name}<span>{portfolioLabels.footer}</span></p></div>
-      <div><LinkPreferenciasCookies /><a className="text-link" href="#inicio">{portfolioLabels.backToTop}</a></div>
+      <div><Link className="text-link" href="/privacidad">Aviso de privacidad</Link><LinkPreferenciasCookies /><a className="text-link" href="#inicio">{portfolioLabels.backToTop}</a></div>
     </footer>
   </>;
 }

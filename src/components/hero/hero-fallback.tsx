@@ -1,23 +1,26 @@
 import { LOGO_PATHS } from "../brand/logo";
 
-/** Composición estática de la escena (sin JS, movimiento reducido o sin WebGL). */
+/**
+ * Composición estática de la escena: alternativa sin JS, sin WebGL o con movimiento reducido,
+ * y skeleton mientras carga el 3D (ocupa exactamente el mismo cuadro). Colores por tokens.
+ */
 export function HeroFallback() {
-  const plate = (cy: number, stroke: string, label: string) => {
+  const plate = (cy: number, label: string, top = false) => {
     const w = 170, h = 98;
     return <g key={label}>
-      <path d={`M250 ${cy - h} L${250 + w} ${cy} L250 ${cy + h} L${250 - w} ${cy} Z`} fill="#161A23" fillOpacity="0.72" stroke={stroke} strokeWidth="1.5" strokeLinejoin="round" />
+      <path className="fb-plate" data-top={top || undefined} d={`M250 ${cy - h} L${250 + w} ${cy} L250 ${cy + h} L${250 - w} ${cy} Z`} />
       <text x={250 - w + 36} y={cy + 6} className="fallback-label">{label}</text>
     </g>;
   };
   return <svg className="hero-fallback" viewBox="0 0 500 500" aria-hidden="true" focusable="false">
-    {plate(370, "#3b3f6e", "repo")}
-    {plate(325, "#5d63b0", "build")}
-    {plate(280, "#8B92FF", "live")}
-    <ellipse cx="250" cy="185" rx="175" ry="58" fill="none" stroke="#F0B67F" strokeWidth="2" strokeDasharray="1 10" strokeLinecap="round" opacity="0.8" />
+    {plate(370, "repo")}
+    {plate(325, "build")}
+    {plate(280, "live", true)}
+    <ellipse className="fb-orbit" cx="250" cy="185" rx="175" ry="58" />
     <g transform="translate(180 105) scale(1.4)" fill="none" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
-      <path d={LOGO_PATHS.hidden} stroke="#3A4052" />
-      <path d={LOGO_PATHS.m} stroke="#8B92FF" />
-      <path d={LOGO_PATHS.a} stroke="#F0B67F" />
+      <path className="fb-hidden" d={LOGO_PATHS.hidden} />
+      <path className="fb-m" d={LOGO_PATHS.m} />
+      <path className="fb-a" d={LOGO_PATHS.a} />
     </g>
   </svg>;
 }

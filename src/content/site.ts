@@ -10,12 +10,8 @@ export const navigation = {
     { label: "Proceso", sectionId: "proceso" },
     { label: "Sobre mí", sectionId: "sobre-mi" },
   ],
-  // PENDIENTE: el propietario debe dar su número de WhatsApp. Mientras tanto, la llamada se agenda por correo.
-  // Destino final: https://wa.me/52<número>?text=Hola%20Max%2C%20quiero%20cotizar%20un%20proyecto
-  call: {
-    label: "Agenda una llamada",
-    href: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contact.email?.label ?? "")}&su=${encodeURIComponent("Agendar una llamada")}`,
-  },
+  /** CTA principal del sitio (único texto: "Cotiza tu proyecto"). Lleva al formulario de contacto. */
+  cta: { label: "Cotiza tu proyecto", sectionId: "contacto" },
   resumeLabel: resume.label,
 };
 
@@ -27,8 +23,8 @@ export const homepage = {
     headline: "Desarrollo Full Stack con foco en backend y APIs.",
     introduction: profile.introduction,
     specialty: profile.focus,
-    primaryAction: { label: "Cuéntame tu proyecto", sectionId: "contacto" },
-    secondaryAction: { label: "Ver casos reales", sectionId: "proyectos" },
+    primaryAction: { label: "Cotiza tu proyecto", sectionId: "contacto" },
+    secondaryAction: { label: "Ver casos", sectionId: "proyectos" },
   },
   projects: {
     id: "proyectos",
@@ -65,7 +61,6 @@ export const portfolioLabels = {
   technicalDetails: "Detalles técnicos",
   architecture: "Arquitectura",
   stack: "Tecnologías",
-  emailAction: "Escríbeme",
   profiles: "También puedes encontrarme en",
   backToTop: "Volver al inicio",
   footer: "Desarrollo Full Stack · Backend y APIs",

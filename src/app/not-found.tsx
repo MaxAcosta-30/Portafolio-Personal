@@ -12,7 +12,7 @@ export default function NotFound() {
       <p className="mono-label">Error 404</p>
       <h1>Esta ruta no está desplegada.</h1>
       <p>La página que buscas no existe o cambió de dirección.</p>
-      <Link className="button" href="/">Volver al inicio</Link>
+      <Link className="button" href="/">Volver al inicio<span className="button-arrow" aria-hidden="true">→</span></Link>
     </main>
   </>;
 }

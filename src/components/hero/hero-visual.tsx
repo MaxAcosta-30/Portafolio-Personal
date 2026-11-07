@@ -39,7 +39,7 @@ export function HeroVisual() {
     return () => { cancel(handle); events.forEach(name => removeEventListener(name, start)); observer.disconnect(); reduce.removeEventListener("change", stop); };
   }, []);
 
-  return <div ref={box} className="hero-visual" data-ready={ready || undefined}>
+  return <div ref={box} className="hero-visual" data-ready={ready || undefined} data-loading={(mount && !ready) || undefined}>
     <div className="hero-stage">
       <HeroFallback />
       {mount && <div className="hero-canvas"><HeroScene active={visible} onReady={() => setReady(true)} /></div>}

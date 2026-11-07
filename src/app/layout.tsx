@@ -5,12 +5,13 @@ import { profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 import { Analytics } from "@/components/analytics";
 import { CookieConsent } from "@/components/cookie-consent";
+import { headScript } from "@/lib/head-script";
 import "./globals.css";
 
-// R6 "Índigo nocturno": Bricolage para titulares, Geist para texto, JetBrains Mono para datos.
+// Bricolage para titulares (H1: única fuente precargada), Geist para texto, JetBrains Mono para datos y botones.
 const display = Bricolage_Grotesque({ subsets: ["latin"], weight: "600", variable: "--font-display-face", display: "swap" });
-const sans = Geist({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-sans-face", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap", preload: false });
+const sans = Geist({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-sans-face", display: "swap", preload: false });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: "400", variable: "--font-mono-face", display: "swap", preload: false });
 
 const baseUrl = siteMetadata.siteUrl;
 const publicBaseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || null;
@@ -65,9 +66,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang={siteMetadata.language} className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Bloqueante a propósito: marca html.js y si la intro ya se vio, antes de pintar. */}
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="/boot.js" />
+        {/* Bloqueante e inline a propósito: aplica el tema y marca html.js antes de pintar. */}
+        <script dangerouslySetInnerHTML={{ __html: headScript }} />
       </head>
       <body className="antialiased">
         <Analytics />

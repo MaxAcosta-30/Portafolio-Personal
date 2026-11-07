@@ -18,6 +18,7 @@ export const hangarSources = {
   infrastructure: source("Infraestructura Compose", "infra/docker-compose.yml"),
   isolationDecision: source("ADR: redes por aplicación", "docs/adr/003-aislamiento-tenants.md"),
   roadmap: source("Alcance y roadmap", "README.md"),
+  pool: source("Pool de conexiones a PostgreSQL", "api/internal/db/pool.go"),
   channel: source("Canal Redis por despliegue", "api/internal/rdb/client.go"),
 };
 
@@ -45,6 +46,7 @@ export const hangarCaseStudy = {
     { id: "workflow", label: "Workflow" },
     { id: "aislamiento", label: "Aislamiento" },
     { id: "logs", label: "Logs" },
+    { id: "rendimiento", label: "Rendimiento" },
     { id: "decisiones", label: "Decisiones" },
     { id: "testing", label: "Pruebas" },
     { id: "limites", label: "Límites" },
@@ -187,6 +189,20 @@ export const hangarCaseStudy = {
     result: "Lo verificable aquí es la implementación y la existencia de estas comprobaciones. No se publican porcentajes de cobertura, tiempos de despliegue ni resultados de producción sin evidencia reproducible.",
     evidence: [hangarSources.tests],
   },
+  // Solo optimizaciones presentes en el código de la revisión fijada (verificado el 2026-11-05).
+  performance: {
+    title: "Rendimiento",
+    text: "Decisiones del código que evitan esperas y trabajo innecesario. Son características de la implementación, no mediciones: no hay benchmarks publicados.",
+    items: [
+      { title: "Cola de Temporal en lugar de esperar el build", detail: "TriggerDeploy inicia DeployWorkflow en la cola hangar-deploy y responde 202 de inmediato; el worker hace clone, build y run en segundo plano." },
+      { title: "Logs en streaming, línea por línea", detail: "La salida de docker build se decodifica como flujo JSON con json.Decoder; cada línea se guarda en deploy_logs y se publica en el canal Redis hangar:logs:{id} sin esperar a que termine el build." },
+      { title: "Historial primero, luego en vivo", detail: "El WebSocket envía los logs guardados y después se suscribe al canal de Redis; si el despliegue ya terminó, cierra tras el historial." },
+      { title: "Contexto de build sin archivo temporal", detail: "El tar del contexto se genera en una tubería (io.Pipe) mientras Docker lo lee, y omite la carpeta .git." },
+      { title: "Clonado superficial", detail: "CloneRepository usa git clone --depth=1: descarga solo el último commit." },
+      { title: "Consultas indexadas y pool de conexiones", detail: "Índices en deployments(app_id) y deploy_logs(deployment_id), las columnas por las que se filtra; pgxpool reutiliza las conexiones a PostgreSQL." },
+    ],
+    evidence: [hangarSources.api, hangarSources.activities, hangarSources.websocket, hangarSources.channel, hangarSources.schema, hangarSources.pool],
+  },
   limits: {
     title: "Qué queda fuera de esta versión",
     implementedLabel: "Límites de la implementación revisada",
@@ -210,7 +226,7 @@ export const hangarCaseStudy = {
   closing: {
     title: "¿Tu proyecto necesita conectar varias piezas?",
     text: "Podemos conversar sobre el backend, las integraciones y el flujo de trabajo que necesita tu aplicación.",
-    action: "Hablemos",
+    action: "Cotiza tu proyecto",
     repositoryAction: "Ver repositorio de Hangar",
     otherCase: { label: "Ver caso: TaskFlow Pro", href: "/proyectos/taskflow-pro" },
   },

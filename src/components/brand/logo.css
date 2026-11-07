@@ -1,11 +1,12 @@
-.logo { display: inline-flex; align-items: center; gap: 0.625rem; color: var(--color-ivory); }
+.logo { display: inline-flex; align-items: center; gap: 0.625rem; color: var(--text); }
 .logo-mark { flex: none; overflow: visible; }
-.logo-m { stroke: var(--color-iris); }
-.logo-a { stroke: var(--color-amber); }
-.logo-hidden { stroke: #3a4052; }
+.logo-m { stroke: var(--text); }
+.logo-a { stroke: var(--accent); }
+.logo-hidden { stroke: var(--line-strong); }
+.logo-a-hop { transform-box: view-box; }
 .logo-word { font-family: var(--font-display); font-weight: 700; font-size: 1.3125rem; letter-spacing: -0.02em; line-height: 1; }
-.logo-label { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--color-fog); }
-.logo-waves circle { fill: none; stroke: var(--color-iris); stroke-width: 1.5; opacity: 0; transform-origin: 50px 50px; }
+.logo-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+.logo-waves circle { fill: none; stroke: var(--line-strong); stroke-width: 1.5; opacity: 0; transform-origin: 50px 50px; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* draw: M, luego A, luego aristas (stroke-dashoffset sobre pathLength=100). */
@@ -13,11 +14,10 @@
   .logo[data-variant="draw"] .logo-a { animation-delay: 380ms; }
   .logo[data-variant="draw"] .logo-hidden { animation-delay: 680ms; }
 
-  /* assemble: la M sube, la A cae con rebote suave y queda flotando; ondas iris detrás. */
+  /* assemble: la M sube, la A cae con rebote suave y queda flotando; ondas en --line-strong detrás. */
   .logo[data-variant="assemble"] .logo-m { animation: logo-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both; }
   .logo[data-variant="assemble"] .logo-hidden { animation: logo-fade 700ms ease-out both; }
   .logo[data-variant="assemble"] .logo-a {
-    filter: drop-shadow(0 0 6px rgb(240 182 127 / 0.55));
     animation: logo-drop 900ms cubic-bezier(0.34, 1.56, 0.64, 1) 350ms both, logo-hover 3.2s ease-in-out 1.4s infinite;
   }
   .logo[data-variant="assemble"] .logo-waves circle { animation: logo-wave 2.4s ease-out 900ms infinite; }
@@ -27,14 +27,18 @@
   .logo[data-variant="deploy"] .logo-a { animation: logo-lift 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
   .logo[data-variant="deploy"] .logo-label { animation: logo-blink 1.6s ease-in-out infinite; }
 
+  /* Cambio de tema: la A sube y cae (560ms); el tema cambia a la mitad, así que su color
+     pasa de naranja a azul en lo alto del salto. Lo dispara ThemeToggle con html[data-theme-hop]. */
+  html[data-theme-hop] .site-brand .logo-a-hop { animation: logo-theme-hop 560ms cubic-bezier(0.45, 0, 0.55, 1); }
+
   /* spin: el cubo gira sobre su eje Y. */
   .logo-spin-stage { display: inline-block; perspective: 400px; }
   .logo[data-variant="spin"] .logo-mark { animation: logo-spin 6s linear infinite; transform-style: preserve-3d; }
 }
 
 /* Separación de la A al hacer scroll (data-split la escribe ScrollTrigger). */
-.logo[data-split] .logo-a { transform: translateY(-14px); filter: drop-shadow(0 0 8px rgb(240 182 127 / 0.6)); }
-.logo .logo-a { transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 600ms ease; }
+.logo[data-split] .logo-a { transform: translateY(-14px); }
+.logo .logo-a { transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1); }
 
 @keyframes logo-draw { to { stroke-dashoffset: 0; } }
 @keyframes logo-rise { from { transform: translateY(18px); opacity: 0; } }
@@ -45,3 +49,8 @@
 @keyframes logo-lift { 0%, 100% { transform: translateY(0); } 45%, 55% { transform: translateY(-12px); } }
 @keyframes logo-blink { 50% { opacity: 0.55; } }
 @keyframes logo-spin { to { transform: rotateY(360deg); } }
+@keyframes logo-theme-hop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } 70% { transform: translateY(1.5px); } }
+
+/* Dentro de un botón (deploy: "Enviando…", "Copiando…") el logo hereda el color del texto del botón. */
+.button .logo path { stroke: currentColor; }
+.button .logo .logo-hidden { opacity: 0.4; }

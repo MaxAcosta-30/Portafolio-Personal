@@ -64,10 +64,10 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   }
   const openState = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(openState.violations).toEqual([]);
-  const gmail = page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" });
-  await expect(gmail).toHaveAttribute("href", new RegExp(`^https://mail\\.google\\.com/mail/\\?view=cm&fs=1&to=${encodeURIComponent(contact.email!.label)}`));
-  await expect(gmail).toHaveAttribute("target", "_blank");
-  await expect(page.getByRole("link", { name: "O escríbeme desde tu app de correo" })).toHaveAttribute("href", contact.email!.href);
+  // El formulario es la acción principal; el correo queda como alternativa.
+  await expect(page.locator("#contacto form")).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "Abrir en tu app de correo" })).toHaveAttribute("href", contact.email!.href);
+  await expect(page.getByRole("button", { name: "Copiar correo" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Descargar CV" })).toHaveCount(0);
   const brokenAnchors = await page.locator('a[href^="#"]').evaluateAll((links) => links.map((link) => link.getAttribute("href")!).filter((href) => !document.getElementById(href.slice(1))));
   expect(brokenAnchors).toEqual([]);
@@ -79,7 +79,7 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator(".nav-pill-link").first()).toHaveCSS("transition-duration", /^0s(, 0s)*$/);
   await mkdir(captureDirectory, { recursive: true });
-  await page.getByRole("link", { name: "Escríbeme por Gmail (se abre en una pestaña nueva)" }).focus();
+  await page.locator("#contacto-name").focus();
   await page.locator("#contacto").screenshot({ path: `${captureDirectory}/portfolio-${testInfo.project.name}-contact.png` });
 });
 
@@ -141,8 +141,8 @@ test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ 
   await expect(page.locator(".hero .badge-short")).toHaveText("Disponible · Culiacán y remoto");
   await expect(page.locator(".hero-title em")).toHaveText("futuro.");
   await expect(page.locator(".hero-metrics dd")).toHaveText([String(Object.keys(repositories).length), "2", "Go · .NET · Next.js"]);
-  await expect(page.getByRole("link", { name: "Cuéntame tu proyecto" })).toHaveAttribute("href", "#contacto");
-  await expect(page.getByRole("link", { name: "Ver casos reales" })).toHaveAttribute("href", "#proyectos");
+  await expect(page.locator(".hero-actions").getByRole("link", { name: "Cotiza tu proyecto" })).toHaveAttribute("href", "#contacto");
+  await expect(page.locator(".hero-actions").getByRole("link", { name: "Ver casos" })).toHaveAttribute("href", "#proyectos");
   // La alternativa SVG está en el HTML; la escena WebGL la sustituye cuando carga.
   await expect(page.locator(".hero-fallback")).toHaveCount(1);
   // La escena 3D se monta con la primera interacción (no bloquea la carga).

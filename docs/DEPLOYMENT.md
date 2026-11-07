@@ -4,7 +4,7 @@ Fecha: 29 de octubre de 2026. Dirección vigente: B, Plano de sistemas.
 
 ## Resumen
 
-El portafolio es una aplicación Next.js con **exportación estática** (`output: "export"`) diseñada para desplegarse en **Cloudflare Pages**. No hay backend, ni Server Actions, ni base de datos, ni adaptador de runtime. El build genera la carpeta `out/` que se sube como sitio estático.
+El portafolio es una aplicación Next.js con **exportación estática** (`output: "export"`) diseñada para desplegarse en **Cloudflare Pages**. No hay Server Actions, ni base de datos, ni adaptador de runtime. El build genera la carpeta `out/` que se sube como sitio estático. La única pieza de servidor es la Pages Function `functions/api/contact.ts` (formulario de contacto), que Cloudflare detecta y despliega sola desde la raíz del repositorio; ver `docs/CONTACTO.md`.
 
 ## Estado actual
 
@@ -65,14 +65,15 @@ Estos pasos requieren tu cuenta y no deben ser realizados por mí:
 
 ## Variables de entorno
 
-Actualmente el sitio no requiere ninguna variable de entorno para funcionar (no hay formulario con API key, ni analytics, ni servicios externos). Si en el futuro agregas alguna (por ejemplo, en el Prompt 14 para Analytics), deberás agregarla en **Cloudflare Pages → Tu proyecto → Settings → Environment variables** y volver a desplegar. Nunca agregues valores reales en el repositorio; `.env.local` está ignorado por Git.
+El formulario de contacto necesita `RESEND_API_KEY` (secreto), `CONTACT_TO` y `CONTACT_FROM`, y opcionalmente el KV `CONTACT_RATE_LIMIT`; están detallados en `docs/CONTACTO.md`. Si en el futuro agregas alguna (por ejemplo, en el Prompt 14 para Analytics), deberás agregarla en **Cloudflare Pages → Tu proyecto → Settings → Environment variables** y volver a desplegar. Nunca agregues valores reales en el repositorio; `.env.local` está ignorado por Git.
 
 ## Notas importantes
 
 - No se ha desplegado aún. Este documento prepara el proyecto para que tú lo hagas.
 - No supongo que ya poseas un dominio. Si no tienes uno, el sitio funciona con el subdominio gratuito de Cloudflare Pages.
 - `/design-system` se exporta con `noindex, nofollow`; es documentación de desarrollo, no control de acceso. Antes de publicar, decidir si se conserva como ruta pública o se retira.
-- La exportación estática no admite lógica dinámica de servidor ni Server Actions. No se agregó Wrangler ni un adaptador de runtime.
+- La exportación estática no admite lógica dinámica de servidor ni Server Actions; el formulario usa una Pages Function. No se agregó un adaptador de runtime.
+- Caché (`public/_headers`): HTML con `max-age=0, must-revalidate`; `/_next/static/*` (JS, CSS y fuentes) con `max-age=31536000, immutable`.
 
 ## Verificación post-deployment (tú)
 

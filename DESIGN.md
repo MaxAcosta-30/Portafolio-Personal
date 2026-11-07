@@ -241,3 +241,33 @@ desplegaba una app mientras lo leía".
   interacción. Botones con altura mínima de 44px (área táctil).
 - **Lighthouse (build estático, local):** móvil 90/100/100/100, escritorio
   100/100/100/100 (rendimiento/accesibilidad/buenas prácticas/SEO).
+
+
+## R7 · Noche / Día (vigente; sustituye la paleta de R6)
+
+- **Dos temas con acento propio** en `html[data-theme]` (`src/styles/tokens.css`):
+  Noche (por defecto) negro + naranja Flame `#FF5101` (6.43:1 sobre negro); Día blanco +
+  azul Cornflower oscurecido a `#4562F0` (el `#4F6BFF` pedido daba 4.30:1 sobre blanco; el
+  nuevo da 4.93:1 sobre `--bg` y 4.54:1 sobre `--surface`). Tokens: `--bg --surface --line
+  --line-strong --text --muted --accent --btn-bg --btn-fg`, más `--field-line` (borde de
+  campos, ≥3:1). Iris y ámbar ya no existen.
+- **Monocromo**: el acento solo va en la A del logo, "futuro.", el botón principal, el punto
+  de "Disponible" y el foco. Métricas en `--text`. Sin glows ni sombras.
+- **Tema**: primera visita según `prefers-color-scheme`; la elección se guarda en
+  `localStorage` y la aplica un script inline en `<head>` (`src/lib/head-script.ts`) antes del
+  primer pintado. `ThemeToggle` (44px) en el header: la A del logo sube y cae (560ms) y el
+  tema cambia a la mitad del salto; los colores pasan en 300ms. Movimiento reducido: instantáneo.
+- **Botones** cuadrados, JetBrains Mono 11px en mayúsculas (0.08em) con flecha →, 44px de alto.
+  CTA únicos: principal "Cotiza tu proyecto" (al formulario), secundario "Ver casos".
+- **Hero** enmarcado con líneas de 1px y marcadores "+" en las esquinas; la escena 3D usa los
+  tokens del tema (placas monocromas, placa superior con borde de acento, cubo M/A del logo).
+  El SVG estático es su skeleton (mismo cuadro, brillo sutil mientras carga; CLS 0).
+- **Contacto**: formulario como acción principal (`docs/CONTACTO.md`); correo como alternativa.
+- **Movimiento nuevo**: contador de métricas con desenfoque que se aclara; preloader solo en la
+  primera visita (1.2s, frase mono rotativa sin opacidad); View Transition del título del caso
+  (tarjeta → página del caso).
+- **Rendimiento**: GSAP, Lenis y three se cargan con import dinámico tras la primera
+  interacción; la escena no hace setState por fotograma, pasa a `frameloop="demand"` fuera de
+  pantalla y baja el DPR a 1 si cae el FPS. Las etiquetas de las placas son spans proyectados
+  por ref (las raíces de `<Html>` de drei cancelaban la View Transition). Solo se precarga la
+  fuente del H1. Lighthouse móvil (Slow 4G, CPU 4×, build local): 99/100/100/100.
