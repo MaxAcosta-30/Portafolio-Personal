@@ -13,7 +13,8 @@ import { CopyEmail } from "@/components/copy-email";
 import { Showcase } from "@/components/showcase";
 import type { SourcedLink } from "@/content/types";
 import { contact, experience, profile, resume } from "@/content/profile";
-import { engineeringSystems, featuredCaseStudies, projects } from "@/content/projects";
+import { engineeringSystems, featuredCaseStudies, hito, projects } from "@/content/projects";
+import { hitoSources } from "@/content/hito-case-study";
 import { homepage, portfolioLabels, siteMetadata } from "@/content/site";
 import { homeDesign as content } from "@/content/home-design";
 import "./home.css";
@@ -92,6 +93,9 @@ export default function Home() {
   const featured = featuredCaseStudies.filter(project => project.status !== "draft");
   const systems = engineeringSystems.filter(project => project.status === "ready");
   const repositoryCount = Object.keys(repositories).length;
+  // README de Hito en la revisión fijada: 53 unitarias + 50 de integración.
+  const hitoTests = 53 + 50;
+  const githubProfile = "https://github.com/MaxAcosta-30?tab=repositories";
   const [headlineStart, headlineEnd] = content.headline.split(content.headlineEmphasis);
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
@@ -114,15 +118,25 @@ export default function Home() {
             <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>
             <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<ButtonArrow /></a>
           </div>
+          {/* Datos verificables: cada cifra enlaza a su fuente pública. */}
           <dl className="hero-metrics" data-step="4">
-            <div><dt>proyectos en GitHub</dt><dd><CountUp value={repositoryCount} /></dd></div>
-            <div><dt>casos documentados</dt><dd><CountUp value={featured.length} /></dd></div>
-            <div><dt>stack principal</dt><dd className="metric-text">{content.mainStack}</dd></div>
+            <div><dt>pruebas automatizadas en Hito <a className="metric-source" href={hitoSources.readme.source}>fuente<span className="sr-only">: README de Hito</span><Icon name="external" /></a></dt><dd><CountUp value={hitoTests} /></dd></div>
+            <div><dt>repositorios públicos <a className="metric-source" href={githubProfile}>fuente<span className="sr-only">: perfil de GitHub</span><Icon name="external" /></a></dt><dd><CountUp value={repositoryCount} /></dd></div>
+            <div><dt>sin registro <a className="metric-source" href={hito.demo!.href} target="_blank" rel="noopener noreferrer">probar<span className="sr-only"> la demo de Hito (se abre en otra pestaña)</span><Icon name="external" /></a></dt><dd className="metric-text">Hito, en vivo</dd></div>
           </dl>
         </div>
         <HeroVisual />
         </div>
       </section>
+
+      {/* Selector de proyectos: el trabajo, a un clic del primer pantallazo. */}
+      <nav className="project-picker page-container" aria-label="Elige un proyecto">
+        <p className="mono-label">Elige un proyecto</p>
+        <ol>
+          {featured.map((project, index) => <li key={project.id}><a href={`#${project.id}`}><span className="picker-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>{project.name}</a></li>)}
+          <li><a href="#sistemas-backend"><span className="picker-index" aria-hidden="true">+{systems.length}</span>sistemas backend</a></li>
+        </ol>
+      </nav>
 
       <section id="servicios" className="services-strip" aria-labelledby="servicios-title">
         <h2 id="servicios-title" className="sr-only">{content.services.title}</h2>

@@ -140,7 +140,8 @@ test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ 
   await expect(page.locator(".hero .badge-long")).toHaveText("Disponible para proyectos · Culiacán y remoto");
   await expect(page.locator(".hero .badge-short")).toHaveText("Disponible · Culiacán y remoto");
   await expect(page.locator(".hero-title em")).toHaveText("tu negocio");
-  await expect(page.locator(".hero-metrics dd")).toHaveText([String(Object.keys(repositories).length), "3", "Go · .NET · Next.js"]);
+  await expect(page.locator(".hero-metrics dd")).toHaveText(["103", String(Object.keys(repositories).length), "Hito, en vivo"]);
+  await expect(page.getByRole("navigation", { name: "Elige un proyecto" }).getByRole("link")).toHaveCount(4);
   await expect(page.locator(".hero-actions").getByRole("link", { name: "Cotiza tu proyecto" })).toHaveAttribute("href", "#contacto");
   await expect(page.locator(".hero-actions").getByRole("link", { name: "Ver casos" })).toHaveAttribute("href", "#proyectos");
   // La alternativa SVG está en el HTML; la escena WebGL la sustituye cuando carga.

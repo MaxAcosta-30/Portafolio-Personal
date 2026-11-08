@@ -362,3 +362,26 @@
   font-family: var(--font-sans); font-size: 15px; letter-spacing: 0; text-transform: none;
   color: var(--text);
 }
+
+/* Fuente de cada dato del héroe: enlace discreto junto a la etiqueta */
+.metric-source { display: inline-flex; align-items: center; gap: 0.25rem; margin-left: 0.5rem; color: var(--text); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 0.2em; .icon { width: 0.75rem; height: 0.75rem; } &:hover { text-decoration-color: currentColor; } }
+
+/* Selector de proyectos bajo el héroe */
+.project-picker {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem;
+  margin-top: 1.5rem; padding-block: 0.75rem; border-block: 1px solid var(--line);
+  ol { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; }
+  a {
+    display: inline-flex; align-items: center; gap: 0.5rem; min-height: var(--spacing-target); padding: 0 0.875rem;
+    border-radius: var(--radius-pill); color: var(--text); font-weight: 500; text-decoration: none;
+    transition: background-color 180ms var(--ease-smooth-out);
+    &:hover { background: var(--surface); }
+  }
+  .picker-index { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+}
+.hero-metrics {
+  @media (width >= 30rem) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  dd.metric-text { white-space: nowrap; }
+}
+.metric-source { margin-left: 0; margin-top: 0.25rem; font-family: var(--font-sans); font-size: 13px; letter-spacing: 0; text-transform: none; }
+.hero-metrics dt { display: flex; flex-direction: column; align-items: flex-start; }

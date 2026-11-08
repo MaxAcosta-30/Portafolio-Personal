@@ -126,7 +126,7 @@ test("aviso de privacidad: enlazado desde el pie y el formulario, accesible", as
 
 test("métricas: cuentan hasta su valor y sin movimiento quedan fijas", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".hero-metrics .count-up")).toHaveText([String(Object.keys(repositories).length), "3"]);
+  await expect(page.locator(".hero-metrics .count-up")).toHaveText(["103", String(Object.keys(repositories).length)]);
   await expect(page.locator(".hero-metrics .count-up").first()).toHaveAttribute("data-counted", "");
   await expect(page.locator(".hero-metrics .count-up").first()).toHaveCSS("filter", /none|blur\(0px\)/);
   const color = await page.locator(".hero-metrics dd").first().evaluate(el => getComputedStyle(el).color);
