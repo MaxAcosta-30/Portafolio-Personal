@@ -35,5 +35,8 @@
   .showcase-stage { --rx: 4deg; --ry: -6deg; aspect-ratio: 4 / 3.4; }
   .device-url { display: none; }
   .device-bar { height: 16px; }
+  /* El celular mide ~90px aquí: el marco de 6px y el radio de 26px de escritorio se comían la captura
+     (cortaban «Tienda en línea» y el pie). Marco y radio en proporción, y un poco más ancho para leerlo. */
+  .device-phone { width: 27%; border-width: 3px; border-radius: 14px; }
 }
 @media (prefers-reduced-motion: reduce) { .device { will-change: auto; } }
