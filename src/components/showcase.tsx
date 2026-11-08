@@ -1,4 +1,5 @@
 import { Picture } from "./picture";
+import "./showcase.css";
 
 type Screen = { name: string; alt: string };
 

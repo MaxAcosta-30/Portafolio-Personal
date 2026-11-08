@@ -2,6 +2,7 @@ import { cvEvidence, supported } from "./evidence";
 import { repositoryEvidence } from "./repositories";
 import { hangarCaseStudy } from "./hangar-case-study";
 import { taskFlowCaseStudy } from "./taskflow-case-study";
+import { hitoCaseStudy } from "./hito-case-study";
 
 export const homeDesign = {
   // Propuesta de valor definida por Max (servicios que ofrece, no proyectos previos).
@@ -49,7 +50,7 @@ export const homeDesign = {
     ],
     note: "El routing se configura dentro de RunContainer. Esquema del código, no una ejecución en vivo.",
   },
-  cases: { hangar: hangarCaseStudy.href, "taskflow-pro": taskFlowCaseStudy.href },
+  cases: { hito: hitoCaseStudy.href, hangar: hangarCaseStudy.href, "taskflow-pro": taskFlowCaseStudy.href },
   caseLink: "Leer caso",
   caseProblem: "Problema",
   // Oferta de servicios definida por Max. "proof" apunta a ids reales de projects.ts;

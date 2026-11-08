@@ -151,7 +151,7 @@ export default function Home() {
                 {project.contribution && <div><dt>{portfolioLabels.contribution}</dt><dd>{project.contribution.text}</dd></div>}
               </dl>
               <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
-              <div className="project-actions">{project.demo ? <DemoLink demo={project.demo} name={project.name} /> : <span className="case-action" aria-hidden={caseHref ? true : undefined}>{caseHref ? content.caseLink : "Próximamente"}{caseHref && <Icon name="arrow" />}</span>}<RepositoryLink repository={project.repository} name={project.name} /></div>
+              <div className="project-actions"><span className="case-action" aria-hidden={caseHref ? true : undefined}>{caseHref ? content.caseLink : "Próximamente"}{caseHref && <Icon name="arrow" />}</span>{project.demo && <DemoLink demo={project.demo} name={project.name} />}<RepositoryLink repository={project.repository} name={project.name} /></div>
             </div>
             {project.id === "hito" ? <HitoVisual /> : project.id === "hangar" ? <HangarVisual /> : <TaskFlowVisual />}
           </article>;

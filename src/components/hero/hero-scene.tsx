@@ -60,9 +60,10 @@ const PLATES = [
 
 /** Captura sobre la cara superior de la placa, girada para leerse en la vista isométrica. */
 function Screen({ src }: { src: string }) {
-  const texture = useTexture(src);
-  texture.colorSpace = SRGBColorSpace;
-  texture.anisotropy = 8;
+  // La configuración va en el callback de carga: el valor devuelto por el hook no se modifica en el render.
+  const texture = useTexture(src, loaded => {
+    for (const t of Array.isArray(loaded) ? loaded : [loaded]) { t.colorSpace = SRGBColorSpace; t.anisotropy = 8; }
+  });
   return <mesh rotation={[-Math.PI / 2, 0, Math.PI / 4]} position={[0, 0.075, 0]}>
     <planeGeometry args={[3.3, 2.06]} />
     <meshBasicMaterial map={texture} toneMapped={false} />
