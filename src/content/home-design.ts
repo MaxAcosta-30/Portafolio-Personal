@@ -5,8 +5,10 @@ import { taskFlowCaseStudy } from "./taskflow-case-study";
 import { hitoCaseStudy } from "./hito-case-study";
 
 export const homeDesign = {
-  // Propuesta de valor definida por Max (servicios que ofrece, no proyectos previos).
-  headline: "Software que se siente futuro.",
+  // Elegida por Max el 2026-11-08 entre tres alternativas: dice qué hace y para quién.
+  headline: "Construyo el software que tu negocio usa todos los días.",
+  // Fragmento resaltado con el acento (debe aparecer tal cual dentro del titular).
+  headlineEmphasis: "tu negocio",
   // Confirmados por el propietario (2026-11-04).
   badge: "Disponible para proyectos · Culiacán y remoto",
   badgeShort: "Disponible · Culiacán y remoto",

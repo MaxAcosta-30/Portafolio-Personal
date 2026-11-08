@@ -1,6 +1,6 @@
 /* Source of truth · R7 "Noche / Día". Dos temas con acento propio, aplicados con
    html[data-theme="dark"|"light"] (script inline en <head>, antes del primer pintado).
-   Todo es monocromo; el acento solo va en la A del logo, "futuro.", el botón
+   Todo es monocromo; el acento solo va en la A del logo, "tu negocio" del titular, el botón
    principal, el punto de "Disponible" y el foco. */
 @theme static {
   --color-*: initial;

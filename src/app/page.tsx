@@ -92,9 +92,7 @@ export default function Home() {
   const featured = featuredCaseStudies.filter(project => project.status !== "draft");
   const systems = engineeringSystems.filter(project => project.status === "ready");
   const repositoryCount = Object.keys(repositories).length;
-  const words = content.headline.split(" ");
-  const headlineStart = words.slice(0, -1).join(" ");
-  const headlineEnd = words.at(-1);
+  const [headlineStart, headlineEnd] = content.headline.split(content.headlineEmphasis);
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
     <SiteHeader />
@@ -110,7 +108,7 @@ export default function Home() {
         <span className="frame-mark" data-corner="tl" aria-hidden="true">+</span><span className="frame-mark" data-corner="tr" aria-hidden="true">+</span><span className="frame-mark" data-corner="bl" aria-hidden="true">+</span><span className="frame-mark" data-corner="br" aria-hidden="true">+</span>
         <div className="hero-copy">
           <p className="hero-badge" data-step="0"><span className="pulse-dot" aria-hidden="true" /><span className="badge-long">{content.badge}</span><span className="badge-short" aria-hidden="true">{content.badgeShort}</span></p>
-          <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart} <em>{headlineEnd}</em></h1>
+          <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart}<em>{content.headlineEmphasis}</em>{headlineEnd}</h1>
           <p className="hero-introduction" data-step="2">{content.introduction}</p>
           <div className="hero-actions" data-step="3">
             <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>

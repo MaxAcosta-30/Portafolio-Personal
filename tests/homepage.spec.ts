@@ -139,7 +139,7 @@ test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ 
   await page.goto("/");
   await expect(page.locator(".hero .badge-long")).toHaveText("Disponible para proyectos · Culiacán y remoto");
   await expect(page.locator(".hero .badge-short")).toHaveText("Disponible · Culiacán y remoto");
-  await expect(page.locator(".hero-title em")).toHaveText("futuro.");
+  await expect(page.locator(".hero-title em")).toHaveText("tu negocio");
   await expect(page.locator(".hero-metrics dd")).toHaveText([String(Object.keys(repositories).length), "3", "Go · .NET · Next.js"]);
   await expect(page.locator(".hero-actions").getByRole("link", { name: "Cotiza tu proyecto" })).toHaveAttribute("href", "#contacto");
   await expect(page.locator(".hero-actions").getByRole("link", { name: "Ver casos" })).toHaveAttribute("href", "#proyectos");
