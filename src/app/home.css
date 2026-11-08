@@ -385,3 +385,5 @@
 }
 .metric-source { margin-left: 0; margin-top: 0.25rem; font-family: var(--font-sans); font-size: 13px; letter-spacing: 0; text-transform: none; }
 .hero-metrics dt { display: flex; flex-direction: column; align-items: flex-start; }
+/* Destino táctil de 44 px para los enlaces de fuente */
+.metric-source { min-height: var(--spacing-target); margin-top: 0; }
