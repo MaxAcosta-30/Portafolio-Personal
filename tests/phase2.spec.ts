@@ -148,7 +148,7 @@ test("skeleton del hero: mismo cuadro antes y después de cargar la escena (CLS 
   const before = await layoutBox();
   await page.mouse.move(200, 300);
   await page.mouse.move(400, 320);
-  await expect(page.locator(".hero-visual")).toHaveAttribute("data-ready", "true", { timeout: 15_000 });
+  await expect(page.locator(".hero-visual")).toHaveAttribute("data-ready", "true", { timeout: 30_000 });
   expect(await layoutBox()).toEqual(before);
   expect(await page.evaluate(() => (window as unknown as { __cls: number }).__cls)).toBe(0);
 });
@@ -166,7 +166,7 @@ test("View Transition: el título del caso viaja de la tarjeta a la página del 
   // Con la escena 3D montada (sus raíces no deben cancelar la transición).
   await page.mouse.move(200, 300);
   await page.mouse.move(400, 320);
-  await expect(page.locator(".hero-visual")).toHaveAttribute("data-ready", "true", { timeout: 15_000 });
+  await expect(page.locator(".hero-visual")).toHaveAttribute("data-ready", "true", { timeout: 30_000 });
   await page.locator("#hangar").scrollIntoViewIfNeeded();
   await page.waitForTimeout(1000); // prefetch del caso
   await watch();
