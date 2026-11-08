@@ -4,7 +4,6 @@ import { HomeMotion } from "@/components/home-motion";
 import { HeroVisual } from "@/components/hero/hero-visual";
 import { Logo } from "@/components/brand/logo";
 import { repositories } from "@/content/repositories";
-import { SyncBoard } from "@/components/sync-board";
 import { ButtonArrow, SiteHeader } from "@/components/portfolio";
 import { CountUp } from "@/components/count-up";
 import { ContactForm } from "@/components/contact-form";
@@ -17,8 +16,6 @@ import { contact, experience, profile, resume } from "@/content/profile";
 import { engineeringSystems, featuredCaseStudies, projects } from "@/content/projects";
 import { homepage, portfolioLabels, siteMetadata } from "@/content/site";
 import { homeDesign as content } from "@/content/home-design";
-import { hangarCaseStudy } from "@/content/hangar-case-study";
-import { projectPreviews } from "@/content/project-previews";
 import "./home.css";
 
 export const metadata = {
@@ -54,30 +51,14 @@ function RepositoryLink({ repository, name }: { repository: SourcedLink | null; 
   return <a className="text-link row-secondary" href={repository.href}>Ver repositorio<span className="sr-only"> de {name}</span><Icon name="external" /></a>;
 }
 
-function CodeWell({ id, name }: { id: keyof typeof projectPreviews; name: string }) {
-  const preview = projectPreviews[id];
-  return <figure className="code-well">
-    <figcaption><a className="row-secondary" href={preview.source}><span className="sr-only">Archivo fuente: </span>{preview.file}</a><span>{preview.language} · líneas {preview.startLine}–{preview.endLine}</span></figcaption>
-    <pre tabIndex={0} aria-label={`Código de ${name}: ${preview.file}. Desplazamiento horizontal con las flechas del teclado.`}><code>{preview.code}</code></pre>
-  </figure>;
-}
-
-/** Valor numérico con contador ("10 min" cuenta hasta 10 y conserva la unidad). */
-function Metric({ value }: { value: string }) {
-  const match = /^(\d+)(.*)$/.exec(value);
-  return match ? <CountUp value={Number(match[1])} suffix={match[2]} /> : value;
-}
-
-/** Visual de Hangar: la política de reintentos real convertida en lectura de instrumentos. */
+/** Visual de Hangar: el dashboard rediseñado con despliegues reales hechos en local. */
 function HangarVisual() {
-  const { configuration, configurationNote, states } = hangarCaseStudy.workflow;
-  return <div className="case-visual">
-    <p className="visual-head"><span className="mono-label">hangar · política de reintentos</span><span className="mono-label visual-live">temporal</span></p>
-    <dl className="gauges">{configuration.map(item => <div key={item.label}><dt>{item.label}</dt><dd><Metric value={item.value} /></dd></div>)}</dl>
-    <ol className="state-track" aria-label="Estados de un despliegue">{states.map(state => <li key={state.title}><span>{state.title}</span>{state.detail}</li>)}</ol>
-    <p className="visual-note">{configurationNote}</p>
-    <CodeWell id="hangar" name="Hangar" />
-  </div>;
+  return <Showcase
+    url="hangar · demo local"
+    back={{ name: "hangar-apps", alt: "" }}
+    front={{ name: "hangar-despliegue", alt: "Despliegue de landing-panaderia en Hangar: las cuatro etapas Clonar, Construir, Ejecutar y Enrutar marcadas como listas sobre los logs reales del build." }}
+    caption="Capturas reales: despliegues hechos en local con Temporal, Docker (Podman) y los logs del worker."
+  />;
 }
 
 function HitoVisual() {
@@ -95,11 +76,13 @@ function DemoLink({ demo, name }: { demo: SourcedLink; name: string }) {
 }
 
 function TaskFlowVisual() {
-  return <div className="case-visual">
-    <p className="visual-head"><span className="mono-label">taskflow · tablero board:42</span><span className="mono-label visual-live">socket.io</span></p>
-    <SyncBoard />
-    <CodeWell id="taskflow-pro" name="TaskFlow Pro" />
-  </div>;
+  return <Showcase
+    url="taskflow · demo local"
+    back={{ name: "taskflow-analitica", alt: "" }}
+    front={{ name: "taskflow-tablero", alt: "Tablero de TaskFlow Pro en tema oscuro: columnas Pendiente, Por hacer, En curso y En revisión con tareas, prioridades y fechas." }}
+    phone={{ name: "taskflow-login-movil", alt: "Inicio de sesión de TaskFlow Pro en el celular." }}
+    caption="Capturas reales de la app corriendo en local con los datos de ejemplo del repositorio."
+  />;
 }
 
 export default function Home() {

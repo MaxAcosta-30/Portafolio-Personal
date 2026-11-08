@@ -384,3 +384,5 @@
 @media (prefers-reduced-motion: reduce) { .device { will-change: auto; } }
 /* En una sola columna, el trabajo se ve antes que la explicación */
 @media (width < 64rem) { .featured-row > .showcase { order: -1; } }
+/* En filas pares la vitrina va a la izquierda, en la columna ancha (igual que el panel técnico) */
+@media (width >= 64rem) { .featured-row:nth-of-type(even) > .showcase { order: -1; } }
