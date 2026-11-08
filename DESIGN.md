@@ -286,3 +286,17 @@ colores por tema, pero cada uno es una familia. Fuente única: `src/styles/token
   alto. Se usa en el encabezado, el menú móvil, el hero, el cierre de cada caso y el envío del
   formulario. "Ver casos" pasa a `.text-link` para no pesar más que el principal. `.button` queda para
   acciones secundarias (probar demo, repositorio, copiar correo, cookies).
+
+### El acento con funciones fijas (opción B)
+
+El acento tiene trabajos concretos y se repite en toda la portada, no solo en el hero:
+
+- **Señales (texto chico, `--accent`):** número de cada servicio, índice del selector de proyectos,
+  «CASO 0N», nodos del proceso.
+- **Señales (grande o gráfico, `--accent-fill`):** cifras del hero (28 px), punto final de cada título
+  de sección (`.section-head h2::after`, oculto a lectores de pantalla), relleno de la línea del
+  proceso al hacer scroll, subrayado de la sección activa del menú, subrayado de los enlaces (55 %),
+  selección de texto (con texto `#050505`).
+- **Momento:** la sección de contacto repite la luz del hero (`--glow`), con línea superior de 2 px en
+  acento y «tu próximo proyecto» resaltado. La página abre y cierra con el mismo gesto.
+- No usar el acento como fondo de bloques ni en degradados de botones.

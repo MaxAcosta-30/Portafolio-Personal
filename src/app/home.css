@@ -394,3 +394,22 @@
 .hero-metrics dt { display: flex; flex-direction: column; align-items: flex-start; }
 /* Destino táctil de 44 px para los enlaces de fuente */
 .metric-source { min-height: var(--spacing-target); margin-top: 0; }
+
+/* ── R8 · El acento con funciones fijas (opción B, elegida por Max) ─────────────────
+   Señales: el acento marca lo que orienta (números, etiquetas de caso, cifras, cierre de títulos).
+   Momento: el contacto repite la luz del hero, así la página abre y cierra con el mismo gesto.
+   Texto chico en --accent (AA); texto grande y gráficos en --accent-fill (color de marca). */
+.strip-number, .picker-index, .case-meta .mono-label { color: var(--accent); }
+.process-node { color: var(--accent); border-color: color-mix(in srgb, var(--accent-fill) 55%, var(--line-strong)); }
+.hero-metrics dd:not(.metric-text) { color: var(--accent-fill); } /* 28px: texto grande, basta 3:1 */
+/* Punto final de color en los títulos de sección; "" lo oculta a lectores de pantalla. */
+.section-head h2::after { content: "." / ""; color: var(--accent-fill); }
+/* La línea del proceso se rellena de acento sólido conforme bajas (el relleno ya lo anima HomeMotion). */
+.process-rail > span { background: var(--accent-fill); }
+
+.contact { isolation: isolate; border-top: 2px solid var(--accent-fill); }
+.contact::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(50rem 26rem at 18% 30%, var(--glow), transparent 65%), radial-gradient(40rem 22rem at 85% 90%, var(--glow-soft), transparent 70%);
+}
+.contact-title em { font-style: normal; color: var(--accent-fill); }

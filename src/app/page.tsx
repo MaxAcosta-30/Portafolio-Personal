@@ -97,6 +97,7 @@ export default function Home() {
   const hitoTests = 53 + 50;
   const githubProfile = "https://github.com/MaxAcosta-30?tab=repositories";
   const [headlineStart, headlineEnd] = content.headline.split(content.headlineEmphasis);
+  const [contactStart, contactEnd] = content.contactTitle.split(content.contactTitleEmphasis);
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
     <SiteHeader />
@@ -230,7 +231,7 @@ export default function Home() {
         <div className="page-container contact-inner">
           <div className="contact-intro">
             <p className="hero-badge"><span className="pulse-dot" aria-hidden="true" />{content.badgeShort}</p>
-            <h2 id="contacto-title" className="contact-title">{content.contactTitle}</h2>
+            <h2 id="contacto-title" className="contact-title">{contactStart}<em>{content.contactTitleEmphasis}</em>{contactEnd}</h2>
             <p className="contact-description">{content.contactDescription}</p>
             {contact.email && <div className="contact-alt">
               <p className="mono-label">{content.emailAlternative}</p>
