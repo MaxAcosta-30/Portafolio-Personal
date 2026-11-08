@@ -33,8 +33,10 @@
 .case-action-link { text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: var(--underline-offset); &:hover { text-decoration-color: currentColor; } }
 @media (width < 48rem) {
   .showcase-stage { --rx: 4deg; --ry: -6deg; aspect-ratio: 4 / 3.4; }
-  .device-url { display: none; }
-  .device-bar { height: 16px; }
+  /* La URL se queda también en celular: es la prueba de que es el sitio en vivo (antes se ocultaba).
+     Barra un poco más alta y letra más chica para que quepa en la ventana de ~260px. */
+  .device-bar { height: 20px; padding-inline: 6px; }
+  .device-url { padding: 1px 8px; font-size: 8.5px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* El celular mide ~90px aquí: el marco de 6px y el radio de 26px de escritorio se comían la captura
      (cortaban «Tienda en línea» y el pie). Marco y radio en proporción, y un poco más ancho para leerlo. */
   .device-phone { width: 27%; border-width: 3px; border-radius: 14px; }
