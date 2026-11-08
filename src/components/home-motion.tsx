@@ -97,9 +97,13 @@ export function HomeMotion() {
             gsap.fromTo(rail, horizontal ? { scaleX: 0 } : { scaleY: 0 }, { ...(horizontal ? { scaleX: 1 } : { scaleY: 1 }), ease: "none", scrollTrigger: { trigger: ".process-list", start: "top 75%", end: "bottom 55%", scrub: 0.5 } });
           }
 
+          // Otros proyectos: cada ficha se desliza en su archivero (la portada barre de izquierda a derecha).
           ScrollTrigger.batch(".registry-row", {
-            start: "top 90%", once: true,
-            onEnter: rows => gsap.fromTo(rows, { y: 16, filter: "blur(4px)" }, { y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out", stagger: 0.06, clearProps: "transform,filter" }),
+            start: "top 88%", once: true,
+            onEnter: rows => {
+              gsap.fromTo(rows.map(row => row.querySelector(".registry-cover")), { clipPath: "inset(0 100% 0 0 round 8px)" }, { clipPath: "inset(0 0% 0 0 round 8px)", duration: 0.7, ease: "power4.out", stagger: 0.08, clearProps: "clipPath" });
+              gsap.fromTo(rows.map(row => row.querySelector(".registry-body")), { x: -14, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out", stagger: 0.08, delay: 0.12, clearProps: "transform,opacity" });
+            },
           });
         }, root!);
 

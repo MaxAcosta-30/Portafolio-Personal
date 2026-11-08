@@ -161,14 +161,17 @@ export default function Home() {
       {/* Otros sistemas: tabla densa con cabecera, no tarjetas. */}
       <section id="sistemas-backend" className="home-section registry page-container" aria-labelledby="sistemas-title">
         <header className="section-head"><h2 id="sistemas-title">{content.systemsTitle}</h2><p>{content.systemsDescription}</p></header>
-        <div className="registry-head" aria-hidden="true"><span>Sistema</span><span>Decisión técnica</span><span>Stack</span><span>Código</span></div>
+        <div className="registry-head" aria-hidden="true"><span>Sistema</span><span>Decisión técnica y stack</span><span>Código</span></div>
         <ul className="registry-list">{systems.map(project => <li id={project.id} key={project.id} className="registry-row">
-          <h3>{project.name}</h3>
+          {/* Portada del README del repositorio (SVG estático: no necesita optimización de imagen). */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="registry-cover" src={`/images/serie/${project.id}.svg`} alt="" width={1280} height={400} loading="lazy" decoding="async" />
           <div className="registry-body">
+            <h3>{project.name}</h3>
             <p className="registry-focus">{project.engineeringFocus?.text ?? project.summary?.text}</p>
             {project.summary && project.engineeringFocus && <p className="registry-summary">{project.summary.text}</p>}
+            <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
           </div>
-          <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
           <RepositoryLink repository={project.repository} name={project.name} />
         </li>)}</ul>
       </section>
