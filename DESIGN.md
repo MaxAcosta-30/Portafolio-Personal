@@ -1,24 +1,15 @@
 ---
-name: Índigo nocturno
-description: Portafolio de Max Acosta — marca oscura con cubo isométrico (M iris, A ámbar) y hero 3D
+name: Brasa (Noche) · Día
+description: Portafolio de Max Acosta — dos temas con el mismo tratamiento de profundidad y paleta propia; cubo isométrico (M + A en acento) y hero 3D
 colors:
-  ink: "#0C0E14"
-  graphite: "#161A23"
-  panel: "#13161D"
-  line: "#262B37"
-  fog: "#9AA1B2"
-  ivory: "#EEEBE3"
-  iris: "#8B92FF"
-  amber: "#F0B67F"
+  dark:  { bg-deep: "#0C0A09", bg: "#110E0C", surface: "#1A1613", surface-raised: "#221D19", line: "#2A241F", line-strong: "#40372F", text: "#F4EFE8", muted: "#A59B91", accent: "#FF6A2E", accent-fill: "#FF5A1F" }
+  light: { bg-deep: "#F2F5FC", bg: "#FFFFFF", surface: "#F6F8FE", surface-raised: "#FFFFFF", line: "#E6EAF3", line-strong: "#C9D2E6", text: "#050505", muted: "#585D68", accent: "#1A64FF", accent-fill: "#548CFF" }
 typography:
   display: { fontFamily: "Bricolage Grotesque 600", fontSize: "clamp(44px, 5vw, 68px)", lineHeight: 1, letterSpacing: "-0.04em" }
   heading: { fontFamily: "Bricolage Grotesque 600", fontSize: "clamp(30px, 3.2vw, 46px)", letterSpacing: "-0.03em" }
-  title: { fontFamily: "Geist 500", fontSize: "21px" }
-  lead: { fontFamily: "Geist 400", fontSize: "17px", lineHeight: 1.6 }
+  cta: { fontFamily: "Bricolage Grotesque 600", fontSize: "18px", textDecoration: "underline 2px accent-fill, offset 0.3em" }
   body: { fontFamily: "Geist 400", fontSize: "16px" }
-  ui: { fontFamily: "Geist 500", fontSize: "14px" }
   eyebrow: { fontFamily: "JetBrains Mono", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em" }
-  metric: { fontFamily: "Bricolage Grotesque 600", fontSize: "28px", color: "amber" }
 rounded:
   control: "0.625rem"
   surface: "1rem"
@@ -271,3 +262,27 @@ desplegaba una app mientras lo leía".
   pantalla y baja el DPR a 1 si cae el FPS. Las etiquetas de las placas son spans proyectados
   por ref (las raíces de `<Html>` de drei cancelaban la View Transition). Solo se precarga la
   fuente del H1. Lighthouse móvil (Slow 4G, CPU 4×, build local): 99/100/100/100.
+
+
+## R8 · Brasa (Noche) y Día
+
+Problema que resuelve: con negro y blanco puros y un acento de un solo valor, todo vivía en un plano
+(las sombras estaban en `none` y la superficie casi no se distinguía del fondo). Se mantienen tres
+colores por tema, pero cada uno es una familia. Fuente única: `src/styles/tokens.css`.
+
+- **Mismo tratamiento, paleta propia.** Noche: negro cálido · marfil · naranja. Día: `#FFFFFF` ·
+  `#050505` · `#548CFF` (paleta definida por Max).
+- **Fondo en capas:** `--bg-deep` → `--bg` → `--surface` → `--surface-raised`. Sombras activas
+  (`--shadow-raised`, `--shadow-floating`): en Noche con filo de luz interior, en Día tintadas de azul.
+- **El acento como luz:** `--glow` detrás del cubo del hero (`.hero-frame::before`), `--glow-soft` muy
+  tenue en el cuerpo, halo en el punto "Disponible".
+- **Dos tonos de acento:** `--accent-fill` es el color de marca visible (titular, subrayado del CTA,
+  A del logo, cubo 3D, punto); `--accent` es la versión para texto chico con AA. En Día, `#548CFF`
+  da 3.2:1 sobre blanco, así que el texto chico usa `#1A64FF` (4.9:1).
+- **Grano:** `body::after` fijo, `--grain-opacity` 7 % en Noche y 4 % en Día; se apaga con
+  `prefers-reduced-transparency` y `forced-colors`.
+- **CTA «Cotiza tu proyecto» = `.cta-link`:** texto subrayado sin caja (elección de Max: sin degradado
+  ni botón lleno). Bricolage 600, subrayado de 2 px en `--accent-fill`, flecha en `--accent`, 44 px de
+  alto. Se usa en el encabezado, el menú móvil, el hero, el cierre de cada caso y el envío del
+  formulario. "Ver casos" pasa a `.text-link` para no pesar más que el principal. `.button` queda para
+  acciones secundarias (probar demo, repositorio, copiar correo, cookies).

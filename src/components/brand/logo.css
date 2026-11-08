@@ -1,7 +1,7 @@
 .logo { display: inline-flex; align-items: center; gap: 0.625rem; color: var(--text); }
 .logo-mark { flex: none; overflow: visible; }
 .logo-m { stroke: var(--text); }
-.logo-a { stroke: var(--accent); }
+.logo-a { stroke: var(--accent-fill); }
 .logo-hidden { stroke: var(--line-strong); }
 .logo-a-hop { transform-box: view-box; }
 .logo-word { font-family: var(--font-display); font-weight: 700; font-size: 1.3125rem; letter-spacing: -0.02em; line-height: 1; }

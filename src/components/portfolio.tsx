@@ -19,7 +19,7 @@ export function SiteHeader({ homeLinks = false }: { homeLinks?: boolean }) {
         <a href={homeLinks ? "/" : "#inicio"} className="site-brand" aria-label="Max Acosta, inicio"><Logo variant="assemble" wordmark size={30} /></a>
         <HomeNavigation homeLinks={homeLinks} />
         <div className="header-actions">
-          <a className="button header-cta" href={`${homeLinks ? "/" : ""}#${navigation.cta.sectionId}`}>{navigation.cta.label}<ButtonArrow /></a>
+          <a className="cta-link header-cta" href={`${homeLinks ? "/" : ""}#${navigation.cta.sectionId}`}>{navigation.cta.label}<ButtonArrow /></a>
           <ThemeToggle />
           <MobileMenu homeLinks={homeLinks} />
         </div>

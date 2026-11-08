@@ -24,7 +24,7 @@
 .device-front { left: 2%; top: 12%; width: 76%; transform: translate3d(var(--tx), var(--ty), 0) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0); z-index: 1; }
 .device-phone {
   right: 4%; bottom: 2%; width: 23%; z-index: 2; aspect-ratio: 390 / 844;
-  border: 6px solid #0b0c10; border-radius: 26px; box-shadow: 0 34px 60px -18px rgb(0 0 0 / 0.65), 0 0 0 1px var(--line-strong);
+  border: 6px solid #0f0c0a; border-radius: 26px; box-shadow: 0 34px 60px -18px rgb(0 0 0 / 0.65), 0 0 0 1px var(--line-strong);
   clip-path: none;
   transform: translate3d(var(--tx), var(--ty), 0) rotate(var(--rz)) scale(var(--s)) rotateX(calc(var(--rx) * 0.6)) rotateY(calc(var(--ry) * 0.6)) translateZ(70px);
 }

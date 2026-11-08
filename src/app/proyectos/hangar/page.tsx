@@ -220,7 +220,7 @@ export default function HangarCaseStudy() {
       <div className="project-actions">
         {hangar.repository?.visibility === "public" && <a className="text-link" href={hangar.repository.href}>{content.closing.repositoryAction}<Icon name="external" /></a>}
         <Link className="text-link" href={content.closing.otherCase.href}>{content.closing.otherCase.label}<Icon name="arrow" /></Link>
-        <Link className="button" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
       </div>
     </footer>
   </>;

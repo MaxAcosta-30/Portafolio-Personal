@@ -115,8 +115,8 @@ export default function Home() {
           <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart}<em>{content.headlineEmphasis}</em>{headlineEnd}</h1>
           <p className="hero-introduction" data-step="2">{content.introduction}</p>
           <div className="hero-actions" data-step="3">
-            <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>
-            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<ButtonArrow /></a>
+            <a className="cta-link" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>
+            <a className="text-link" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<ButtonArrow /></a>
           </div>
           {/* Datos verificables: cada cifra enlaza a su fuente pública. */}
           <dl className="hero-metrics" data-step="4">

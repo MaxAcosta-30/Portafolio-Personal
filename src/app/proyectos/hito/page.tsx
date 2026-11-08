@@ -145,7 +145,7 @@ export default function HitoCaseStudy() {
       <h2 className="max-w-measure text-heading">{content.closing.title}</h2>
       <p className="mt-4 max-w-measure text-muted">{content.closing.text}</p>
       <div className="project-actions">
-        <Link className="button" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
         <Link className="text-link" href="/#proyectos">{content.back}</Link>
       </div>
     </footer>
