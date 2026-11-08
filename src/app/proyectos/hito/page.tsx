@@ -7,15 +7,14 @@ import { Showcase } from "@/components/showcase";
 import { Icon } from "@/components/ui";
 import { hitoCaseStudy as content, hitoSources } from "@/content/hito-case-study";
 import { hito } from "@/content/projects";
-import { profile } from "@/content/profile";
 import { portfolioLabels, siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `Hito · Caso de estudio · ${profile.name}`,
+  title: "Hito · Caso de estudio",
   description: content.introduction,
   alternates: { canonical: `${siteMetadata.siteUrl}/proyectos/hito` },
   openGraph: {
-    title: `Hito · Caso de estudio · ${profile.name}`,
+    title: "Hito · Caso de estudio",
     description: content.introduction,
     type: "website",
     url: `${siteMetadata.siteUrl}/proyectos/hito`,

@@ -20,13 +20,13 @@ import { homeDesign as content } from "@/content/home-design";
 import "./home.css";
 
 export const metadata = {
-  title: { absolute: `${profile.name} · ${profile.role}` },
+  title: { absolute: `${profile.displayName} · ${profile.role}` },
   description: profile.introduction.text,
   alternates: {
     canonical: `${siteMetadata.siteUrl}/`,
   },
   openGraph: {
-    title: `${profile.name} · ${profile.role}`,
+    title: `${profile.displayName} · ${profile.role}`,
     description: profile.introduction.text,
     type: "website",
     url: `${siteMetadata.siteUrl}/`,
@@ -35,13 +35,13 @@ export const metadata = {
         url: `${siteMetadata.siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: `${profile.name} · Portafolio`,
+        alt: `${profile.displayName} · Portafolio`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} · ${profile.role}`,
+    title: `${profile.displayName} · ${profile.role}`,
     description: profile.introduction.text,
     images: [`${siteMetadata.siteUrl}/og-image.png`],
   },
@@ -244,7 +244,7 @@ export default function Home() {
       </section>
     </main>
     <footer className="home-footer page-container">
-      <div className="footer-brand"><Logo variant="spin" size={30} /><p>{profile.name}<span>{portfolioLabels.footer}</span></p></div>
+      <div className="footer-brand"><Logo variant="spin" size={30} /><p>{profile.displayName}<span>{portfolioLabels.footer}</span></p></div>
       <div><Link className="text-link" href="/privacidad">Aviso de privacidad</Link><LinkPreferenciasCookies /><a className="text-link" href="#inicio">{portfolioLabels.backToTop}</a></div>
     </footer>
   </>;

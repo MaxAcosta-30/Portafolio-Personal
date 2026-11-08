@@ -12,13 +12,13 @@ import { profile } from "@/content/profile";
 import { portfolioLabels, siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `TaskFlow Pro · Caso de estudio · ${profile.name}`,
+  title: "TaskFlow Pro · Caso de estudio",
   description: content.introduction,
   alternates: {
     canonical: `${siteMetadata.siteUrl}/proyectos/taskflow-pro`,
   },
   openGraph: {
-    title: `TaskFlow Pro · Caso de estudio · ${profile.name}`,
+    title: "TaskFlow Pro · Caso de estudio",
     description: content.introduction,
     type: "website",
     url: `${siteMetadata.siteUrl}/proyectos/taskflow-pro`,
@@ -33,7 +33,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `TaskFlow Pro · Caso de estudio · ${profile.name}`,
+    title: `TaskFlow Pro · Caso de estudio · ${profile.displayName}`,
     description: content.introduction,
     images: [`${siteMetadata.siteUrl}/og-image.png`],
   },

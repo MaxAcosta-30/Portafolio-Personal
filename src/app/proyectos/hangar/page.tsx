@@ -19,11 +19,11 @@ const caseUrl = publicSiteUrl ? `${publicSiteUrl}${content.href}` : null;
 
 export const metadata: Metadata = {
   metadataBase: publicSiteUrl ? new URL(publicSiteUrl) : null,
-  title: `Hangar · Caso de estudio · ${profile.name}`,
+  title: "Hangar · Caso de estudio",
   description: content.introduction,
   alternates: { canonical: caseUrl },
   openGraph: {
-    title: `Hangar · Caso de estudio · ${profile.name}`,
+    title: "Hangar · Caso de estudio",
     description: content.introduction,
     type: "article",
     url: caseUrl ?? undefined,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     creator: null,
-    title: `Hangar · Caso de estudio · ${profile.name}`,
+    title: `Hangar · Caso de estudio · ${profile.displayName}`,
     description: content.introduction,
     images: publicSiteUrl ? [`${publicSiteUrl}/og-hangar.svg`] : [],
   },

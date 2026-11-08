@@ -1,11 +1,10 @@
 import { LinkPreferenciasCookies } from "@/components/cookie-consent";
 import { SiteHeader } from "@/components/portfolio";
-import { profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `Política de cookies · ${profile.name}`,
-  description: "Política de cookies del portafolio de Max Alexander Acosta Valencia.",
+  title: "Política de cookies",
+  description: "Política de cookies del portafolio de Max Acosta.",
   alternates: {
     canonical: `${siteMetadata.siteUrl}/legal/cookies`,
   },

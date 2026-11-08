@@ -1,4 +1,4 @@
-# robots.txt — Portafolio de Max Alexander Acosta Valencia
+# robots.txt — Portafolio de Max Acosta
 # Reemplazar tu-dominio.com por el dominio real antes de publicar (Prompt 13).
 
 User-agent: *

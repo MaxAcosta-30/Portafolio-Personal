@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("contenido, accesibilidad y capturas de la portada", async ({ page }, testInfo) => {
-  await expect(page).toHaveTitle(`${profile.name} · ${profile.role}`);
+  await expect(page).toHaveTitle(`${profile.displayName} · ${profile.role}`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(homeDesign.headline);
   for (const project of projects) {
     await expect(page.getByRole("heading", { name: project.name, exact: true })).toBeVisible();

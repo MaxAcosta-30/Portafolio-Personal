@@ -5,8 +5,8 @@ import { contact, profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `Aviso de privacidad · ${profile.name}`,
-  description: "Aviso de privacidad integral del portafolio de Max Alexander Acosta Valencia, conforme a la LFPDPPP.",
+  title: "Aviso de privacidad",
+  description: "Aviso de privacidad integral del portafolio de Max Acosta, conforme a la LFPDPPP.",
   alternates: { canonical: `${siteMetadata.siteUrl}/privacidad` },
 } as const;
 
