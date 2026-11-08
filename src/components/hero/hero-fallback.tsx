@@ -13,9 +13,9 @@ export function HeroFallback() {
     </g>;
   };
   return <svg className="hero-fallback" viewBox="0 0 500 500" aria-hidden="true" focusable="false">
-    {plate(370, "repo")}
-    {plate(325, "build")}
-    {plate(280, "live", true)}
+    {plate(370, "taskflow")}
+    {plate(325, "hangar")}
+    {plate(280, "hito", true)}
     <ellipse className="fb-orbit" cx="250" cy="185" rx="175" ry="58" />
     <g transform="translate(180 105) scale(1.4)" fill="none" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
       <path className="fb-hidden" d={LOGO_PATHS.hidden} />

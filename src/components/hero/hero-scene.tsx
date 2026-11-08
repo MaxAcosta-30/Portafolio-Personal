@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Line, OrthographicCamera, PerformanceMonitor, RoundedBox } from "@react-three/drei";
-import { Vector3, type Group, type Mesh } from "three";
+import { Float, Line, OrthographicCamera, PerformanceMonitor, RoundedBox, useTexture } from "@react-three/drei";
+import { SRGBColorSpace, Vector3, type Group, type Mesh } from "three";
 
 /** Ancla de la etiqueta de cada placa, en coordenadas locales de la placa. */
 const LABEL_ANCHOR = new Vector3(2.6, 0.05, -1.5);
@@ -50,11 +50,24 @@ function roundedOutline(size: number, radius: number, y: number): V[] {
   return points;
 }
 
+// Cada placa lleva encima la captura real de un proyecto: al hacer scroll la pila se separa
+// y deja ver el trabajo capa por capa (antes eran placas vacías "repo / build / live").
 const PLATES = [
-  { label: "repo", y: -2.35, spread: 1.1, opacity: 0.7 },
-  { label: "build", y: -1.75, spread: 0.55, opacity: 0.78 },
-  { label: "live", y: -1.15, spread: 0, opacity: 0.86 },
+  { label: "taskflow", y: -2.35, spread: 1.1, opacity: 0.7, screen: "/images/optimized/taskflow-tablero-1024.webp" },
+  { label: "hangar", y: -1.75, spread: 0.55, opacity: 0.78, screen: "/images/optimized/hangar-despliegue-1024.webp" },
+  { label: "hito", y: -1.15, spread: 0, opacity: 0.86, screen: "/images/optimized/hito-landing-1024.webp" },
 ] as const;
+
+/** Captura sobre la cara superior de la placa, girada para leerse en la vista isométrica. */
+function Screen({ src }: { src: string }) {
+  const texture = useTexture(src);
+  texture.colorSpace = SRGBColorSpace;
+  texture.anisotropy = 8;
+  return <mesh rotation={[-Math.PI / 2, 0, Math.PI / 4]} position={[0, 0.075, 0]}>
+    <planeGeometry args={[3.3, 2.06]} />
+    <meshBasicMaterial map={texture} toneMapped={false} />
+  </mesh>;
+}
 
 /** Placas monocromas; solo la superior lleva el borde de acento. */
 function Plate({ plate, index, progress, palette }: { plate: (typeof PLATES)[number]; index: number; progress: { current: number }; palette: Palette }) {
@@ -67,6 +80,7 @@ function Plate({ plate, index, progress, palette }: { plate: (typeof PLATES)[num
       <meshBasicMaterial color={palette.surface} transparent opacity={plate.opacity} />
     </RoundedBox>
     <Line points={outline} color={top ? palette.accent : palette.lineStrong} lineWidth={top ? 2 : 1.4} toneMapped={false} />
+    <Suspense fallback={null}><Screen src={plate.screen} /></Suspense>
   </group>;
 }
 
