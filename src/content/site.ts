@@ -33,7 +33,7 @@ export const homepage = {
     featured: {
       id: "casos-de-estudio",
       title: "Casos de estudio",
-      projectIds: ["hangar", "taskflow-pro"],
+      projectIds: ["hito", "hangar", "taskflow-pro"],
       presentation: "case-study-sections",
     },
     engineering: {

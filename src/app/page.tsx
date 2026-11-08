@@ -11,6 +11,7 @@ import { ContactForm } from "@/components/contact-form";
 import { Icon } from "@/components/ui";
 import { LinkPreferenciasCookies } from "@/components/cookie-consent";
 import { CopyEmail } from "@/components/copy-email";
+import { Showcase } from "@/components/showcase";
 import type { SourcedLink } from "@/content/types";
 import { contact, experience, profile, resume } from "@/content/profile";
 import { engineeringSystems, featuredCaseStudies, projects } from "@/content/projects";
@@ -77,6 +78,20 @@ function HangarVisual() {
     <p className="visual-note">{configurationNote}</p>
     <CodeWell id="hangar" name="Hangar" />
   </div>;
+}
+
+function HitoVisual() {
+  return <Showcase
+    url="hito-one.vercel.app"
+    back={{ name: "hito-panel", alt: "" }}
+    front={{ name: "hito-landing", alt: "Landing de Hito: carpeta coral con el titular «Lo que acordaste, asentado.» y una hoja de hitos que se puede aprobar." }}
+    phone={{ name: "hito-cliente", alt: "Vista del cliente en el celular: hitos con sus sellos y el botón Aprobar entrega." }}
+    caption="Capturas reales de la demo: landing, panel de cobros y la vista que recibe el cliente."
+  />;
+}
+
+function DemoLink({ demo, name }: { demo: SourcedLink; name: string }) {
+  return <a className="case-action case-action-link" href={demo.href} target="_blank" rel="noopener noreferrer">{demo.label}<span className="sr-only"> de {name} (se abre en otra pestaña)</span><Icon name="external" /></a>;
 }
 
 function TaskFlowVisual() {
@@ -150,9 +165,9 @@ export default function Home() {
                 {project.contribution && <div><dt>{portfolioLabels.contribution}</dt><dd>{project.contribution.text}</dd></div>}
               </dl>
               <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
-              <div className="project-actions"><span className="case-action" aria-hidden={caseHref ? true : undefined}>{caseHref ? content.caseLink : "Próximamente"}{caseHref && <Icon name="arrow" />}</span><RepositoryLink repository={project.repository} name={project.name} /></div>
+              <div className="project-actions">{project.demo ? <DemoLink demo={project.demo} name={project.name} /> : <span className="case-action" aria-hidden={caseHref ? true : undefined}>{caseHref ? content.caseLink : "Próximamente"}{caseHref && <Icon name="arrow" />}</span>}<RepositoryLink repository={project.repository} name={project.name} /></div>
             </div>
-            {project.id === "hangar" ? <HangarVisual /> : <TaskFlowVisual />}
+            {project.id === "hito" ? <HitoVisual /> : project.id === "hangar" ? <HangarVisual /> : <TaskFlowVisual />}
           </article>;
         })}
       </section>

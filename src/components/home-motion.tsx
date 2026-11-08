@@ -53,6 +53,22 @@ export function HomeMotion() {
             ScrollTrigger.create({ trigger: row, start: "top 65%", onEnter: pop, onEnterBack: pop });
           });
 
+          // Vitrina: el scroll endereza los equipos al llegar y el cursor los inclina (solo puntero fino).
+          gsap.utils.toArray<HTMLElement>("[data-showcase] .showcase-stage").forEach(stage => {
+            const tilt = { rx: 8, ry: -12, px: 0, py: 0 };
+            const paint = () => { stage.style.setProperty("--rx", `${tilt.rx + tilt.py}deg`); stage.style.setProperty("--ry", `${tilt.ry + tilt.px}deg`); };
+            gsap.fromTo(tilt, { rx: 22, ry: -26 }, { rx: 6, ry: -9, ease: "none", onUpdate: paint, scrollTrigger: { trigger: stage, start: "top 95%", end: "center 45%", scrub: 0.6 } });
+            if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+            const toX = gsap.quickTo(tilt, "px", { duration: 0.6, ease: "power3.out", onUpdate: paint });
+            const toY = gsap.quickTo(tilt, "py", { duration: 0.6, ease: "power3.out", onUpdate: paint });
+            stage.addEventListener("pointermove", event => {
+              const box = stage.getBoundingClientRect();
+              toX(((event.clientX - box.left) / box.width - 0.5) * 10);
+              toY(-((event.clientY - box.top) / box.height - 0.5) * 8);
+            });
+            stage.addEventListener("pointerleave", () => { toX(0); toY(0); });
+          });
+
           const rail = root!.querySelector(".process-rail > span");
           if (rail) {
             const horizontal = matchMedia("(width >= 64rem)").matches;

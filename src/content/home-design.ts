@@ -71,14 +71,14 @@ export const homeDesign = {
     description: "Software a medida para negocios. Cada servicio se apoya en proyectos que puedes revisar aquí mismo.",
     proofLabel: "Lo respaldan",
     items: [
-      { title: "Sitios web y landing pages", text: "Páginas rápidas, accesibles y fáciles de mantener, pensadas para presentar tu negocio y convertir visitas en contactos.", proof: ["taskflow-pro"], note: "Este portafolio (Next.js)" },
-      { title: "Puntos de venta y sistemas de gestión", text: "Inventario, ventas, usuarios y permisos, con datos consistentes aunque varias personas operen al mismo tiempo.", proof: ["secure-inventory", "safeledger", "freelanceguard-erp"] },
+      { title: "Sitios web y landing pages", text: "Páginas rápidas, accesibles y fáciles de mantener, pensadas para presentar tu negocio y convertir visitas en contactos.", proof: ["hito", "taskflow-pro"], note: "Este portafolio (Next.js)" },
+      { title: "Puntos de venta y sistemas de gestión", text: "Inventario, ventas, usuarios y permisos, con datos consistentes aunque varias personas operen al mismo tiempo.", proof: ["hito", "secure-inventory", "safeledger", "freelanceguard-erp"] },
       { title: "APIs e integraciones", text: "APIs documentadas y seguras para conectar tu sistema con aplicaciones web, móviles u otros servicios.", proof: ["secure-vault", "fortressid", "sentinel-iot"] },
       { title: "Aplicaciones en tiempo real", text: "Tableros, notificaciones y automatizaciones que se actualizan solas, con colas y procesos en segundo plano.", proof: ["taskflow-pro", "hangar"] },
     ],
   },
   casesTitle: "Trabajo seleccionado",
-  casesDescription: "Dos proyectos autodirigidos. La arquitectura, las decisiones y los límites, explicados en detalle.",
+  casesDescription: "Tres proyectos autodirigidos. Uno lo puedes probar ahora mismo; de los otros, la arquitectura, las decisiones y los límites, explicados en detalle.",
   systemsTitle: "Otros proyectos",
   // Resumen de los dominios ya respaldados en projects.ts (engineeringFocus de cada sistema).
   systemsDescription: "APIs y servicios backend centrados en seguridad, concurrencia, identidad y telemetría. Cada uno destaca la decisión técnica que lo define.",
