@@ -17,7 +17,7 @@ export const profile = {
   name: "Max Alexander Acosta Valencia",
   /** Nombre que se muestra: pestaña del navegador, redes, pie y marca (decisión de Max). */
   displayName: "Max Acosta",
-  role: "Desarrollador Full Stack",
+  role: "Desarrollador de Software",
   education: {
     program: "Ingeniería en Sistemas Computacionales",
     status: "Estudiante",
