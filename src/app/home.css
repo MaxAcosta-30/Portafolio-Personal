@@ -366,12 +366,16 @@
 .device-browser { border: 1px solid var(--line-strong); border-radius: 10px; box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.04) inset; }
 .device-bar { display: flex; align-items: center; justify-content: center; height: 26px; padding-inline: 10px; background: var(--bg); border-bottom: 1px solid var(--line); }
 .device-url { padding: 2px 12px; border-radius: var(--radius-pill); background: var(--surface); font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }
-.device-back { left: 18%; top: 0; width: 70%; opacity: 0.9; transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(-90px); filter: saturate(0.85) brightness(0.8); }
-.device-front { left: 2%; top: 12%; width: 76%; transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0); z-index: 1; }
+/* Cada equipo suma su propio desplazamiento (--tx, --ty, --rz, --s, --clip) a la perspectiva del escenario:
+   HomeMotion anima esas variables y la inclinación con el cursor sigue funcionando encima. */
+.device { --tx: 0px; --ty: 0px; --rz: 0deg; --s: 1; --clip: 0%; clip-path: inset(var(--clip) 0 0 0 round 10px); }
+.device-back { left: 18%; top: 0; width: 70%; opacity: 0.9; transform: translate3d(var(--tx), var(--ty), 0) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(-90px); filter: saturate(0.85) brightness(0.8); }
+.device-front { left: 2%; top: 12%; width: 76%; transform: translate3d(var(--tx), var(--ty), 0) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0); z-index: 1; }
 .device-phone {
   right: 4%; bottom: 2%; width: 23%; z-index: 2; aspect-ratio: 390 / 844;
   border: 6px solid #0b0c10; border-radius: 26px; box-shadow: 0 34px 60px -18px rgb(0 0 0 / 0.65), 0 0 0 1px var(--line-strong);
-  transform: rotateX(calc(var(--rx) * 0.6)) rotateY(calc(var(--ry) * 0.6)) translateZ(70px);
+  clip-path: none;
+  transform: translate3d(var(--tx), var(--ty), 0) rotate(var(--rz)) scale(var(--s)) rotateX(calc(var(--rx) * 0.6)) rotateY(calc(var(--ry) * 0.6)) translateZ(70px);
 }
 .device-phone img { height: 100%; object-fit: cover; object-position: top; }
 .showcase figcaption { margin-top: 0.75rem; font-size: 13px; color: var(--muted); }

@@ -55,6 +55,7 @@ function RepositoryLink({ repository, name }: { repository: SourcedLink | null; 
 function HangarVisual() {
   return <Showcase
     url="hangar · demo local"
+    motion="porton"
     back={{ name: "hangar-apps", alt: "" }}
     front={{ name: "hangar-despliegue", alt: "Despliegue de landing-panaderia en Hangar: las cuatro etapas Clonar, Construir, Ejecutar y Enrutar marcadas como listas sobre los logs reales del build." }}
     caption="Capturas reales: despliegues hechos en local con Temporal, Docker (Podman) y los logs del worker."
@@ -64,6 +65,7 @@ function HangarVisual() {
 function HitoVisual() {
   return <Showcase
     url="hito-one.vercel.app"
+    motion="sello"
     back={{ name: "hito-panel", alt: "" }}
     front={{ name: "hito-landing", alt: "Landing de Hito: carpeta coral con el titular «Lo que acordaste, asentado.» y una hoja de hitos que se puede aprobar." }}
     phone={{ name: "hito-cliente", alt: "Vista del cliente en el celular: hitos con sus sellos y el botón Aprobar entrega." }}
@@ -78,6 +80,7 @@ function DemoLink({ demo, name }: { demo: SourcedLink; name: string }) {
 function TaskFlowVisual() {
   return <Showcase
     url="taskflow · demo local"
+    motion="andenes"
     back={{ name: "taskflow-analitica", alt: "" }}
     front={{ name: "taskflow-tablero", alt: "Tablero de TaskFlow Pro en tema oscuro: columnas Pendiente, Por hacer, En curso y En revisión con tareas, prioridades y fechas." }}
     phone={{ name: "taskflow-login-movil", alt: "Inicio de sesión de TaskFlow Pro en el celular." }}

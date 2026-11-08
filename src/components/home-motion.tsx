@@ -53,12 +53,34 @@ export function HomeMotion() {
             ScrollTrigger.create({ trigger: row, start: "top 65%", onEnter: pop, onEnterBack: pop });
           });
 
-          // Vitrina: el scroll endereza los equipos al llegar y el cursor los inclina (solo puntero fino).
-          gsap.utils.toArray<HTMLElement>("[data-showcase] .showcase-stage").forEach(stage => {
-            const tilt = { rx: 8, ry: -12, px: 0, py: 0 };
-            const paint = () => { stage.style.setProperty("--rx", `${tilt.rx + tilt.py}deg`); stage.style.setProperty("--ry", `${tilt.ry + tilt.px}deg`); };
-            gsap.fromTo(tilt, { rx: 22, ry: -26 }, { rx: 6, ry: -9, ease: "none", onUpdate: paint, scrollTrigger: { trigger: stage, start: "top 95%", end: "center 45%", scrub: 0.6 } });
+          // Vitrinas: cada proyecto entra a su manera; el cursor las inclina a todas (solo puntero fino).
+          gsap.utils.toArray<HTMLElement>("[data-showcase]").forEach(figure => {
+            const stage = figure.querySelector<HTMLElement>(".showcase-stage");
+            if (!stage) return;
+            const [back, front, phone] = [".device-back", ".device-front", ".device-phone"].map(s => stage.querySelector<HTMLElement>(s));
+            const devices = [back, front, phone].filter((d): d is HTMLElement => d !== null);
+            const motion = figure.dataset.showcase;
+            if (motion === "sello") {
+              // Hito: las ventanas caen en su sitio y el celular se estampa con un golpe seco (una vez).
+              const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+              tl.from([back, front].filter(Boolean), { "--ty": "-48px", opacity: 0, duration: 0.6, stagger: 0.08 });
+              if (phone) tl.from(phone, { "--s": 1.45, "--rz": "-9deg", opacity: 0, duration: 0.42, ease: "expo.out" }, "-=0.15")
+                .to(stage, { "--ry": "-13.5deg", duration: 0.09, yoyo: true, repeat: 1, ease: "power1.out" }, "<0.32");
+              ScrollTrigger.create({ trigger: stage, start: "top 70%", once: true, onEnter: () => tl.play() });
+            } else if (motion === "porton") {
+              // Hangar: un portón que sube; las pantallas se revelan de abajo hacia arriba con el scroll.
+              gsap.fromTo(devices, { "--clip": "100%" }, { "--clip": "0%", ease: "none", stagger: 0.25, scrollTrigger: { trigger: stage, start: "top 90%", end: "center 55%", scrub: 0.6 } });
+            } else if (motion === "andenes") {
+              // TaskFlow: las pantallas cambian de columna como una tarjeta, y el celular llega al final.
+              const tl = gsap.timeline({ scrollTrigger: { trigger: stage, start: "top 90%", end: "center 50%", scrub: 0.6 } });
+              if (back) tl.fromTo(back, { "--tx": "-140px", opacity: 0 }, { "--tx": "0px", opacity: 0.9, ease: "none" }, 0);
+              if (front) tl.fromTo(front, { "--tx": "140px", opacity: 0 }, { "--tx": "0px", opacity: 1, ease: "none" }, 0.1);
+              if (phone) tl.fromTo(phone, { "--tx": "90px", opacity: 0 }, { "--tx": "0px", opacity: 1, ease: "none" }, 0.45);
+            }
             if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+            const tilt = { px: 0, py: 0 };
+            const base = { rx: parseFloat(getComputedStyle(stage).getPropertyValue("--rx")) || 8, ry: parseFloat(getComputedStyle(stage).getPropertyValue("--ry")) || -12 };
+            const paint = () => { stage.style.setProperty("--rx", `${base.rx + tilt.py}deg`); stage.style.setProperty("--ry", `${base.ry + tilt.px}deg`); };
             const toX = gsap.quickTo(tilt, "px", { duration: 0.6, ease: "power3.out", onUpdate: paint });
             const toY = gsap.quickTo(tilt, "py", { duration: 0.6, ease: "power3.out", onUpdate: paint });
             stage.addEventListener("pointermove", event => {
