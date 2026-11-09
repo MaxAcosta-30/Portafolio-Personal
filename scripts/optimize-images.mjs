@@ -1,4 +1,5 @@
-// Convierte las capturas de images/source/ a AVIF + WebP en 640, 1024 y 1600 px de ancho.
+// Convierte las capturas de images/source/ a AVIF + WebP en 320, 480, 640, 1024 y 1600 px de ancho
+// (320 y 480: el celular de la vitrina y las ventanas en pantallas de 390 px).
 // Uso: npm run images   (salida en public/images/optimized/ y un manifiesto con dimensiones)
 // Nunca amplía: si el original es más estrecho que un ancho, ese ancho se omite.
 import { mkdir, readdir, writeFile } from "node:fs/promises";
@@ -8,7 +9,7 @@ import sharp from "sharp";
 const SOURCE = "images/source";
 const OUTPUT = "public/images/optimized";
 const MANIFEST = "src/content/image-manifest.json";
-const WIDTHS = [640, 1024, 1600];
+const WIDTHS = [320, 480, 640, 1024, 1600];
 const INPUT = /\.(png|jpe?g|webp|avif|tiff?)$/i;
 
 await mkdir(SOURCE, { recursive: true });

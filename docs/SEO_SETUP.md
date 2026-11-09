@@ -42,11 +42,11 @@ Cada página incluye `twitter:card: summary_large_image`, título, descripción 
 
 ### robots.txt
 
-`public/robots.txt` permite rastrear todo el sitio y apunta al sitemap. Bloquea `/design-system/` (documentación interna, no indexar).
+`src/app/robots.ts` genera `/robots.txt`: permite rastrear todo y apunta al sitemap con `NEXT_PUBLIC_SITE_URL`. `/design-system` y `/muestra` no se bloquean ahí sino con `noindex` en su metadata (si robots las bloqueara, Google no podría leer el `noindex`).
 
 ### sitemap.xml
 
-`public/sitemap.xml` lista las 4 rutas estáticas con `changefreq` y `priority`.
+`src/app/sitemap.ts` genera `/sitemap.xml` con las 7 páginas públicas (portada, 3 casos y 3 legales), sin `lastmod` (cambiaría en cada build). Al publicar una página nueva, agregarla ahí. Imágenes para redes: `og-*.png` 1200×630 generadas con `node scripts/og-images.mjs` (PNG porque WhatsApp, LinkedIn y X no muestran SVG).
 
 ### Favicon
 
@@ -75,7 +75,7 @@ Las imágenes que existan (`og-image.png`, favicon) incluyen `alt`. No hay imág
 
 | Dato | Cómo usarlo | Nota |
 | --- | --- | --- |
-| Dominio real | Variable `NEXT_PUBLIC_SITE_URL` en `.env.local`; reemplazar `https://tu-dominio.com` en `public/robots.txt` y `public/sitemap.xml` | No se asume posesión de dominio (Prompt 13) |
+| Dominio real | Variable `NEXT_PUBLIC_SITE_URL` en Cloudflare Pages (obligatoria: el build falla sin ella); canonical, robots, sitemap y Open Graph salen de ahí | No se asume posesión de dominio (Prompt 13) |
 | `public/og-image.svg` | Imagen OG ya generada (1200×630, SVG, < 300 KB) | Puede reemplazarse por un PNG optimizado si se prefiere |
 | `public/og-hangar.svg` | Imagen OG del caso Hangar (1200×630, SVG) | Ya generada |
 | `public/og-taskflow.svg` | Imagen OG del caso TaskFlow Pro (1200×630, SVG) | Ya generada |
@@ -86,7 +86,7 @@ Las imágenes que existan (`og-image.png`, favicon) incluyen `alt`. No hay imág
 ## IMPORTANTE
 
 - **No se conectó Google Analytics ni Search Console.** Esos servicios requieren credenciales de cuenta del propietario (Prompt 10: "Todavía NO conectes Google Analytics ni Search Console"). Queda documentado exactamente qué identificadores no secretos se necesitarán en el Prompt 14.
-- No se inventó ubicación, empresa ni servicio. El dominio `https://tu-dominio.com` es un placeholder explícito que debe reemplazarse antes de publicar.
+- No se inventó ubicación, empresa ni servicio. La URL pública sale de `NEXT_PUBLIC_SITE_URL`; en local el respaldo es `http://127.0.0.1:3000`.
 - No hay keyword stuffing: las descripciones son reales y extraídas del contenido del portafolio.
 
 ## Verificación

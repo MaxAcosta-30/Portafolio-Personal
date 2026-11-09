@@ -11,10 +11,16 @@ function webglAvailable() {
   try { return !!document.createElement("canvas").getContext("webgl2"); } catch { return false; }
 }
 
+/** Ahorro de datos activado (Save-Data / modo Lite) o red lenta: el 3D (~240 KB) no se descarga. */
+function saveData() {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  return connection?.saveData === true || /(^|-)2g$|^3g$/.test(connection?.effectiveType ?? "") || matchMedia("(prefers-reduced-data: reduce)").matches;
+}
+
 /**
  * Lado derecho del hero. El SVG estático siempre está en el HTML; la escena 3D
- * se monta tras la primera interacción, si hay WebGL y el movimiento está permitido,
- * y se pausa al salir del viewport.
+ * se monta tras la primera interacción, si hay WebGL, el movimiento está permitido y el
+ * visitante no pidió ahorrar datos; se pausa al salir del viewport.
  */
 export function HeroVisual() {
   const box = useRef<HTMLDivElement>(null);
@@ -24,7 +30,7 @@ export function HeroVisual() {
 
   useEffect(() => {
     const reduce = matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduce.matches || !webglAvailable()) return;
+    if (reduce.matches || saveData() || !webglAvailable()) return;
     // La escena (three.js + WebGL) se monta con la primera interacción: no bloquea la carga inicial.
     const idle = window.requestIdleCallback ?? ((callback: () => void) => window.setTimeout(callback, 50));
     const cancel = window.cancelIdleCallback ?? clearTimeout;

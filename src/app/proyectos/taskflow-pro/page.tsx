@@ -24,7 +24,7 @@ export const metadata = {
     url: `${siteMetadata.siteUrl}/proyectos/taskflow-pro`,
     images: [
       {
-        url: `${siteMetadata.siteUrl}/og-taskflow.svg`,
+        url: `${siteMetadata.siteUrl}/og-taskflow.png`,
         width: 1200,
         height: 630,
         alt: `Caso de estudio: TaskFlow Pro`,
@@ -35,7 +35,7 @@ export const metadata = {
     card: "summary_large_image",
     title: `TaskFlow Pro · Caso de estudio · ${profile.displayName}`,
     description: content.introduction,
-    images: [`${siteMetadata.siteUrl}/og-image.png`],
+    images: [`${siteMetadata.siteUrl}/og-taskflow.png`],
   },
 } as const;
 

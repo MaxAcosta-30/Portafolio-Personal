@@ -46,7 +46,7 @@ Estos pasos requieren tu cuenta y no deben ser realizados por mí:
 | Directorio de salida | `out` |
 | Versión de Node | 24 (ver `.nvmrc`) |
 | Framework preset | Next.js (detectado automáticamente) |
-| Variables de entorno | Ninguna requerida actualmente |
+| Variables de entorno | `NEXT_PUBLIC_SITE_URL` **obligatoria** (URL pública sin `/` final, p. ej. `https://tu-proyecto.pages.dev`); sin ella el build falla a propósito. Más las del formulario (`docs/CONTACTO.md`) y Analytics |
 
 ## Pasos exactos de deployment
 

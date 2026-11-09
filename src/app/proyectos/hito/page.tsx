@@ -18,7 +18,13 @@ export const metadata = {
     description: content.introduction,
     type: "website",
     url: `${siteMetadata.siteUrl}/proyectos/hito`,
-    images: [{ url: `${siteMetadata.siteUrl}/og-image.png`, width: 1200, height: 630, alt: "Caso de estudio: Hito" }],
+    images: [{ url: `${siteMetadata.siteUrl}/og-hito.png`, width: 1200, height: 630, alt: "Caso de estudio: Hito" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hito · Caso de estudio · Max Acosta",
+    description: content.introduction,
+    images: [`${siteMetadata.siteUrl}/og-hito.png`],
   },
 } as const;
 
@@ -62,6 +68,8 @@ export default function HitoCaseStudy() {
           <Showcase
             url="hito-one.vercel.app"
             motion="sello"
+            wide
+            priority
             back={{ name: "hito-panel", alt: "" }}
             front={{ name: "hito-landing", alt: "Landing de Hito: carpeta coral con el titular «Lo que acordaste, asentado.» y una hoja de hitos que se puede aprobar." }}
             phone={{ name: "hito-cliente", alt: "Vista del cliente en el celular: hitos con sus sellos y el botón Aprobar entrega." }}
