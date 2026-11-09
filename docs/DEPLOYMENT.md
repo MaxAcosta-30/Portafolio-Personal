@@ -10,7 +10,7 @@ El portafolio es una aplicación Next.js con **exportación estática** (`output
 
 - Repositorio en rama `main`, sin secrets versionados.
 - `.gitignore` excluye `.env`, `.env.*`, `.dev.vars`, `.dev.vars.*`, `node_modules/`, `.next/`, `out/`, `test-results/`, `playwright-report/`, `.impeccable/`, `references/raw/`, `CV_MAX-2.pdf`.
-- Build válido: `npm run build` genera `out/` con las rutas `/`, `/proyectos/hangar`, `/proyectos/taskflow-pro`, `/design-system`, `/_not-found`.
+- Build válido: `npm run build` genera `out/` con las rutas `/`, `/proyectos/hangar`, `/proyectos/taskflow-pro`, `/proyectos/hito`, páginas legales, `/robots.txt`, `/sitemap.xml` y `/_not-found`.
 - `npm test`: 30 pruebas aprobadas.
 - `npm run lint` y `npm run typecheck`: correctos.
 
@@ -46,7 +46,7 @@ Estos pasos requieren tu cuenta y no deben ser realizados por mí:
 | Directorio de salida | `out` |
 | Versión de Node | 24 (ver `.nvmrc`) |
 | Framework preset | Next.js (detectado automáticamente) |
-| Variables de entorno | Ninguna requerida actualmente |
+| Variables de entorno | `NEXT_PUBLIC_SITE_URL` **obligatoria** (URL pública sin `/` final, p. ej. `https://tu-proyecto.pages.dev`); sin ella el build falla a propósito. Más las del formulario (`docs/CONTACTO.md`) y Analytics |
 
 ## Pasos exactos de deployment
 
@@ -71,7 +71,6 @@ El formulario de contacto necesita `RESEND_API_KEY` (secreto), `CONTACT_TO` y `C
 
 - No se ha desplegado aún. Este documento prepara el proyecto para que tú lo hagas.
 - No supongo que ya poseas un dominio. Si no tienes uno, el sitio funciona con el subdominio gratuito de Cloudflare Pages.
-- `/design-system` se exporta con `noindex, nofollow`; es documentación de desarrollo, no control de acceso. Antes de publicar, decidir si se conserva como ruta pública o se retira.
 - La exportación estática no admite lógica dinámica de servidor ni Server Actions; el formulario usa una Pages Function. No se agregó un adaptador de runtime.
 - Caché (`public/_headers`): HTML con `max-age=0, must-revalidate`; `/_next/static/*` (JS, CSS y fuentes) con `max-age=31536000, immutable`.
 

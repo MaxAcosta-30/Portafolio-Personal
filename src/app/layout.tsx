@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     title: `${profile.displayName} · ${profile.role}`,
     description:
       "Portafolio de Max Acosta, desarrollador Full Stack con foco en backend, APIs y sistemas en tiempo real.",
-    images: ["/og-image.png"],
+    images: [`${baseUrl}/og-image.png`],
   },
   alternates: {
     canonical: baseUrl,

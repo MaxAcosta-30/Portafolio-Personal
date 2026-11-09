@@ -98,10 +98,13 @@ export const caseStudySections = [
 ] as const;
 
 
-/** Metadata de sitio. Reemplazar siteUrl con el dominio real antes de publicar. */
+/**
+ * Metadata de sitio. siteUrl sale de NEXT_PUBLIC_SITE_URL (canonical, sitemap, robots y Open Graph);
+ * en Cloudflare Pages el build falla si falta (ver next.config.ts). El respaldo solo sirve en local.
+ */
 export const siteMetadata = {
   siteName: `${profile.displayName} · Portafolio`,
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://tu-dominio.com",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || "http://127.0.0.1:3000",
   language: "es",
   locale: "es-MX",
   author: {

@@ -4,8 +4,8 @@
   "description": "Portafolio de Max Acosta, desarrollador Full Stack con foco en backend, APIs y sistemas en tiempo real.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f2f5f3",
-  "theme_color": "#195c52",
+  "background_color": "#110e0c",
+  "theme_color": "#110e0c",
   "icons": [
     {
       "src": "/favicon.svg",

@@ -7,7 +7,7 @@ Revisión y capturas: [REDISENO_REVIEW.md](docs/REDISENO_REVIEW.md).
 El propietario tiene pendiente la revisión visual final. `/` contiene la página principal:
 navegación, hero, proyectos destacados, seis sistemas backend, perfil, formación,
 Outlier como experiencia profesional, tecnologías por función y contacto directo.
-`/design-system` conserva la referencia de componentes y estados.
+El sistema visual vigente está en `DESIGN.md`.
 
 El contenido está centralizado en `src/content/`, con fuentes del CV y del brief.
 Hangar tiene un caso completo en `/proyectos/hangar` (`ready`), con diagramas HTML,
@@ -100,19 +100,13 @@ los diagramas: [caso de Hangar](docs/HANGAR_REVIEW.md).
   integrada directamente con Tailwind 4.
 - [src/app/globals.css](src/app/globals.css): estilos base y componentes compartidos.
 - [src/components/ui.tsx](src/components/ui.tsx): Button, Tag e iconos SVG.
-- [src/app/design-system/](src/app/design-system/): página de referencia y demos.
-- [src/assets/fonts/](src/assets/fonts/): IBM Plex local y licencias.
-- [tests/design-system.spec.ts](tests/design-system.spec.ts): pruebas de interacción
-  y accesibilidad en escritorio y móvil.
 - [docs/VISUAL_DIRECTIONS.md](docs/VISUAL_DIRECTIONS.md): exploración histórica;
   no usar sus alternativas como sistema vigente.
 
 No hay biblioteca de componentes o animación adicional, backend, CMS ni base de
 datos. GSAP se añade únicamente en la fase 8 para la animación narrativa del
 pipeline de Hangar (reveal de pasos al entrar en viewport, sin layout shifts y
-respetando `prefers-reduced-motion`). Los formularios y estados de carga de
-`/design-system` siguen siendo demostraciones locales. La homepage usa correo
-directo, sin formulario simulado.
+respetando `prefers-reduced-motion`).
 
 ## Cloudflare
 
@@ -123,9 +117,8 @@ La aplicación conserva `output: "export"`. En Cloudflare Pages:
 - Salida: `out`.
 - Node: 24.
 
-No se ha desplegado. `/design-system` también se exporta y lleva `noindex,
-nofollow`; esto no es control de acceso. Antes de publicar el portafolio final,
-decidir si se conserva como documentación pública o se retira la ruta.
+Variable obligatoria: `NEXT_PUBLIC_SITE_URL` (ver `docs/DEPLOYMENT.md`).
+`/design-system` y `/muestra` se retiraron antes de publicar (8 nov 2026).
 
 La exportación estática no admite lógica dinámica de servidor ni Server Actions.
 Revisar alojamiento solo si una fase posterior lo requiere. No se agregó Wrangler

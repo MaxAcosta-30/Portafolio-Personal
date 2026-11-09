@@ -12,13 +12,11 @@ import { Icon } from "@/components/ui";
 import { hangarCaseStudy as content, hangarSources } from "@/content/hangar-case-study";
 import { hangar } from "@/content/projects";
 import { profile } from "@/content/profile";
-import { portfolioLabels } from "@/content/site";
+import { portfolioLabels, siteMetadata } from "@/content/site";
 
-const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || null;
-const caseUrl = publicSiteUrl ? `${publicSiteUrl}${content.href}` : null;
+const caseUrl = `${siteMetadata.siteUrl}${content.href}`;
 
 export const metadata: Metadata = {
-  metadataBase: publicSiteUrl ? new URL(publicSiteUrl) : null,
   title: "Hangar · Caso de estudio",
   description: content.introduction,
   alternates: { canonical: caseUrl },
@@ -26,15 +24,15 @@ export const metadata: Metadata = {
     title: "Hangar · Caso de estudio",
     description: content.introduction,
     type: "article",
-    url: caseUrl ?? undefined,
-    images: publicSiteUrl ? [{ url: `${publicSiteUrl}/og-hangar.svg`, width: 1200, height: 630, alt: `Caso de estudio: Hangar` }] : [],
+    url: caseUrl,
+    images: [{ url: `${siteMetadata.siteUrl}/og-hangar.png`, width: 1200, height: 630, alt: "Caso de estudio: Hangar" }],
   },
   twitter: {
     card: "summary_large_image",
     creator: null,
     title: `Hangar · Caso de estudio · ${profile.displayName}`,
     description: content.introduction,
-    images: publicSiteUrl ? [`${publicSiteUrl}/og-hangar.svg`] : [],
+    images: [`${siteMetadata.siteUrl}/og-hangar.png`],
   },
 };
 
