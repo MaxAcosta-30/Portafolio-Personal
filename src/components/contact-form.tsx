@@ -128,7 +128,7 @@ export function ContactForm({ email }: { email: string }) {
       <input id="contacto-trap" type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" defaultValue="" />
     </div>
     <div className="form-actions">
-      <button type="submit" className="button form-submit" aria-disabled={sending || undefined}>
+      <button type="submit" className="cta-link form-submit" aria-disabled={sending || undefined}>
         {sending ? <Logo variant="deploy" size={18} label="Enviando…" /> : <>Cotiza tu proyecto<span className="button-arrow" aria-hidden="true">→</span></>}
       </button>
       <p id="contacto-privacidad" className="form-help">Al enviar aceptas el tratamiento de tus datos según el <Link className="text-link" href="/privacidad">aviso de privacidad</Link>.</p>

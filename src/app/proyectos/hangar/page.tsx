@@ -12,29 +12,27 @@ import { Icon } from "@/components/ui";
 import { hangarCaseStudy as content, hangarSources } from "@/content/hangar-case-study";
 import { hangar } from "@/content/projects";
 import { profile } from "@/content/profile";
-import { portfolioLabels } from "@/content/site";
+import { portfolioLabels, siteMetadata } from "@/content/site";
 
-const publicSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || null;
-const caseUrl = publicSiteUrl ? `${publicSiteUrl}${content.href}` : null;
+const caseUrl = `${siteMetadata.siteUrl}${content.href}`;
 
 export const metadata: Metadata = {
-  metadataBase: publicSiteUrl ? new URL(publicSiteUrl) : null,
-  title: `Hangar · Caso de estudio · ${profile.name}`,
+  title: "Hangar · Caso de estudio",
   description: content.introduction,
   alternates: { canonical: caseUrl },
   openGraph: {
-    title: `Hangar · Caso de estudio · ${profile.name}`,
+    title: "Hangar · Caso de estudio",
     description: content.introduction,
     type: "article",
-    url: caseUrl ?? undefined,
-    images: publicSiteUrl ? [{ url: `${publicSiteUrl}/og-hangar.svg`, width: 1200, height: 630, alt: `Caso de estudio: Hangar` }] : [],
+    url: caseUrl,
+    images: [{ url: `${siteMetadata.siteUrl}/og-hangar.png`, width: 1200, height: 630, alt: "Caso de estudio: Hangar" }],
   },
   twitter: {
     card: "summary_large_image",
     creator: null,
-    title: `Hangar · Caso de estudio · ${profile.name}`,
+    title: `Hangar · Caso de estudio · ${profile.displayName}`,
     description: content.introduction,
-    images: publicSiteUrl ? [`${publicSiteUrl}/og-hangar.svg`] : [],
+    images: [`${siteMetadata.siteUrl}/og-hangar.png`],
   },
 };
 
@@ -220,7 +218,7 @@ export default function HangarCaseStudy() {
       <div className="project-actions">
         {hangar.repository?.visibility === "public" && <a className="text-link" href={hangar.repository.href}>{content.closing.repositoryAction}<Icon name="external" /></a>}
         <Link className="text-link" href={content.closing.otherCase.href}>{content.closing.otherCase.label}<Icon name="arrow" /></Link>
-        <Link className="button" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
       </div>
     </footer>
   </>;

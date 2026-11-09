@@ -130,9 +130,6 @@ test("extractos fieles, desplazamiento accesible y metadata sin dominio inventad
   await expect(page.getByRole("link", { name: content.closing.otherCase.label, exact: true })).toHaveAttribute("href", "/proyectos/taskflow-pro");
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /Hangar/);
   await expect(page.locator('meta[property="og:description"]')).toHaveAttribute("content", content.introduction);
-  if (!process.env.NEXT_PUBLIC_SITE_URL) {
-    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
-    await expect(page.locator('meta[property="og:url"]')).toHaveCount(0);
-    await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
-  }
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/proyectos\/hangar$/);
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /\/og-hangar\.png$/);
 });

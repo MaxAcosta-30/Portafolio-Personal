@@ -11,7 +11,7 @@ type Refs<T> = RefObject<(T | null)[]>;
 
 /** Colores de la escena: los mismos tokens CSS del tema activo (cambian con data-theme). */
 type Palette = { surface: string; line: string; lineStrong: string; text: string; muted: string; accent: string };
-const TOKENS = { surface: "--surface", line: "--line", lineStrong: "--line-strong", text: "--text", muted: "--muted", accent: "--accent" } as const;
+const TOKENS = { surface: "--surface", line: "--line", lineStrong: "--line-strong", text: "--text", muted: "--muted", accent: "--accent-fill" } as const;
 const subscribeTheme = (onChange: () => void) => {
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -150,14 +150,42 @@ function Rig({ progress, labels }: { progress: { current: number }; labels: Refs
   </group>;
 }
 
+/** Fotogramas por segundo de la escena: la animación es lenta, 30 basta y es la mitad (o la cuarta
+ *  parte en pantallas de 120 Hz) del trabajo de GPU y batería que pintar a la frecuencia de la pantalla. */
+const FPS = 30;
+
+/** Pide un fotograma cada 1/FPS s mientras la escena está visible; fuera de pantalla no pide ninguno. */
+function FrameLimiter({ active }: { active: boolean }) {
+  const invalidate = useThree(state => state.invalidate);
+  useEffect(() => {
+    if (!active) return;
+    let id = 0, last = -Infinity;
+    const loop = (time: number) => {
+      id = requestAnimationFrame(loop);
+      if (time - last >= 1000 / FPS - 2) { last = time; invalidate(); }
+    };
+    id = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(id);
+  }, [active, invalidate]);
+  return null;
+}
+
+/** Equipo modesto (≤ 4 núcleos o ≤ 4 GB): resolución 1×. Si no, hasta 1.5× (en una escena de líneas
+ *  no se distingue de 2× o 3×, y en un celular 3× pinta 4 veces menos píxeles). */
+function initialDpr() {
+  const nav = navigator as Navigator & { deviceMemory?: number };
+  const modest = (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4;
+  return modest ? 1 : Math.min(1.5, window.devicePixelRatio || 1);
+}
+
 /**
  * Escena 3D del hero. La carga HeroVisual con import dinámico y solo si hay movimiento permitido.
- * Rendimiento: ningún setState en useFrame (todo por refs); fuera de pantalla frameloop="demand"
- * (solo re-pinta si algo lo invalida); si el FPS cae, PerformanceMonitor baja el DPR a 1.
+ * Rendimiento: ningún setState en useFrame (todo por refs); frameloop="demand" con FrameLimiter a
+ * 30 FPS y sin fotogramas fuera de pantalla; si el FPS cae, PerformanceMonitor baja el DPR a 1.
  */
 export default function HeroScene({ active, onReady }: { active: boolean; onReady: () => void }) {
   const progress = useRef(0);
-  const [dpr, setDpr] = useState(() => Math.min(2, window.devicePixelRatio || 1));
+  const [dpr, setDpr] = useState(initialDpr);
   useEffect(() => {
     // Al hacer scroll las placas se separan: el cubo "se despliega".
     const update = () => { progress.current = Math.min(1, scrollY / (innerHeight * 0.8)); };
@@ -168,11 +196,12 @@ export default function HeroScene({ active, onReady }: { active: boolean; onRead
   const labels = useRef<(HTMLSpanElement | null)[]>([]);
   return <div className="hero-scene-layer"><Canvas
     dpr={dpr}
-    frameloop={active ? "always" : "demand"}
+    frameloop="demand"
     gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
     onCreated={() => onReady()}
     aria-hidden="true"
   >
+    <FrameLimiter active={active} />
     <PerformanceMonitor onDecline={() => setDpr(1)} />
     <IsoCamera />
     <Rig progress={progress} labels={labels} />

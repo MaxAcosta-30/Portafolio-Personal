@@ -49,6 +49,7 @@
 /* Marco de 1px con marcadores "+" en las esquinas; en escritorio, una línea separa copy y escena. */
 .hero-frame {
   --frame-y: clamp(1.5rem, 1rem + 2vw, 3rem);
+  isolation: isolate;
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; align-items: center;
   padding: var(--frame-y) clamp(1rem, 0.5rem + 2vw, 2.5rem);
   border: 1px solid var(--line);
@@ -58,6 +59,12 @@
     /* La línea divisoria llega de borde a borde del marco. */
     .hero-visual { align-self: stretch; display: flex; flex-direction: column; justify-content: center; margin-block: calc(-1 * var(--frame-y)); padding: var(--frame-y) 0 var(--frame-y) 2rem; border-left: 1px solid var(--line); }
   }
+}
+/* Brasa: el naranja como luz de brasa detrás del cubo (en celular, detrás de la escena de abajo). */
+.hero-frame::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(34rem 28rem at 50% 78%, var(--glow), transparent 64%);
+  @media (width >= 64rem) { background: radial-gradient(38rem 30rem at 78% 46%, var(--glow), transparent 62%); }
 }
 .frame-mark {
   position: absolute; width: 1rem; height: 1rem; display: grid; place-items: center;
@@ -76,16 +83,16 @@
   .badge-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .badge-short { display: inline; }
 }
-.pulse-dot { position: relative; flex: none; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--accent); }
-.pulse-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); animation: pulse 1.8s ease-out infinite; }
+.pulse-dot { position: relative; flex: none; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--accent-fill); box-shadow: 0 0 10px var(--glow); }
+.pulse-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent-fill); animation: pulse 1.8s ease-out infinite; }
 @keyframes pulse { to { transform: scale(3); opacity: 0; } }
 .hero-title {
   margin-top: 1.5rem; max-width: 15ch; font-family: var(--font-display); font-weight: 600;
   font-size: var(--text-display); line-height: 1; letter-spacing: -0.04em; color: var(--text);
-  em { font-style: normal; color: var(--accent); }
+  em { font-style: normal; color: var(--accent-fill); } /* texto grande: el color de marca tal cual */
 }
 .hero-introduction { margin-top: 1.5rem; max-width: 52ch; font-size: var(--text-lead); line-height: 1.6; color: var(--muted); }
-.hero-actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.hero-actions { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 2rem; }
 .hero-metrics {
   margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line);
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem;
@@ -387,3 +394,22 @@
 .hero-metrics dt { display: flex; flex-direction: column; align-items: flex-start; }
 /* Destino táctil de 44 px para los enlaces de fuente */
 .metric-source { min-height: var(--spacing-target); margin-top: 0; }
+
+/* ── R8 · El acento con funciones fijas (opción B, elegida por Max) ─────────────────
+   Señales: el acento marca lo que orienta (números, etiquetas de caso, cifras, cierre de títulos).
+   Momento: el contacto repite la luz del hero, así la página abre y cierra con el mismo gesto.
+   Texto chico en --accent (AA); texto grande y gráficos en --accent-fill (color de marca). */
+.strip-number, .picker-index, .case-meta .mono-label { color: var(--accent); }
+.process-node { color: var(--accent); border-color: color-mix(in srgb, var(--accent-fill) 55%, var(--line-strong)); }
+.hero-metrics dd:not(.metric-text) { color: var(--accent-fill); } /* 28px: texto grande, basta 3:1 */
+/* Punto final de color en los títulos de sección; "" lo oculta a lectores de pantalla. */
+.section-head h2::after { content: "." / ""; color: var(--accent-fill); }
+/* La línea del proceso se rellena de acento sólido conforme bajas (el relleno ya lo anima HomeMotion). */
+.process-rail > span { background: var(--accent-fill); }
+
+.contact { isolation: isolate; border-top: 2px solid var(--accent-fill); }
+.contact::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(50rem 26rem at 18% 30%, var(--glow), transparent 65%), radial-gradient(40rem 22rem at 85% 90%, var(--glow-soft), transparent 70%);
+}
+.contact-title em { font-style: normal; color: var(--accent-fill); }

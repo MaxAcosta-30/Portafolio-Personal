@@ -1,11 +1,10 @@
 import { LinkPreferenciasCookies } from "@/components/cookie-consent";
 import { SiteHeader } from "@/components/portfolio";
-import { profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `Aviso legal · ${profile.name}`,
-  description: "Aviso legal del portafolio de Max Alexander Acosta Valencia.",
+  title: "Aviso legal",
+  description: "Aviso legal del portafolio de Max Acosta.",
   alternates: {
     canonical: `${siteMetadata.siteUrl}/legal/aviso-legal`,
   },

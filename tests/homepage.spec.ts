@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("contenido, accesibilidad y capturas de la portada", async ({ page }, testInfo) => {
-  await expect(page).toHaveTitle(`${profile.name} · ${profile.role}`);
+  await expect(page).toHaveTitle(`${profile.displayName} · ${profile.role}`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(homeDesign.headline);
   for (const project of projects) {
     await expect(page.getByRole("heading", { name: project.name, exact: true })).toBeVisible();
@@ -38,9 +38,17 @@ test("contenido, accesibilidad y capturas de la portada", async ({ page }, testI
     range.selectNodeContents(element);
     window.getSelection()?.removeAllRanges();
     window.getSelection()?.addRange(range);
-    return { text: getComputedStyle(element, "::selection").color, background: getComputedStyle(document.body).backgroundColor };
+    // R8: la selección usa el color de marca del tema (--accent-fill) con texto #050505.
+    const probe = document.createElement("span");
+    probe.style.color = "var(--accent-fill)";
+    document.body.append(probe);
+    const accent = getComputedStyle(probe).color;
+    probe.remove();
+    const pseudo = getComputedStyle(element, "::selection");
+    return { text: pseudo.color, background: pseudo.backgroundColor, accent };
   });
-  expect(selection.text).toBe(selection.background);
+  expect(selection.text).toBe("rgb(5, 5, 5)");
+  expect(selection.background).toBe(selection.accent);
   await page.screenshot({ path: `${captureDirectory}/portfolio-${testInfo.project.name}-selection.png` });
   await page.evaluate(() => window.getSelection()?.removeAllRanges());
 });
@@ -156,6 +164,20 @@ test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ 
   if (testInfo.project.name === "desktop") expect(box.y).toBeLessThan(page.viewportSize()!.height);
   await expect(page.locator(".logs-card")).toContainText("✓ live");
   await expect(page.locator(".services-strip > ol > li")).toHaveCount(4);
+});
+
+test("ahorro de datos: con Save-Data el 3D no se descarga y queda la alternativa SVG", async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, "connection", { value: { saveData: true, effectiveType: "4g" } }));
+  await page.goto("/");
+  await page.mouse.move(200, 300);
+  await page.mouse.wheel(0, 600);
+  await page.waitForTimeout(1500);
+  await expect(page.locator(".hero-canvas")).toHaveCount(0);
+  await expect(page.locator(".hero-fallback")).toBeVisible();
+  // Lo que el navegador de verdad descargó (el registro de la página, no un escucha externo).
+  const chunks = await page.evaluate(() => performance.getEntriesByType("resource").map(entry => entry.name).filter(name => /\/chunks\/.+\.js$/.test(name)));
+  const sources = await Promise.all(chunks.map(url => page.request.get(url).then(response => response.text())));
+  expect(chunks.filter((_, i) => sources[i].includes("WebGLRenderer"))).toEqual([]);
 });
 
 test("R2: secciones, navegación activa, filas completas y borde del pie", async ({ page }) => {

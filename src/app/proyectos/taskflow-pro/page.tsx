@@ -12,19 +12,19 @@ import { profile } from "@/content/profile";
 import { portfolioLabels, siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `TaskFlow Pro · Caso de estudio · ${profile.name}`,
+  title: "TaskFlow Pro · Caso de estudio",
   description: content.introduction,
   alternates: {
     canonical: `${siteMetadata.siteUrl}/proyectos/taskflow-pro`,
   },
   openGraph: {
-    title: `TaskFlow Pro · Caso de estudio · ${profile.name}`,
+    title: "TaskFlow Pro · Caso de estudio",
     description: content.introduction,
     type: "website",
     url: `${siteMetadata.siteUrl}/proyectos/taskflow-pro`,
     images: [
       {
-        url: `${siteMetadata.siteUrl}/og-taskflow.svg`,
+        url: `${siteMetadata.siteUrl}/og-taskflow.png`,
         width: 1200,
         height: 630,
         alt: `Caso de estudio: TaskFlow Pro`,
@@ -33,9 +33,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `TaskFlow Pro · Caso de estudio · ${profile.name}`,
+    title: `TaskFlow Pro · Caso de estudio · ${profile.displayName}`,
     description: content.introduction,
-    images: [`${siteMetadata.siteUrl}/og-image.png`],
+    images: [`${siteMetadata.siteUrl}/og-taskflow.png`],
   },
 } as const;
 
@@ -227,7 +227,7 @@ export default function TaskFlowCaseStudy() {
       <h2 className="max-w-measure text-heading">{content.closing.title}</h2>
       <p className="mt-4 max-w-measure text-muted">{content.closing.text}</p>
       <div className="project-actions">
-        <Link className="button" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
         <Link className="text-link" href="/#proyectos">{content.back}</Link>
       </div>
     </footer>
