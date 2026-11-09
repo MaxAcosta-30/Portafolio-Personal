@@ -36,3 +36,10 @@ test("sitemap.xml lista las páginas públicas y no las internas", async ({ requ
   expect(sitemap).not.toContain("design-system");
   expect(sitemap).not.toContain("muestra");
 });
+
+test("los avisos legales no muestran campos pendientes", async ({ page }) => {
+  for (const path of ["/privacidad", "/legal/cookies", "/legal/aviso-legal"]) {
+    await page.goto(path);
+    await expect(page.locator("main")).not.toContainText(/POR COMPLETAR|Pendiente de revisión|Revisión legal pendiente/);
+  }
+});
