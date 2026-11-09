@@ -37,7 +37,9 @@ export function HeroVisual() {
     let handle = 0;
     const events = ["pointermove", "pointerdown", "touchstart", "wheel", "scroll", "keydown"] as const;
     const start = () => { events.forEach(name => removeEventListener(name, start)); handle = idle(() => setMount(true)); };
-    events.forEach(name => addEventListener(name, start, { passive: true, once: true }));
+    // Si la interacción llegó antes de hidratar, headScript ya la anotó en <html data-interacted>.
+    if (document.documentElement.hasAttribute("data-interacted")) start();
+    else events.forEach(name => addEventListener(name, start, { passive: true, once: true }));
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
     if (box.current) observer.observe(box.current);
     const stop = () => { if (reduce.matches) { setMount(false); setReady(false); } };

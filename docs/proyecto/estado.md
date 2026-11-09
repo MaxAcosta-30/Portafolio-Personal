@@ -24,10 +24,11 @@ Hecho:
 - SEO: `robots.txt` y `sitemap.xml` generados desde `NEXT_PUBLIC_SITE_URL` (antes decían `tu-dominio.com` y el sitemap tenía mal el namespace); el build falla en Cloudflare si falta la variable.
 - Imágenes para redes en PNG con la paleta Brasa y el titular vigente (antes: «Software que se siente futuro.» y SVG que las redes no muestran).
 - Caché de una semana para `/images/*` y `og-*.png`.
+- Retiradas `/design-system`, `/muestra` y las fuentes Plex que solo usaban ellas (decisión de Max).
+- 3D de bajo consumo (se mantiene en todos los dispositivos, decisión de Max): 30 FPS con `frameloop="demand"` y un limitador, sin fotogramas fuera de pantalla, resolución máx. 1.5× (1× en equipos de ≤ 4 núcleos o ≤ 4 GB). Medido en celular emulado con la escena a la vista: CPU 94 % → 45 %, dibujos/s 296 → 151, lienzo 632² → 474² px (render por software: vale la proporción, no el absoluto).
+- Arreglo de causa: si el visitante tocaba la página antes de que React arrancara, el 3D no montaba hasta otra interacción (8/8 en celular emulado; era la prueba intermitente «View Transition»). `headScript` anota `data-interacted` y HeroVisual lo lee: 0/8.
 - Se descartó `experimental.inlineCss`: el HTML de la portada pasaba de 21 a 59 KB comprimido en cada visita.
 
 ## Pendientes
 
-- Prueba inestable que ya existía: «View Transition» en `mobile` falla 2 de 3 veces también en `rediseno/brasa` (el 3D por software tarda en montar).
-- Decidir: `/muestra` (página de una dirección vieja) y `/design-system` se publican con `noindex`; ¿se quitan del build?
 - Publicar: Cloudflare Pages + `NEXT_PUBLIC_SITE_URL`, luego Search Console, Bing Webmaster Tools, Analytics y sitemap (ver `docs/SEO_SETUP.md`).

@@ -13,7 +13,6 @@ Todas las rutas estáticas tienen `title` y `description` únicos, sin keyword s
 | `/` | Max Alexander Acosta Valencia · Desarrollador Full Stack | Intro del perfil | Sí |
 | `/proyectos/hangar` | Hangar · Caso de estudio · Max Alexander Acosta Valencia | Introducción del caso Hangar | Sí |
 | `/proyectos/taskflow-pro` | TaskFlow Pro · Caso de estudio · Max Alexander Acosta Valencia | Introducción del caso TaskFlow | Sí |
-| `/design-system` | Sistema de diseño · Max Alexander Acosta Valencia | Referencia de desarrollo | No (noindex, nofollow) |
 
 ### Canonical URLs
 
@@ -28,7 +27,6 @@ Cada página incluye `og:title`, `og:description`, `og:type`, `og:url` y `og:ima
 | `/` | `/og-image.svg` |
 | `/proyectos/hangar` | `/og-hangar.svg` |
 | `/proyectos/taskflow-pro` | `/og-taskflow.svg` |
-| `/design-system` | Sin imagen OG (no indexar) |
 
 Diseño minimalista: fondo liso (`#f7f5f0`), mucho espacio vacío, el nombre de Max, su rol real ("Desarrollador Full Stack") y una línea de acento sutil (`#195c52`). Sin texto diminuto ni decoración.
 
@@ -42,7 +40,7 @@ Cada página incluye `twitter:card: summary_large_image`, título, descripción 
 
 ### robots.txt
 
-`src/app/robots.ts` genera `/robots.txt`: permite rastrear todo y apunta al sitemap con `NEXT_PUBLIC_SITE_URL`. `/design-system` y `/muestra` no se bloquean ahí sino con `noindex` en su metadata (si robots las bloqueara, Google no podría leer el `noindex`).
+`src/app/robots.ts` genera `/robots.txt`: permite rastrear todo y apunta al sitemap con `NEXT_PUBLIC_SITE_URL`.
 
 ### sitemap.xml
 

@@ -168,16 +168,16 @@ test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ 
 
 test("ahorro de datos: con Save-Data el 3D no se descarga y queda la alternativa SVG", async ({ page }) => {
   await page.addInitScript(() => Object.defineProperty(navigator, "connection", { value: { saveData: true, effectiveType: "4g" } }));
-  const threeChunks: string[] = [];
-  page.on("request", request => { if (/\/chunks\/.+\.js$/.test(request.url())) threeChunks.push(request.url()); });
   await page.goto("/");
   await page.mouse.move(200, 300);
   await page.mouse.wheel(0, 600);
   await page.waitForTimeout(1500);
   await expect(page.locator(".hero-canvas")).toHaveCount(0);
   await expect(page.locator(".hero-fallback")).toBeVisible();
-  const loaded = await Promise.all(threeChunks.map(url => page.request.get(url).then(response => response.text())));
-  expect(loaded.some(source => source.includes("WebGLRenderer"))).toBe(false);
+  // Lo que el navegador de verdad descargó (el registro de la página, no un escucha externo).
+  const chunks = await page.evaluate(() => performance.getEntriesByType("resource").map(entry => entry.name).filter(name => /\/chunks\/.+\.js$/.test(name)));
+  const sources = await Promise.all(chunks.map(url => page.request.get(url).then(response => response.text())));
+  expect(chunks.filter((_, i) => sources[i].includes("WebGLRenderer"))).toEqual([]);
 });
 
 test("R2: secciones, navegación activa, filas completas y borde del pie", async ({ page }) => {
