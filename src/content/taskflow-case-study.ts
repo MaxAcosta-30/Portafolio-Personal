@@ -11,6 +11,11 @@ export const taskFlowSources = {
   scheduler: source("Scheduler de automatizaciones", "workers/processors/scheduler.ts"),
   tests: source("Tests end-to-end", "tests/e2e/flows.test.ts"),
   package: source("Dependencias del proyecto", "package.json"),
+  redis: source("Caché y rate limit en Redis", "lib/redis/index.ts"),
+  board: source("API del tablero", "app/api/boards/[boardId]/route.ts"),
+  move: source("Mover una tarea", "app/api/tasks/[taskId]/move/route.ts"),
+  queues: source("Colas BullMQ", "lib/queue/index.ts"),
+  schema: source("Esquema de Prisma", "prisma/schema.prisma"),
 };
 
 export type FlowNode = { title: string; detail: string };
@@ -34,6 +39,7 @@ export const taskFlowCaseStudy = {
     { id: "automatizaciones", label: "Automatizaciones" },
     { id: "observabilidad", label: "Observabilidad" },
     { id: "seguridad", label: "Seguridad" },
+    { id: "rendimiento", label: "Rendimiento" },
     { id: "decisiones", label: "Decisiones" },
     { id: "testing", label: "Testing" },
   ],
@@ -219,9 +225,23 @@ export const taskFlowCaseStudy = {
     toggle: "Ver archivos de referencia",
     label: "Fuente",
   },
+  // Solo optimizaciones presentes en el código de la revisión fijada (verificado el 2026-11-05).
+  performance: {
+    title: "Rendimiento",
+    text: "Decisiones del código para responder rápido y sacar el trabajo pesado de la petición. Son características de la implementación, no mediciones: no hay benchmarks publicados.",
+    items: [
+      { title: "Caché del tablero en Redis", detail: "GET /api/boards/:id guarda el tablero completo en board:{id} con withCache durante 5 minutos; crear, editar, borrar o mover una tarea invalida esa clave." },
+      { title: "Caché de usuario", detail: "/api/auth/me lee el usuario de user:{id} (1 hora) antes de ir a PostgreSQL." },
+      { title: "Colas BullMQ fuera de la petición", detail: "Automatizaciones y notificaciones se encolan y las procesa un worker aparte, con concurrencia 5 y 10, reintentos con backoff y retención limitada de jobs terminados." },
+      { title: "Reordenar con pocas consultas", detail: "Mover una tarea corre en una transacción y desplaza las posiciones afectadas con un solo updateMany por rango, no una consulta por tarea." },
+      { title: "Consultas acotadas e indexadas", detail: "Las relaciones se piden con select de los campos necesarios y _count en lugar de cargar comentarios; el esquema indexa columnId, position, assigneeId y dueDate, entre otras." },
+      { title: "Tiempo real escalable", detail: "Socket.io usa el adaptador de Redis, y las API routes publican eventos por Redis Pub/Sub en lugar de hablar con el proceso de sockets." },
+    ],
+    evidence: [taskFlowSources.board, taskFlowSources.redis, taskFlowSources.queues, taskFlowSources.workers, taskFlowSources.move, taskFlowSources.schema, taskFlowSources.socket],
+  },
   closing: {
     title: "¿Tu proyecto necesita sincronización o automatización?",
     text: "Podemos conversar sobre la arquitectura en tiempo real, las colas de trabajo y la observabilidad que necesita tu aplicación.",
-    action: "Hablemos",
+    action: "Cotiza tu proyecto",
   },
 } as const;

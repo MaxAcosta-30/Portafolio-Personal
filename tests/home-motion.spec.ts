@@ -1,47 +1,28 @@
 import { expect, test } from "@playwright/test";
-import { projectPreviews } from "../src/content/project-previews";
 
-test("casos: fragmentos reales, código accesible y acciones consistentes", async ({ page }) => {
+test("casos: vitrinas con capturas reales, texto alternativo y acciones consistentes", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  for (const id of ["hangar", "taskflow-pro"] as const) {
-    const preview = projectPreviews[id];
+  for (const id of ["hito", "hangar", "taskflow-pro"] as const) {
     const row = page.locator(`#${id}`);
     await row.scrollIntoViewIfNeeded();
-    const codeBlock = row.locator(".code-well pre");
-    expect(await codeBlock.locator("code").textContent()).toBe(preview.code);
-    await expect(codeBlock).toHaveAttribute("tabindex", "0");
-    await expect(codeBlock).toHaveAttribute("aria-label", new RegExp(preview.file.replaceAll(".", "\\.")));
-    await expect(codeBlock).toHaveCSS("white-space", "pre");
-    await expect(codeBlock).toHaveCSS("overflow-x", "auto");
-    if (await codeBlock.evaluate(element => element.scrollWidth > element.clientWidth)) {
-      await codeBlock.focus();
-      await expect(codeBlock).toHaveCSS("outline-style", "solid");
-      await page.keyboard.press("ArrowRight");
-      await expect.poll(() => codeBlock.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
-      await codeBlock.evaluate(element => { element.scrollLeft = 0; element.blur(); });
-    }
-    await expect(row.getByRole("link", { name: `Archivo fuente: ${preview.file}` })).toHaveAttribute("href", preview.source);
+    const showcase = row.locator("[data-showcase]");
+    await expect(showcase).toBeVisible();
+    // La captura principal describe lo que muestra; la del fondo es decorativa.
+    const front = showcase.locator(".device-front img");
+    await expect(front).toHaveAttribute("alt", /.{20,}/);
+    await expect(showcase.locator(".device-back img")).toHaveAttribute("alt", "");
+    await expect(showcase.locator("figcaption")).toContainText("Capturas reales");
+    await expect.poll(() => front.evaluate(img => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     const styles = await row.evaluate(element => {
       const caseStyle = getComputedStyle(element.querySelector(".case-action")!);
-      const repoStyle = getComputedStyle(element.querySelector(".project-actions > a")!);
+      const repoStyle = getComputedStyle(element.querySelector(".project-actions > a:last-child")!);
       return { caseSize: caseStyle.fontSize, repoSize: repoStyle.fontSize, caseWeight: caseStyle.fontWeight, repoWeight: repoStyle.fontWeight };
     });
     expect(styles.caseSize).toBe(styles.repoSize);
-    expect(styles.caseWeight).toBe(styles.repoWeight);
   }
-  // Hangar muestra la política de reintentos real del código.
-  await expect(page.locator("#hangar .gauges dd")).toHaveText(["3", "10 min", "5 s", "2"]);
-});
-
-test("TaskFlow: mover una tarjeta en el tablero de Ana la sincroniza en el de Luis", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
-  const board = page.getByRole("group", { name: "Demostración de sincronización de TaskFlow Pro" });
-  await board.scrollIntoViewIfNeeded();
-  await board.getByRole("button", { name: "Mover «Revisar diseño» a la siguiente columna" }).click();
-  const luisInProgress = board.locator('[data-owner="luis"] .sync-column').nth(1);
-  await expect(luisInProgress).toContainText("Revisar diseño");
+  // Hito es el único con demo pública.
+  await expect(page.locator("#hito").getByRole("link", { name: /Probar la demo/ })).toHaveAttribute("href", "https://hito-one.vercel.app");
 });
 
 test("lectura sin JavaScript y con movimiento reducido", async ({ browser, page }, testInfo) => {

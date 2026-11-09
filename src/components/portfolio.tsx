@@ -1,9 +1,15 @@
 import { HomeNavigation } from "./home-navigation";
 import { Logo } from "./brand/logo";
 import { MobileMenu } from "./mobile-menu";
+import { ThemeToggle } from "./theme-toggle";
 import { navigation } from "@/content/site";
 
-/** Header de marca: logo, navegación en píldora y llamada a la acción. En las páginas de caso los enlaces apuntan a la home. */
+/** Flecha de los botones (texto, no icono: hereda la fuente mono del botón). */
+export function ButtonArrow() {
+  return <span className="button-arrow" aria-hidden="true">→</span>;
+}
+
+/** Header de marca: logo, navegación, CTA principal, tema y menú. En las páginas de caso los enlaces apuntan a la home. */
 export function SiteHeader({ homeLinks = false }: { homeLinks?: boolean }) {
   return <>
     {/* Ancla fuera del header: un elemento sticky ya "está visible" y el navegador no desplaza hacia él. */}
@@ -13,7 +19,8 @@ export function SiteHeader({ homeLinks = false }: { homeLinks?: boolean }) {
         <a href={homeLinks ? "/" : "#inicio"} className="site-brand" aria-label="Max Acosta, inicio"><Logo variant="assemble" wordmark size={30} /></a>
         <HomeNavigation homeLinks={homeLinks} />
         <div className="header-actions">
-          <a className="call-cta" href={navigation.call.href} target="_blank" rel="noopener noreferrer"><span className="cta-long">{navigation.call.label}</span><span className="cta-short" aria-hidden="true">Agendar</span><span className="sr-only"> (se abre en una pestaña nueva)</span></a>
+          <a className="button header-cta" href={`${homeLinks ? "/" : ""}#${navigation.cta.sectionId}`}>{navigation.cta.label}<ButtonArrow /></a>
+          <ThemeToggle />
           <MobileMenu homeLinks={homeLinks} />
         </div>
       </div>

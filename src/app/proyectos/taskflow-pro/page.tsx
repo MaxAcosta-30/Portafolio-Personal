@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ViewTransition } from "react";
+import { SequenceList } from "@/components/sequence-list";
 import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/portfolio";
@@ -70,14 +72,14 @@ export default function TaskFlowCaseStudy() {
       <header className="py-8 lg:py-12">
         <div className="grid gap-6 md:grid-cols-12 md:gap-gutter">
           <div className="md:col-span-4">
-            <h1 className="text-display">{content.title}</h1>
+            <ViewTransition name="case-title-taskflow-pro" share="case-morph" default="none"><h1 className="text-display case-title">{content.title}</h1></ViewTransition>
             <p className="mt-3 text-label text-muted">{content.kind}</p>
           </div>
           <div className="md:col-span-8 lg:col-span-7 lg:col-start-6">
             <p className="max-w-measure text-heading text-balance">{content.subtitle}</p>
             <p className="mt-4 max-w-measure text-muted">{content.introduction}</p>
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-              {taskFlowPro.repository && <a className="button" href={taskFlowPro.repository.href}>{content.repositoryLabel}<Icon name="external" /></a>}
+              {taskFlowPro.repository && <a className="button button-secondary" href={taskFlowPro.repository.href}>{content.repositoryLabel}<Icon name="external" /></a>}
               {taskFlowPro.demo ? <a className="text-link" href={taskFlowPro.demo.href}>{taskFlowPro.demo.label}<Icon name="external" /></a> : <p className="text-label text-muted">{content.demoUnavailable}</p>}
             </div>
           </div>
@@ -183,6 +185,11 @@ export default function TaskFlowCaseStudy() {
             </div>
             <SourceLinks sources={content.security.evidence} />
           </CaseSection>
+          <CaseSection id="rendimiento" title={content.performance.title}>
+            <p className="case-copy">{content.performance.text}</p>
+            <div className="mt-8"><SequenceList label={content.performance.title} steps={content.performance.items} /></div>
+            <SourceLinks sources={content.performance.evidence} />
+          </CaseSection>
           <CaseSection id="decisiones" title={content.decisions.title}>
             <div className="divide-y divide-border">
               {content.decisions.items.map((item) => <article key={item.title} className="py-6 first:pt-0 last:pb-0">
@@ -216,10 +223,12 @@ export default function TaskFlowCaseStudy() {
         </div>
       </div>
     </main>
-    <footer className="contact-surface py-section">
-      <div className="page-container grid gap-6 md:grid-cols-12 md:gap-gutter">
-        <div className="md:col-span-8"><h2 className="max-w-measure text-heading">{content.closing.title}</h2><p className="mt-4 max-w-measure">{content.closing.text}</p></div>
-        <div className="flex flex-wrap items-start gap-x-6 md:col-span-4 md:justify-end"><Link className="inverse-link" href="/#contacto">{content.closing.action}<Icon name="arrow" /></Link><Link className="inverse-link" href="/#proyectos">{content.back}</Link></div>
+    <footer className="page-container hangar-closing">
+      <h2 className="max-w-measure text-heading">{content.closing.title}</h2>
+      <p className="mt-4 max-w-measure text-muted">{content.closing.text}</p>
+      <div className="project-actions">
+        <Link className="button" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="text-link" href="/#proyectos">{content.back}</Link>
       </div>
     </footer>
   </>;

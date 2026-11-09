@@ -1,20 +1,22 @@
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { HomeMotion } from "@/components/home-motion";
 import { HeroVisual } from "@/components/hero/hero-visual";
 import { Logo } from "@/components/brand/logo";
 import { repositories } from "@/content/repositories";
-import { SyncBoard } from "@/components/sync-board";
-import { SiteHeader } from "@/components/portfolio";
+import { ButtonArrow, SiteHeader } from "@/components/portfolio";
+import { CountUp } from "@/components/count-up";
+import { ContactForm } from "@/components/contact-form";
 import { Icon } from "@/components/ui";
 import { LinkPreferenciasCookies } from "@/components/cookie-consent";
 import { CopyEmail } from "@/components/copy-email";
+import { Showcase } from "@/components/showcase";
 import type { SourcedLink } from "@/content/types";
 import { contact, experience, profile, resume } from "@/content/profile";
-import { engineeringSystems, featuredCaseStudies, projects } from "@/content/projects";
+import { engineeringSystems, featuredCaseStudies, hito, projects } from "@/content/projects";
+import { hitoSources } from "@/content/hito-case-study";
 import { homepage, portfolioLabels, siteMetadata } from "@/content/site";
 import { homeDesign as content } from "@/content/home-design";
-import { hangarCaseStudy } from "@/content/hangar-case-study";
-import { projectPreviews } from "@/content/project-previews";
 import "./home.css";
 
 export const metadata = {
@@ -50,64 +52,91 @@ function RepositoryLink({ repository, name }: { repository: SourcedLink | null; 
   return <a className="text-link row-secondary" href={repository.href}>Ver repositorio<span className="sr-only"> de {name}</span><Icon name="external" /></a>;
 }
 
-function CodeWell({ id, name }: { id: keyof typeof projectPreviews; name: string }) {
-  const preview = projectPreviews[id];
-  return <figure className="code-well">
-    <figcaption><a className="row-secondary" href={preview.source}><span className="sr-only">Archivo fuente: </span>{preview.file}</a><span>{preview.language} · líneas {preview.startLine}–{preview.endLine}</span></figcaption>
-    <pre tabIndex={0} aria-label={`Código de ${name}: ${preview.file}. Desplazamiento horizontal con las flechas del teclado.`}><code>{preview.code}</code></pre>
-  </figure>;
+/** Visual de Hangar: el dashboard rediseñado con despliegues reales hechos en local. */
+function HangarVisual() {
+  return <Showcase
+    url="hangar · demo local"
+    motion="porton"
+    back={{ name: "hangar-apps", alt: "" }}
+    front={{ name: "hangar-despliegue", alt: "Despliegue de landing-panaderia en Hangar: las cuatro etapas Clonar, Construir, Ejecutar y Enrutar marcadas como listas sobre los logs reales del build." }}
+    caption="Capturas reales: despliegues hechos en local con Temporal, Docker (Podman) y los logs del worker."
+  />;
 }
 
-/** Visual de Hangar: la política de reintentos real convertida en lectura de instrumentos. */
-function HangarVisual() {
-  const { configuration, configurationNote, states } = hangarCaseStudy.workflow;
-  return <div className="case-visual">
-    <p className="visual-head"><span className="mono-label">hangar · política de reintentos</span><span className="mono-label visual-live">temporal</span></p>
-    <dl className="gauges">{configuration.map(item => <div key={item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
-    <ol className="state-track" aria-label="Estados de un despliegue">{states.map(state => <li key={state.title}><span>{state.title}</span>{state.detail}</li>)}</ol>
-    <p className="visual-note">{configurationNote}</p>
-    <CodeWell id="hangar" name="Hangar" />
-  </div>;
+function HitoVisual() {
+  return <Showcase
+    url="hito-one.vercel.app"
+    motion="sello"
+    back={{ name: "hito-panel", alt: "" }}
+    front={{ name: "hito-landing", alt: "Landing de Hito: carpeta coral con el titular «Lo que acordaste, asentado.» y una hoja de hitos que se puede aprobar." }}
+    phone={{ name: "hito-cliente", alt: "Vista del cliente en el celular: hitos con sus sellos y el botón Aprobar entrega." }}
+    caption="Capturas reales de la demo: landing, panel de cobros y la vista que recibe el cliente."
+  />;
+}
+
+function DemoLink({ demo, name }: { demo: SourcedLink; name: string }) {
+  return <a className="case-action case-action-link" href={demo.href} target="_blank" rel="noopener noreferrer">{demo.label}<span className="sr-only"> de {name} (se abre en otra pestaña)</span><Icon name="external" /></a>;
 }
 
 function TaskFlowVisual() {
-  return <div className="case-visual">
-    <p className="visual-head"><span className="mono-label">taskflow · tablero board:42</span><span className="mono-label visual-live">socket.io</span></p>
-    <SyncBoard />
-    <CodeWell id="taskflow-pro" name="TaskFlow Pro" />
-  </div>;
+  return <Showcase
+    url="taskflow · demo local"
+    motion="andenes"
+    back={{ name: "taskflow-analitica", alt: "" }}
+    front={{ name: "taskflow-tablero", alt: "Tablero de TaskFlow Pro en tema oscuro: columnas Pendiente, Por hacer, En curso y En revisión con tareas, prioridades y fechas." }}
+    phone={{ name: "taskflow-login-movil", alt: "Inicio de sesión de TaskFlow Pro en el celular." }}
+    caption="Capturas reales de la app corriendo en local con los datos de ejemplo del repositorio."
+  />;
 }
 
 export default function Home() {
   const featured = featuredCaseStudies.filter(project => project.status !== "draft");
   const systems = engineeringSystems.filter(project => project.status === "ready");
   const repositoryCount = Object.keys(repositories).length;
-  const words = content.headline.split(" ");
-  const headlineStart = words.slice(0, -1).join(" ");
-  const headlineEnd = words.at(-1);
+  // README de Hito en la revisión fijada: 53 unitarias + 50 de integración.
+  const hitoTests = 53 + 50;
+  const githubProfile = "https://github.com/MaxAcosta-30?tab=repositories";
+  const [headlineStart, headlineEnd] = content.headline.split(content.headlineEmphasis);
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
     <SiteHeader />
     <HomeMotion />
     <main id="contenido" tabIndex={-1} className="home-content">
-      <div className="intro" aria-hidden="true"><Logo variant="draw" size={88} /></div>
+      {/* Preloader: solo en la primera visita y con movimiento permitido; CSS puro, 1.2s como máximo. */}
+      <div className="intro" aria-hidden="true">
+        <Logo variant="draw" size={88} />
+        <p className="intro-phrase"><span>compilando ideas…</span><span>desplegando…</span></p>
+      </div>
       <section className="hero page-container" aria-labelledby="hero-title">
+        <div className="hero-frame">
+        <span className="frame-mark" data-corner="tl" aria-hidden="true">+</span><span className="frame-mark" data-corner="tr" aria-hidden="true">+</span><span className="frame-mark" data-corner="bl" aria-hidden="true">+</span><span className="frame-mark" data-corner="br" aria-hidden="true">+</span>
         <div className="hero-copy">
           <p className="hero-badge" data-step="0"><span className="pulse-dot" aria-hidden="true" /><span className="badge-long">{content.badge}</span><span className="badge-short" aria-hidden="true">{content.badgeShort}</span></p>
-          <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart} <em>{headlineEnd}</em></h1>
+          <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart}<em>{content.headlineEmphasis}</em>{headlineEnd}</h1>
           <p className="hero-introduction" data-step="2">{content.introduction}</p>
           <div className="hero-actions" data-step="3">
-            <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<Icon name="arrow" /></a>
-            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}</a>
+            <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>
+            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<ButtonArrow /></a>
           </div>
+          {/* Datos verificables: cada cifra enlaza a su fuente pública. */}
           <dl className="hero-metrics" data-step="4">
-            <div><dt>proyectos en GitHub</dt><dd>{repositoryCount}</dd></div>
-            <div><dt>casos documentados</dt><dd>{featured.length}</dd></div>
-            <div><dt>stack principal</dt><dd className="metric-text">{content.mainStack}</dd></div>
+            <div><dt>pruebas automatizadas en Hito <a className="metric-source" href={hitoSources.readme.source}>fuente<span className="sr-only">: README de Hito</span><Icon name="external" /></a></dt><dd><CountUp value={hitoTests} /></dd></div>
+            <div><dt>repositorios públicos <a className="metric-source" href={githubProfile}>fuente<span className="sr-only">: perfil de GitHub</span><Icon name="external" /></a></dt><dd><CountUp value={repositoryCount} /></dd></div>
+            <div><dt>sin registro <a className="metric-source" href={hito.demo!.href} target="_blank" rel="noopener noreferrer">probar<span className="sr-only"> la demo de Hito (se abre en otra pestaña)</span><Icon name="external" /></a></dt><dd className="metric-text">Hito, en vivo</dd></div>
           </dl>
         </div>
         <HeroVisual />
+        </div>
       </section>
+
+      {/* Selector de proyectos: el trabajo, a un clic del primer pantallazo. */}
+      <nav className="project-picker page-container" aria-label="Elige un proyecto">
+        <p className="mono-label">Elige un proyecto</p>
+        <ol>
+          {featured.map((project, index) => <li key={project.id}><a href={`#${project.id}`}><span className="picker-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>{project.name}</a></li>)}
+          <li><a href="#sistemas-backend"><span className="picker-index" aria-hidden="true">+{systems.length}</span>sistemas backend</a></li>
+        </ol>
+      </nav>
 
       <section id="servicios" className="services-strip" aria-labelledby="servicios-title">
         <h2 id="servicios-title" className="sr-only">{content.services.title}</h2>
@@ -127,16 +156,16 @@ export default function Home() {
           return <article id={project.id} key={project.id} className="featured-row project-row t-learn">
             <div className="featured-copy">
               <div className="case-meta"><Logo size={34} className="case-logo" /><span className="mono-label">Caso {String(index + 1).padStart(2, "0")}</span></div>
-              <h3 aria-label={project.name}>{caseHref ? <Link className="row-primary" href={caseHref} aria-label={`${content.caseLink} de ${project.name}`}>{project.name}<span className="t-learn-chevron"><Icon name="arrow" /></span></Link> : project.name}</h3>
+              <h3 aria-label={project.name}>{caseHref ? <Link className="row-primary" href={caseHref} aria-label={`${content.caseLink} de ${project.name}`}><ViewTransition name={`case-title-${project.id}`} share="case-morph" default="none"><span className="case-title-text">{project.name}</span></ViewTransition><span className="t-learn-chevron"><Icon name="arrow" /></span></Link> : project.name}</h3>
               {project.summary && <p className="project-description">{project.summary.text}</p>}
               <dl className="featured-facts">
                 {project.problem && <div><dt>{content.caseProblem}</dt><dd>{project.problem.text}</dd></div>}
                 {project.contribution && <div><dt>{portfolioLabels.contribution}</dt><dd>{project.contribution.text}</dd></div>}
               </dl>
               <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
-              <div className="project-actions"><span className="case-action" aria-hidden={caseHref ? true : undefined}>{caseHref ? content.caseLink : "Próximamente"}{caseHref && <Icon name="arrow" />}</span><RepositoryLink repository={project.repository} name={project.name} /></div>
+              <div className="project-actions"><span className="case-action" aria-hidden={caseHref ? true : undefined}>{caseHref ? content.caseLink : "Próximamente"}{caseHref && <Icon name="arrow" />}</span>{project.demo && <DemoLink demo={project.demo} name={project.name} />}<RepositoryLink repository={project.repository} name={project.name} /></div>
             </div>
-            {project.id === "hangar" ? <HangarVisual /> : <TaskFlowVisual />}
+            {project.id === "hito" ? <HitoVisual /> : project.id === "hangar" ? <HangarVisual /> : <TaskFlowVisual />}
           </article>;
         })}
       </section>
@@ -144,14 +173,17 @@ export default function Home() {
       {/* Otros sistemas: tabla densa con cabecera, no tarjetas. */}
       <section id="sistemas-backend" className="home-section registry page-container" aria-labelledby="sistemas-title">
         <header className="section-head"><h2 id="sistemas-title">{content.systemsTitle}</h2><p>{content.systemsDescription}</p></header>
-        <div className="registry-head" aria-hidden="true"><span>Sistema</span><span>Decisión técnica</span><span>Stack</span><span>Código</span></div>
+        <div className="registry-head" aria-hidden="true"><span>Sistema</span><span>Decisión técnica y stack</span><span>Código</span></div>
         <ul className="registry-list">{systems.map(project => <li id={project.id} key={project.id} className="registry-row">
-          <h3>{project.name}</h3>
+          {/* Portada del README del repositorio (SVG estático: no necesita optimización de imagen). */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="registry-cover" src={`/images/serie/${project.id}.svg`} alt="" width={1280} height={400} loading="lazy" decoding="async" />
           <div className="registry-body">
+            <h3>{project.name}</h3>
             <p className="registry-focus">{project.engineeringFocus?.text ?? project.summary?.text}</p>
             {project.summary && project.engineeringFocus && <p className="registry-summary">{project.summary.text}</p>}
+            <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
           </div>
-          <ul className="technology-line" aria-label={`Tecnologías de ${project.name}`}>{project.stack.map(t => <li key={t.name}>{t.name}</li>)}</ul>
           <RepositoryLink repository={project.repository} name={project.name} />
         </li>)}</ul>
       </section>
@@ -193,24 +225,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contacto: cierre centrado con brillo iris. */}
+      {/* Contacto: el formulario es la acción principal; el correo queda como alternativa. */}
       <section id="contacto" className="home-section contact" aria-labelledby="contacto-title">
         <div className="page-container contact-inner">
-          <p className="hero-badge"><span className="pulse-dot" aria-hidden="true" />{content.badgeShort}</p>
-          <h2 id="contacto-title" className="contact-title">{content.contactTitle}</h2>
-          <p className="contact-description">{content.contactDescription}</p>
-          {contact.email && <>
-            <p className="contact-email">{contact.email.label}</p>
-            <div className="contact-buttons"><a className="button" href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contact.email.label)}&su=${encodeURIComponent(content.emailSubject)}`} target="_blank" rel="noopener noreferrer">{portfolioLabels.emailAction}<span className="sr-only"> por Gmail (se abre en una pestaña nueva)</span><Icon name="external" /></a><CopyEmail email={contact.email.label} /></div>
-            <a className="text-link contact-mailto" href={contact.email.href}>{content.emailAppAction}</a>
-          </>}
-          <ul className="contact-links">{contact.professionalLinks.map(link => <li key={link.href}><a className="text-link" href={link.href}>{link.label}<Icon name="external" /></a></li>)}</ul>
+          <div className="contact-intro">
+            <p className="hero-badge"><span className="pulse-dot" aria-hidden="true" />{content.badgeShort}</p>
+            <h2 id="contacto-title" className="contact-title">{content.contactTitle}</h2>
+            <p className="contact-description">{content.contactDescription}</p>
+            {contact.email && <div className="contact-alt">
+              <p className="mono-label">{content.emailAlternative}</p>
+              <p className="contact-email">{contact.email.label}</p>
+              <div className="contact-buttons"><CopyEmail email={contact.email.label} /><a className="text-link contact-mailto" href={contact.email.href}>{content.emailAppAction}</a></div>
+            </div>}
+            <ul className="contact-links">{contact.professionalLinks.map(link => <li key={link.href}><a className="text-link" href={link.href}>{link.label}<Icon name="external" /></a></li>)}</ul>
+          </div>
+          <ContactForm email={contact.email?.label ?? ""} />
         </div>
       </section>
     </main>
     <footer className="home-footer page-container">
       <div className="footer-brand"><Logo variant="spin" size={30} /><p>{profile.name}<span>{portfolioLabels.footer}</span></p></div>
-      <div><LinkPreferenciasCookies /><a className="text-link" href="#inicio">{portfolioLabels.backToTop}</a></div>
+      <div><Link className="text-link" href="/privacidad">Aviso de privacidad</Link><LinkPreferenciasCookies /><a className="text-link" href="#inicio">{portfolioLabels.backToTop}</a></div>
     </footer>
   </>;
 }

@@ -8,7 +8,9 @@
     "start": "serve out --listen tcp://127.0.0.1:3000",
     "lint": "eslint . --max-warnings=0",
     "test": "playwright test",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "images": "node scripts/optimize-images.mjs",
+    "analyze": "ANALYZE=true next build --webpack"
   },
   "overrides": {
     "serve": {
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
+    "@next/bundle-analyzer": "16.4.3",
     "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "22.20.1",
@@ -40,6 +43,7 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.3",
     "serve": "14.2.6",
+    "sharp": "0.35.5",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3"
   }

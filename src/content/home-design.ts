@@ -2,10 +2,13 @@ import { cvEvidence, supported } from "./evidence";
 import { repositoryEvidence } from "./repositories";
 import { hangarCaseStudy } from "./hangar-case-study";
 import { taskFlowCaseStudy } from "./taskflow-case-study";
+import { hitoCaseStudy } from "./hito-case-study";
 
 export const homeDesign = {
-  // Propuesta de valor definida por Max (servicios que ofrece, no proyectos previos).
-  headline: "Software que se siente futuro.",
+  // Elegida por Max el 2026-11-08 entre tres alternativas: dice qué hace y para quién.
+  headline: "Construyo el software que tu negocio usa todos los días.",
+  // Fragmento resaltado con el acento (debe aparecer tal cual dentro del titular).
+  headlineEmphasis: "tu negocio",
   // Confirmados por el propietario (2026-11-04).
   badge: "Disponible para proyectos · Culiacán y remoto",
   badgeShort: "Disponible · Culiacán y remoto",
@@ -49,7 +52,7 @@ export const homeDesign = {
     ],
     note: "El routing se configura dentro de RunContainer. Esquema del código, no una ejecución en vivo.",
   },
-  cases: { hangar: hangarCaseStudy.href, "taskflow-pro": taskFlowCaseStudy.href },
+  cases: { hito: hitoCaseStudy.href, hangar: hangarCaseStudy.href, "taskflow-pro": taskFlowCaseStudy.href },
   caseLink: "Leer caso",
   caseProblem: "Problema",
   // Oferta de servicios definida por Max. "proof" apunta a ids reales de projects.ts;
@@ -71,20 +74,20 @@ export const homeDesign = {
     description: "Software a medida para negocios. Cada servicio se apoya en proyectos que puedes revisar aquí mismo.",
     proofLabel: "Lo respaldan",
     items: [
-      { title: "Sitios web y landing pages", text: "Páginas rápidas, accesibles y fáciles de mantener, pensadas para presentar tu negocio y convertir visitas en contactos.", proof: ["taskflow-pro"], note: "Este portafolio (Next.js)" },
-      { title: "Puntos de venta y sistemas de gestión", text: "Inventario, ventas, usuarios y permisos, con datos consistentes aunque varias personas operen al mismo tiempo.", proof: ["secure-inventory", "safeledger", "freelanceguard-erp"] },
+      { title: "Sitios web y landing pages", text: "Páginas rápidas, accesibles y fáciles de mantener, pensadas para presentar tu negocio y convertir visitas en contactos.", proof: ["hito", "taskflow-pro"], note: "Este portafolio (Next.js)" },
+      { title: "Puntos de venta y sistemas de gestión", text: "Inventario, ventas, usuarios y permisos, con datos consistentes aunque varias personas operen al mismo tiempo.", proof: ["hito", "secure-inventory", "safeledger", "freelanceguard-erp"] },
       { title: "APIs e integraciones", text: "APIs documentadas y seguras para conectar tu sistema con aplicaciones web, móviles u otros servicios.", proof: ["secure-vault", "fortressid", "sentinel-iot"] },
       { title: "Aplicaciones en tiempo real", text: "Tableros, notificaciones y automatizaciones que se actualizan solas, con colas y procesos en segundo plano.", proof: ["taskflow-pro", "hangar"] },
     ],
   },
   casesTitle: "Trabajo seleccionado",
-  casesDescription: "Dos proyectos autodirigidos. La arquitectura, las decisiones y los límites, explicados en detalle.",
+  casesDescription: "Tres proyectos autodirigidos. Uno lo puedes probar ahora mismo; de los otros, la arquitectura, las decisiones y los límites, explicados en detalle.",
   systemsTitle: "Otros proyectos",
   // Resumen de los dominios ya respaldados en projects.ts (engineeringFocus de cada sistema).
   systemsDescription: "APIs y servicios backend centrados en seguridad, concurrencia, identidad y telemetría. Cada uno destaca la decisión técnica que lo define.",
   experienceTitle: "Experiencia profesional",
   contactTitle: "Conversemos sobre tu próximo proyecto.",
-  emailSubject: "Quiero cotizar un proyecto",
-  emailAppAction: "O escríbeme desde tu app de correo",
+  emailAlternative: "¿Prefieres el correo?",
+  emailAppAction: "Abrir en tu app de correo",
   contactDescription: "Una landing page, un sitio web, un punto de venta o una API. Cuéntame qué necesitas y te propongo cómo construirlo.",
 } as const;

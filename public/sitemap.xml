@@ -12,12 +12,17 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://tu-dominio.com/proyectos/hito</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://tu-dominio.com/proyectos/taskflow-pro</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://tu-dominio.com/legal/privacidad</loc>
+    <loc>https://tu-dominio.com/privacidad</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>

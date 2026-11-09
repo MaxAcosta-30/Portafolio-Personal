@@ -1,7 +1,8 @@
 import type { Evidence, SourcedLink } from "./types";
 
-/** Public repositories inspected on 2026-10-28. Pin evidence; keep the code link current. */
+/** Public repositories inspected on 2026-10-28 (Hito on 2026-11-07). Pin evidence; keep the code link current. */
 export const repositories = {
+  hito: { name: "Hito", revision: "6699aa9a542f7df5e499a93d762ced503b7f8295" },
   hangar: { name: "Setup-hangar", revision: "62f02735668eb66e65a06041eb4277525399f174" },
   "taskflow-pro": { name: "Taskflow-pro", revision: "9b8a54b9c89a8f7d1b7e8ddc29e6d47a347c1c79" },
   "secure-vault": { name: "SecureVault", revision: "9a581cc3aab1f8f21e010e4d9c3ee1c2ec4c8f13" },
@@ -16,7 +17,7 @@ export function repositoryEvidence(id: keyof typeof repositories, path = "README
   const { name, revision } = repositories[id];
   return {
     source: `https://github.com/MaxAcosta-30/${name}/blob/${revision}/${path}`,
-    location: `${path} · revisión del 28 de octubre de 2026`,
+    location: `${path} · revisión ${revision.slice(0, 7)}`,
     kind: "repository",
   };
 }

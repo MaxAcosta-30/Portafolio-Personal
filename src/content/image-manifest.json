@@ -1,0 +1,86 @@
+{
+  "hangar-apps": {
+    "width": 1920,
+    "height": 1200,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "hangar-despliegue": {
+    "width": 1920,
+    "height": 1200,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "hito-cliente": {
+    "width": 780,
+    "height": 1688,
+    "widths": [
+      640
+    ]
+  },
+  "hito-landing-movil": {
+    "width": 780,
+    "height": 1688,
+    "widths": [
+      640
+    ]
+  },
+  "hito-landing": {
+    "width": 1920,
+    "height": 1200,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "hito-panel": {
+    "width": 1920,
+    "height": 1200,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "hito-proyecto": {
+    "width": 1920,
+    "height": 1200,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "taskflow-analitica": {
+    "width": 1920,
+    "height": 1200,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "taskflow-login-movil": {
+    "width": 780,
+    "height": 1688,
+    "widths": [
+      640
+    ]
+  },
+  "taskflow-tablero": {
+    "width": 1920,
+    "height": 1200,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  }
+}

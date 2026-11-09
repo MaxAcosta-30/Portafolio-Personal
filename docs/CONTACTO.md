@@ -1,45 +1,51 @@
-# Contacto — arquitectura y decisiones (Prompt 12)
+# Contacto — arquitectura (actualizado el 5 de noviembre de 2026)
 
-Fecha: 29 de octubre de 2026. Dirección vigente: B, Plano de sistemas.
+Sustituye a la Opción A (solo `mailto:`) del Prompt 12. Decisión del propietario: Cloudflare
+Pages Function + Resend.
 
-## Opción elegida: A — Enlace de correo directo (mailto:)
+## Cómo funciona
 
-El contacto del portafolio es un enlace directo al correo del propietario:
+- **Formulario** (`src/components/contact-form.tsx`) en la sección Contacto de la home: nombre,
+  negocio (opcional), correo, WhatsApp (opcional), qué necesitas, presupuesto aproximado
+  (opcional, rangos definidos por el propietario) y mensaje. Valida al salir de cada campo con
+  las mismas reglas que el servidor (`src/lib/contact-schema.ts`).
+- **Envío**: `POST /api/contact`, atendido por `functions/api/contact.ts`, una Pages Function que
+  Cloudflare despliega junto al sitio estático (`output: "export"` no admite Server Actions ni
+  Route Handlers). La función llama a la API REST de Resend; el correo llega con
+  *Responder a* = correo del cliente.
+- **Protección**: comprobación de `Origin`, solo JSON de hasta 16 KB, honeypot (`sitio_web`,
+  fuera de la vista y del tabulador; si llega lleno responde 200 sin enviar), límite de
+  5 envíos por IP cada 10 minutos (`CF-Connecting-IP`), validación completa en el servidor.
+- **Alternativa**: el correo sigue visible con "Copiar correo" y "Abrir en tu app de correo".
 
-```
-mailto:maxacostado3020@gmail.com
-```
+## Configuración pendiente (la hace el propietario)
 
-Implementado en `src/content/profile.ts` (campo `contact.email`) y renderizado en la sección Contacto de la homepage como botón "Escríbeme" (`portfolioLabels.emailAction`).
+1. Crear cuenta en Resend y verificar el dominio del sitio (sin dominio verificado Resend solo
+   permite enviar desde `onboarding@resend.dev` al correo de la propia cuenta).
+2. En Cloudflare → Pages → el proyecto → Settings → Variables and Secrets (Production):
+   - `RESEND_API_KEY` como **secreto**.
+   - `CONTACT_TO`: buzón que recibe los mensajes.
+   - `CONTACT_FROM`: remitente verificado, p. ej. `Portafolio <contacto@tu-dominio.com>`.
+3. Opcional, recomendado: crear un KV namespace y enlazarlo como `CONTACT_RATE_LIMIT`
+   (Settings → Bindings). Sin él, el límite por IP vive en la memoria de cada instancia y es
+   solo de mejor esfuerzo.
+4. Volver a desplegar.
 
-## Por qué no se eligieron las otras opciones
+Mientras falten los secretos, la función responde 503 y el formulario muestra un error con el
+correo como alternativa. **Nunca** poner claves en el repositorio; para probar en local con
+Wrangler se usa `.dev.vars`, ya ignorado por Git.
 
-| Opción | Motivo de descarte |
-| --- | --- |
-| B — Servicio externo de formulario (Formspree / Getform) | Añade dependencia de tercero; los datos pasan por servidores ajenos; requiere crear cuenta y configurar destino de correo. No es necesario para un portafolio de contacto directo. |
-| C — Servicio con API key (Resend / SendGrid / Mailgun) + servidor | **Incompatible con la exportación estática** (`output: "export"` en `next.config.ts`). Requeriría adaptador de servidor, cambio de despliegue y manejo de API key secreta, lo cual el portafolio no necesita. |
+## Verificación
 
-## Qué no se implementó (por decisión intencional)
+- `tests/contact-function.spec.ts`: envío a Resend (clave solo en la cabecera del servidor),
+  honeypot, origen ajeno, validación, 405, límite por IP y 503 sin configuración.
+- `tests/phase2.spec.ts`: validación al salir del campo, foco con borde de acento, estado
+  "Enviando…" con `<Logo variant="deploy">`, éxito, error y axe sin violaciones.
+- **NO VERIFICADO**: un envío real a Resend desde Cloudflare (requiere la cuenta y los secretos).
 
-- **Formulario en el sitio:** No hay `<form>` de contacto. El visitante abre su propio cliente de correo. Esto elimina la necesidad de validación, honeypot, estados loading/success/error y envío de datos a terceros.
-- **Variables de entorno secretas:** No se usa ninguna API key, token ni contraseña para el contacto. No existe `.env.local` con valores reales ni se debe crear.
-- **Backend de envío de correo:** No hay Server Action, ruta de API ni función serverless. Coherente con la exportación estática y Cloudflare Pages.
+## Privacidad
 
-## Accesibilidad del contacto
-
-- El enlace "Escríbeme" es un `<a>` con `href="mailto:..."`, navegable por teclado, con foco visible y target táctil ≥44px (verificado en Playwright a 320/390/768/1024/1920px).
-- El correo proviene del CV local (`contactSource`), con referencia de evidencia registrada.
-- No hay promesa de tiempo de respuesta (coherente con `CONTENT_ARCHITECTURE.md`).
-
-## Archivos relacionados
-
-- `src/content/profile.ts` — definición de `contact.email` y `contact.professionalLinks` (GitHub, LinkedIn).
-- `src/app/page.tsx` — sección Contacto con botón "Escríbeme".
-- `src/components/portfolio.tsx` — no se usa para contacto (contacto está en la homepage).
-- `.gitignore` — excluye `.env`, `.env.*`, `.dev.vars`, `.dev.vars.*`, `test-results/`, `playwright-report/`. Nunca colocar secretos en archivos versionados.
-- `docs/SEO_SETUP.md` — señala que el CV público descargable sigue pendiente.
-
-## Pendiente (señalado, no parte de esta fase)
-
-- Versión pública descargable del CV (`resume.file` es `null`; no se usa el PDF local `CV_MAX-2.pdf` como URL).
-- Dominio real y despliegue en Cloudflare Pages (Prompt 13).
+Aviso de privacidad (LFPDPPP) en `/privacidad`, enlazado desde el pie y desde el formulario.
+`/legal/privacidad` redirige con 301 (`public/_redirects`). Campos marcados `[POR COMPLETAR]`:
+domicilio, plazo de conservación y confirmación de que no hay finalidades secundarias.
+Pendiente de revisión legal.

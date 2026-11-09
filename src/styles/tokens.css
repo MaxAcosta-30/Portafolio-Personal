@@ -1,36 +1,9 @@
-/* Source of truth · R5 "Hangar en vivo": asfalto + amarillo señal (oscuro, por defecto)
-   y hormigón + tinta (claro, diseñado aparte). El tema claro se aplica por
-   prefers-color-scheme o por elección explícita (html[data-theme]). */
-/* Source of truth · R6 "Índigo nocturno". Marca solo oscura. */
+/* Source of truth · R7 "Noche / Día". Dos temas con acento propio, aplicados con
+   html[data-theme="dark"|"light"] (script inline en <head>, antes del primer pintado).
+   Todo es monocromo; el acento solo va en la A del logo, "tu negocio" del titular, el botón
+   principal, el punto de "Disponible" y el foco. */
 @theme static {
   --color-*: initial;
-  /* Paleta de marca */
-  --color-ink: #0c0e14;
-  --color-graphite: #161a23;
-  --color-panel: #13161d;
-  --color-line: #262b37;
-  --color-fog: #9aa1b2;
-  --color-ivory: #eeebe3;
-  --color-iris: #8b92ff;
-  --color-amber: #f0b67f;
-  /* Roles semánticos que usa el resto del sitio */
-  --color-background: #0c0e14;
-  --color-surface: #161a23;
-  --color-surface-muted: #13161d;
-  --color-foreground: #eeebe3;
-  --color-muted: #9aa1b2;
-  --color-border: #262b37;
-  --color-control: #6b7287;
-  --color-accent: #8b92ff;
-  --color-accent-fill: #8b92ff;
-  --color-accent-hover: #a9aeff;
-  --color-accent-active: #c3c6ff;
-  --color-accent-fill-hover: #a3a9ff;
-  --color-on-accent: #0c0e14;
-  --color-selected: #1d2040;
-  --color-focus-ring: #a9aeff;
-  --color-success: #f0b67f;
-
   --spacing: 0.25rem;
   --spacing-page: 1.25rem;
   --spacing-gutter: 1.5rem;
@@ -81,14 +54,55 @@
   --ease-state: cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* Roles de color de Tailwind: apuntan a los tokens del tema activo. */
 @theme inline {
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-foreground: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--line);
+  --color-border-strong: var(--line-strong);
+  --color-control: var(--field-line);
+  --color-accent: var(--accent);
+  --color-btn: var(--btn-bg);
+  --color-on-btn: var(--btn-fg);
   --font-display: var(--font-display-face), system-ui, sans-serif;
   --font-sans: var(--font-sans-face), system-ui, sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, monospace;
 }
 
 @layer base {
+  /* Noche (por defecto): negro + naranja Flame. #FF5101 sobre #000 = 6.43:1 (AA en texto pequeño). */
+  :root, :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #000000;
+    --surface: #0d0d0d;
+    --line: #222222;
+    --line-strong: #3a3a3a;
+    --text: #ffffff;
+    --muted: #a3a3a3;
+    --accent: #ff5101;
+    --btn-bg: #ff5101;
+    --btn-fg: #000000;
+  }
+  /* Día: blanco + azul Cornflower. #4F6BFF daba 4.30:1 sobre blanco (no pasa AA en texto
+     pequeño); se oscurece a #4562F0: 4.93:1 sobre --bg y 4.54:1 sobre --surface. */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #f3f5ff;
+    --line: #e6e6e6;
+    --line-strong: #c9cfe8;
+    --text: #050505;
+    --muted: #5c5c5c;
+    --accent: #4562f0;
+    --btn-bg: #050505;
+    --btn-fg: #ffffff;
+  }
   :root {
+    /* Borde de campos: 1.4.11 pide 3:1 (4.37:1 en Noche, 3.32:1 en Día). */
+    --field-line: color-mix(in srgb, var(--muted) 70%, var(--bg));
+    --duration-theme: 300ms;
     /* @theme inline no publica variables: las familias se exponen aquí para CSS plano (home.css). */
     --font-display: var(--font-display-face), system-ui, sans-serif;
     --font-mono: var(--font-mono-face), ui-monospace, monospace;
@@ -115,8 +129,8 @@
     --underline-offset: 0.2em;
     --scroll-offset: 1.5rem;
     --layer-skip: 10;
-    --shadow-raised: inset 0 1px 0 rgb(238 235 227 / 0.04), 0 12px 32px -14px rgb(0 0 0 / 0.7);
-    --shadow-floating: inset 0 1px 0 rgb(238 235 227 / 0.06), 0 30px 70px -24px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(139 146 255 / 0.06);
+    --shadow-raised: none;
+    --shadow-floating: none;
 
     @variant lg {
       --spacing-page: 2.5rem;

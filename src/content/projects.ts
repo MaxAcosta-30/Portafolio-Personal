@@ -2,6 +2,9 @@ import type { EngineeringSystem, FeaturedCaseStudy, Project } from "./types";
 import { cvEvidence, supported } from "./evidence";
 import { repositoryEvidence, repositoryLink } from "./repositories";
 
+const hitoReadme = repositoryEvidence("hito");
+const hitoInstructions = repositoryEvidence("hito", "CLAUDE.md");
+const hitoDemo = { source: "https://hito-one.vercel.app", location: "Demo pública · revisada el 7 de noviembre de 2026", kind: "demo" } as const;
 const hangarSource = cvEvidence("Página 1 · Hangar");
 const taskFlowSource = cvEvidence("Página 1 · TaskFlow Pro");
 const seriesSource = cvEvidence("Página 1 · Desarrollo Full Stack — Proyectos de Portafolio Técnico");
@@ -18,6 +21,52 @@ const erpSource = repositoryEvidence("freelanceguard-erp");
 const erpPersistence = repositoryEvidence("freelanceguard-erp", "src/FreelanceGuard.Api/Repositories/EmployeeRepository.cs");
 
 // Ready means enough sourced content to publish, not production validation.
+export const hito: FeaturedCaseStudy = {
+  id: "hito",
+  name: "Hito",
+  aliases: [],
+  kind: "case-study",
+  status: "ready",
+  nameEvidence: [hitoReadme],
+  summary: supported("Sistema para que un freelancer acuerde hitos con su cliente, registre cada entrega y aprobación, y sepa qué le deben. El cliente aprueba desde un enlace, sin cuenta.", hitoReadme),
+  contribution: supported("Diseñé y construí todo el sistema: la API en capas con .NET 10, la interfaz en React, las pruebas y el despliegue automático a costo cero.", hitoReadme),
+  context: supported("Proyecto autodirigido de portafolio para puestos full stack .NET + React, publicado con una demo de un clic.", hitoInstructions),
+  problem: supported("Los acuerdos y cobros de un freelancer viven en chats: el alcance cambia sin registro y nadie sabe qué está aprobado ni qué se debe.", hitoInstructions),
+  architecture: supported("React con TanStack Query en Vercel llama por rewrite a una API ASP.NET Core en Render, con PostgreSQL en Supabase. Las reglas de estado viven en el dominio y se prueban sin base de datos.", hitoInstructions),
+  technicalDecisions: [
+    {
+      decision: "Congelar el alcance aceptado en versiones.",
+      rationale: "Un cambio posterior crea una versión nueva que el cliente debe aceptar; nada acordado se edita.",
+      alternatives: ["Editar los hitos con bitácora de cambios"],
+      tradeoffs: ["Más tablas y consultas por versión."],
+      evidence: [hitoInstructions],
+    },
+    {
+      decision: "Enlace privado para el cliente, guardando solo el hash del token.",
+      rationale: "El cliente no necesita cuenta; el enlace expira y se puede revocar.",
+      alternatives: ["Cuenta de cliente con contraseña"],
+      tradeoffs: ["Quien tenga el enlace vigente puede aprobar; por eso vence y se revoca."],
+      evidence: [hitoInstructions],
+    },
+  ],
+  stack: [
+    { name: ".NET 10 / ASP.NET Core", usage: "API en capas: Domain, Application, Infrastructure y Api.", evidence: [hitoReadme] },
+    { name: "EF Core / PostgreSQL", usage: "Migraciones versionadas; dinero en numeric(18,2).", evidence: [hitoInstructions] },
+    { name: "React 19 / TanStack Query", usage: "Panel del freelancer y vista del cliente en el celular.", evidence: [hitoReadme] },
+    { name: "Identity / JWT", usage: "Access token en memoria y refresh token en cookie httpOnly.", evidence: [hitoInstructions] },
+    { name: "xUnit / Testcontainers / Playwright", usage: "Unitarias, integración con PostgreSQL real y un e2e del flujo de cobro.", evidence: [hitoReadme] },
+    { name: "GitHub Actions / kind", usage: "Pruebas, prueba en Kubernetes local y migraciones antes del deploy.", evidence: [hitoInstructions] },
+  ],
+  operation: supported("Crear proyecto → enviar enlace → el cliente acepta → entregar → aprobar → registrar pago. Cada acción queda en un historial que la API no deja editar.", hitoInstructions),
+  challenges: [],
+  testing: supported("Pruebas unitarias de transiciones y pagos, integración con PostgreSQL real mediante Testcontainers (incluido el aislamiento entre usuarios) y un e2e con Playwright del flujo completo.", hitoReadme),
+  security: supported("Permisos validados en el servidor, límite de intentos en inicio de sesión y enlaces públicos, URLs de evidencia solo http(s) y secretos fuera del repositorio.", hitoInstructions),
+  infrastructure: supported("Vercel Hobby, Render Free y Supabase Free, sin tarjeta: una demo de portafolio, no producción.", hitoInstructions),
+  results: [],
+  repository: repositoryLink("hito"),
+  demo: { label: "Probar la demo", href: "https://hito-one.vercel.app", evidence: [hitoDemo] },
+};
+
 export const hangar: FeaturedCaseStudy = {
   id: "hangar",
   name: "Hangar",
@@ -112,7 +161,7 @@ export const taskFlowPro: FeaturedCaseStudy = {
   demo: null,
 };
 
-export const featuredCaseStudies: readonly FeaturedCaseStudy[] = [hangar, taskFlowPro];
+export const featuredCaseStudies: readonly FeaturedCaseStudy[] = [hito, hangar, taskFlowPro];
 
 export const engineeringSystems: readonly EngineeringSystem[] = [
   {

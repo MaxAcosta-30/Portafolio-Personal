@@ -27,7 +27,8 @@ export function Logo({ variant = "static", size = 32, wordmark = false, label = 
     {variant === "assemble" && <g className="logo-waves"><circle cx="50" cy="50" r="30" /><circle cx="50" cy="50" r="30" /></g>}
     <path className="logo-hidden" d={LOGO_PATHS.hidden} pathLength={100} />
     <path className="logo-m" d={LOGO_PATHS.m} pathLength={100} />
-    <path className="logo-a" d={LOGO_PATHS.a} pathLength={100} />
+    {/* El grupo permite el salto al cambiar de tema sin reiniciar las animaciones propias de la A. */}
+    <g className="logo-a-hop"><path className="logo-a" d={LOGO_PATHS.a} pathLength={100} /></g>
   </svg>;
 
   return <span className={`logo ${className}`} data-variant={variant}>
