@@ -1,7 +1,11 @@
-/* Source of truth · R7 "Noche / Día". Dos temas con acento propio, aplicados con
-   html[data-theme="dark"|"light"] (script inline en <head>, antes del primer pintado).
-   Todo es monocromo; el acento solo va en la A del logo, "tu negocio" del titular, el botón
-   principal, el punto de "Disponible" y el foco. */
+/* Source of truth · R8 "Brasa" (Noche) y su par "Día". Dos temas con el mismo tratamiento y
+   paleta propia, aplicados con html[data-theme="dark"|"light"] (script inline en <head>).
+   Tres colores por tema, pero cada uno es una familia: fondo en capas (hondo → página →
+   superficie → elevado), texto y gris con temperatura, y el acento también como luz (brillo del
+   hero, halo, sombras). Noche: negro cálido · marfil · naranja. Día: blanco · #050505 · azul #548CFF.
+   --accent es el acento para texto chico (AA); --accent-fill es el color de marca visible
+   (titular, subrayado del CTA, rellenos). El acento va en la A del logo, "tu negocio", el CTA
+   subrayado, el punto de "Disponible" y el foco. */
 @theme static {
   --color-*: initial;
   --spacing: 0.25rem;
@@ -72,32 +76,52 @@
 }
 
 @layer base {
-  /* Noche (por defecto): negro + naranja Flame. #FF5101 sobre #000 = 6.43:1 (AA en texto pequeño). */
+  /* Noche (por defecto): negro cálido en capas + marfil + naranja brasa.
+     Contraste: texto 16.8:1, muted 7.1:1 (6.1:1 sobre elevado), acento 6.7:1 (5.9:1 sobre elevado). */
   :root, :root[data-theme="dark"] {
     color-scheme: dark;
-    --bg: #000000;
-    --surface: #0d0d0d;
-    --line: #222222;
-    --line-strong: #3a3a3a;
-    --text: #ffffff;
-    --muted: #a3a3a3;
-    --accent: #ff5101;
-    --btn-bg: #ff5101;
-    --btn-fg: #000000;
+    --bg-deep: #0c0a09;
+    --bg: #110e0c;
+    --surface: #1a1613;
+    --surface-raised: #221d19;
+    --line: #2a241f;
+    --line-strong: #40372f;
+    --text: #f4efe8;
+    --muted: #a59b91;
+    --accent: #ff6a2e;
+    --accent-fill: #ff5a1f;
+    --btn-bg: #ff5a1f;
+    --btn-fg: #140a05;
+    /* El naranja como luz: brillo detrás del cubo y halo del punto "Disponible". */
+    --glow: rgb(255 90 31 / 0.17);
+    --glow-soft: rgb(255 190 140 / 0.05);
+    --grain-opacity: 0.07;
+    --shadow-raised: inset 0 1px 0 rgb(255 240 225 / 0.06), 0 14px 30px -20px rgb(0 0 0 / 0.85);
+    --shadow-floating: inset 0 1px 0 rgb(255 240 225 / 0.07), 0 28px 50px -26px rgb(0 0 0 / 0.9), 0 0 0 1px rgb(0 0 0 / 0.35);
   }
-  /* Día: blanco + azul Cornflower. #4F6BFF daba 4.30:1 sobre blanco (no pasa AA en texto
-     pequeño); se oscurece a #4562F0: 4.93:1 sobre --bg y 4.54:1 sobre --surface. */
+  /* Día: blanco #FFFFFF + #050505 + azul #548CFF (colores de Max), en capas frías.
+     #548CFF da 3.2:1 sobre blanco: vale para texto grande (titular), subrayados, brillos y foco
+     (3:1). Para texto chico se usa #1A64FF, el mismo tono más profundo: 4.9:1 (4.6:1 sobre superficie).
+     Contraste: texto 20.4:1, muted 6.6:1 (6.2:1 sobre superficie). */
   :root[data-theme="light"] {
     color-scheme: light;
+    --bg-deep: #f2f5fc;
     --bg: #ffffff;
-    --surface: #f3f5ff;
-    --line: #e6e6e6;
-    --line-strong: #c9cfe8;
+    --surface: #f6f8fe;
+    --surface-raised: #ffffff;
+    --line: #e6eaf3;
+    --line-strong: #c9d2e6;
     --text: #050505;
-    --muted: #5c5c5c;
-    --accent: #4562f0;
+    --muted: #585d68;
+    --accent: #1a64ff;
+    --accent-fill: #548cff;
     --btn-bg: #050505;
     --btn-fg: #ffffff;
+    --glow: rgb(84 140 255 / 0.16);
+    --glow-soft: rgb(84 140 255 / 0.07);
+    --grain-opacity: 0.04;
+    --shadow-raised: 0 1px 2px rgb(10 20 50 / 0.06), 0 12px 28px -18px rgb(20 40 110 / 0.22);
+    --shadow-floating: 0 1px 2px rgb(10 20 50 / 0.06), 0 26px 48px -24px rgb(20 40 110 / 0.3);
   }
   :root {
     /* Borde de campos: 1.4.11 pide 3:1 (4.37:1 en Noche, 3.32:1 en Día). */
@@ -129,8 +153,6 @@
     --underline-offset: 0.2em;
     --scroll-offset: 1.5rem;
     --layer-skip: 10;
-    --shadow-raised: none;
-    --shadow-floating: none;
 
     @variant lg {
       --spacing-page: 2.5rem;

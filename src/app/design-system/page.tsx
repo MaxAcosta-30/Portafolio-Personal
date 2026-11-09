@@ -6,14 +6,14 @@ import { hangar } from "@/content/projects";
 import { siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `Sistema de diseño · ${profile.name}`,
+  title: "Sistema de diseño",
   description: "Referencia de desarrollo de la dirección Plano de sistemas.",
   robots: { index: false, follow: false },
   alternates: {
     canonical: `${siteMetadata.siteUrl}/design-system`,
   },
   openGraph: {
-    title: `Sistema de diseño · ${profile.name}`,
+    title: "Sistema de diseño",
     description: "Referencia de desarrollo de la dirección Plano de sistemas.",
     type: "website",
     url: `${siteMetadata.siteUrl}/design-system`,
@@ -44,7 +44,7 @@ export default function DesignSystemPage() {
       <a className="skip-link" href="#contenido">Saltar al contenido</a>
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-site flex-wrap items-center justify-between gap-x-6 gap-y-2 px-page py-6">
-          <p className="font-medium">{profile.name}</p>
+          <p className="font-medium">{profile.displayName}</p>
           <p className="text-label text-muted">Plano de sistemas <span aria-hidden="true">/</span> Referencia de desarrollo</p>
         </div>
       </header>

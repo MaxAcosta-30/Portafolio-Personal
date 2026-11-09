@@ -3,7 +3,7 @@ import { cvEvidence, supported } from "./evidence";
 
 /** Section targets implemented on the homepage. */
 export const navigation = {
-  brand: { label: profile.name, href: "/" },
+  brand: { label: profile.displayName, href: "/" },
   items: [
     { label: "Servicios", sectionId: "servicios" },
     { label: "Proyectos", sectionId: "proyectos" },
@@ -17,7 +17,7 @@ export const navigation = {
 
 export const homepage = {
   hero: {
-    name: profile.name,
+    name: profile.displayName,
     role: profile.role,
     education: `${profile.education.status} de ${profile.education.program}`,
     headline: "Desarrollo Full Stack con foco en backend y APIs.",
@@ -100,12 +100,12 @@ export const caseStudySections = [
 
 /** Metadata de sitio. Reemplazar siteUrl con el dominio real antes de publicar. */
 export const siteMetadata = {
-  siteName: `${profile.name} · Portafolio`,
+  siteName: `${profile.displayName} · Portafolio`,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://tu-dominio.com",
   language: "es",
   locale: "es-MX",
   author: {
-    name: profile.name,
+    name: profile.displayName,
     url: "https://github.com/MaxAcosta-30",
   },
   email: contact.email?.href ?? null,

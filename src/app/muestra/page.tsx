@@ -1,5 +1,5 @@
 export const metadata = {
-  title: `Muestra de dirección visual · Max Alexander Acosta Valencia`,
+  title: "Muestra de dirección visual",
   description: "Página de muestra estática para validar la dirección minimalista con propósito.",
   robots: { index: false, follow: false },
 } as const;

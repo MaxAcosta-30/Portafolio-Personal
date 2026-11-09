@@ -13,8 +13,11 @@ export const ownerBrief = {
 } as const satisfies Evidence;
 
 export const profile = {
+  /** Nombre legal completo: solo para el aviso legal, el de privacidad y los datos estructurados. */
   name: "Max Alexander Acosta Valencia",
-  role: "Desarrollador Full Stack",
+  /** Nombre que se muestra: pestaña del navegador, redes, pie y marca (decisión de Max). */
+  displayName: "Max Acosta",
+  role: "Desarrollador de Software",
   education: {
     program: "Ingeniería en Sistemas Computacionales",
     status: "Estudiante",

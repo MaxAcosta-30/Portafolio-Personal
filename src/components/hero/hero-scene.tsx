@@ -11,7 +11,7 @@ type Refs<T> = RefObject<(T | null)[]>;
 
 /** Colores de la escena: los mismos tokens CSS del tema activo (cambian con data-theme). */
 type Palette = { surface: string; line: string; lineStrong: string; text: string; muted: string; accent: string };
-const TOKENS = { surface: "--surface", line: "--line", lineStrong: "--line-strong", text: "--text", muted: "--muted", accent: "--accent" } as const;
+const TOKENS = { surface: "--surface", line: "--line", lineStrong: "--line-strong", text: "--text", muted: "--muted", accent: "--accent-fill" } as const;
 const subscribeTheme = (onChange: () => void) => {
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });

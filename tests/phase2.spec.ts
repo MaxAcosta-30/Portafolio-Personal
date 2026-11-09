@@ -129,9 +129,17 @@ test("métricas: cuentan hasta su valor y sin movimiento quedan fijas", async ({
   await expect(page.locator(".hero-metrics .count-up")).toHaveText(["103", String(Object.keys(repositories).length)]);
   await expect(page.locator(".hero-metrics .count-up").first()).toHaveAttribute("data-counted", "");
   await expect(page.locator(".hero-metrics .count-up").first()).toHaveCSS("filter", /none|blur\(0px\)/);
+  // R8 (opción B): las cifras van en el color de marca del tema; a 28px cuentan como texto grande.
   const color = await page.locator(".hero-metrics dd").first().evaluate(el => getComputedStyle(el).color);
-  const text = await page.evaluate(() => getComputedStyle(document.body).color);
-  expect(color).toBe(text);
+  const accent = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    probe.style.color = "var(--accent-fill)";
+    document.body.append(probe);
+    const value = getComputedStyle(probe).color;
+    probe.remove();
+    return value;
+  });
+  expect(color).toBe(accent);
 });
 
 test("skeleton del hero: mismo cuadro antes y después de cargar la escena (CLS 0)", async ({ page }) => {

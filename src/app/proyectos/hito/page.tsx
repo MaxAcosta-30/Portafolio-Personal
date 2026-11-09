@@ -7,15 +7,14 @@ import { Showcase } from "@/components/showcase";
 import { Icon } from "@/components/ui";
 import { hitoCaseStudy as content, hitoSources } from "@/content/hito-case-study";
 import { hito } from "@/content/projects";
-import { profile } from "@/content/profile";
 import { portfolioLabels, siteMetadata } from "@/content/site";
 
 export const metadata = {
-  title: `Hito · Caso de estudio · ${profile.name}`,
+  title: "Hito · Caso de estudio",
   description: content.introduction,
   alternates: { canonical: `${siteMetadata.siteUrl}/proyectos/hito` },
   openGraph: {
-    title: `Hito · Caso de estudio · ${profile.name}`,
+    title: "Hito · Caso de estudio",
     description: content.introduction,
     type: "website",
     url: `${siteMetadata.siteUrl}/proyectos/hito`,
@@ -145,7 +144,7 @@ export default function HitoCaseStudy() {
       <h2 className="max-w-measure text-heading">{content.closing.title}</h2>
       <p className="mt-4 max-w-measure text-muted">{content.closing.text}</p>
       <div className="project-actions">
-        <Link className="button" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
         <Link className="text-link" href="/#proyectos">{content.back}</Link>
       </div>
     </footer>

@@ -20,13 +20,13 @@ import { homeDesign as content } from "@/content/home-design";
 import "./home.css";
 
 export const metadata = {
-  title: { absolute: `${profile.name} · ${profile.role}` },
+  title: { absolute: `${profile.displayName} · ${profile.role}` },
   description: profile.introduction.text,
   alternates: {
     canonical: `${siteMetadata.siteUrl}/`,
   },
   openGraph: {
-    title: `${profile.name} · ${profile.role}`,
+    title: `${profile.displayName} · ${profile.role}`,
     description: profile.introduction.text,
     type: "website",
     url: `${siteMetadata.siteUrl}/`,
@@ -35,13 +35,13 @@ export const metadata = {
         url: `${siteMetadata.siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: `${profile.name} · Portafolio`,
+        alt: `${profile.displayName} · Portafolio`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} · ${profile.role}`,
+    title: `${profile.displayName} · ${profile.role}`,
     description: profile.introduction.text,
     images: [`${siteMetadata.siteUrl}/og-image.png`],
   },
@@ -97,6 +97,7 @@ export default function Home() {
   const hitoTests = 53 + 50;
   const githubProfile = "https://github.com/MaxAcosta-30?tab=repositories";
   const [headlineStart, headlineEnd] = content.headline.split(content.headlineEmphasis);
+  const [contactStart, contactEnd] = content.contactTitle.split(content.contactTitleEmphasis);
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
     <SiteHeader />
@@ -115,8 +116,8 @@ export default function Home() {
           <h1 id="hero-title" className="hero-title" data-step="1">{headlineStart}<em>{content.headlineEmphasis}</em>{headlineEnd}</h1>
           <p className="hero-introduction" data-step="2">{content.introduction}</p>
           <div className="hero-actions" data-step="3">
-            <a className="button" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>
-            <a className="button button-secondary" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<ButtonArrow /></a>
+            <a className="cta-link" href={`#${homepage.hero.primaryAction.sectionId}`}>{homepage.hero.primaryAction.label}<ButtonArrow /></a>
+            <a className="text-link" href={`#${homepage.hero.secondaryAction.sectionId}`}>{homepage.hero.secondaryAction.label}<ButtonArrow /></a>
           </div>
           {/* Datos verificables: cada cifra enlaza a su fuente pública. */}
           <dl className="hero-metrics" data-step="4">
@@ -230,7 +231,7 @@ export default function Home() {
         <div className="page-container contact-inner">
           <div className="contact-intro">
             <p className="hero-badge"><span className="pulse-dot" aria-hidden="true" />{content.badgeShort}</p>
-            <h2 id="contacto-title" className="contact-title">{content.contactTitle}</h2>
+            <h2 id="contacto-title" className="contact-title">{contactStart}<em>{content.contactTitleEmphasis}</em>{contactEnd}</h2>
             <p className="contact-description">{content.contactDescription}</p>
             {contact.email && <div className="contact-alt">
               <p className="mono-label">{content.emailAlternative}</p>
@@ -244,7 +245,7 @@ export default function Home() {
       </section>
     </main>
     <footer className="home-footer page-container">
-      <div className="footer-brand"><Logo variant="spin" size={30} /><p>{profile.name}<span>{portfolioLabels.footer}</span></p></div>
+      <div className="footer-brand"><Logo variant="spin" size={30} /><p>{profile.displayName}<span>{portfolioLabels.footer}</span></p></div>
       <div><Link className="text-link" href="/privacidad">Aviso de privacidad</Link><LinkPreferenciasCookies /><a className="text-link" href="#inicio">{portfolioLabels.backToTop}</a></div>
     </footer>
   </>;

@@ -87,6 +87,7 @@ export const homeDesign = {
   systemsDescription: "APIs y servicios backend centrados en seguridad, concurrencia, identidad y telemetría. Cada uno destaca la decisión técnica que lo define.",
   experienceTitle: "Experiencia profesional",
   contactTitle: "Conversemos sobre tu próximo proyecto.",
+  contactTitleEmphasis: "tu próximo proyecto",
   emailAlternative: "¿Prefieres el correo?",
   emailAppAction: "Abrir en tu app de correo",
   contactDescription: "Una landing page, un sitio web, un punto de venta o una API. Cuéntame qué necesitas y te propongo cómo construirlo.",

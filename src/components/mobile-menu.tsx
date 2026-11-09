@@ -23,7 +23,7 @@ export function MobileMenu({ homeLinks = false }: { homeLinks?: boolean }) {
           <a href={`${homeLinks ? "/" : ""}#${item.sectionId}`} onClick={close}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>{item.label}</a>
         </li>)}</ol>
       </nav>
-      <a className="button mobile-menu-cta" href={`${homeLinks ? "/" : ""}#${navigation.cta.sectionId}`} onClick={close}>{navigation.cta.label}<span className="button-arrow" aria-hidden="true">→</span></a>
+      <a className="cta-link mobile-menu-cta" href={`${homeLinks ? "/" : ""}#${navigation.cta.sectionId}`} onClick={close}>{navigation.cta.label}<span className="button-arrow" aria-hidden="true">→</span></a>
     </dialog>
   </>;
 }

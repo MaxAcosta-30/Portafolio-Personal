@@ -19,11 +19,11 @@ const caseUrl = publicSiteUrl ? `${publicSiteUrl}${content.href}` : null;
 
 export const metadata: Metadata = {
   metadataBase: publicSiteUrl ? new URL(publicSiteUrl) : null,
-  title: `Hangar · Caso de estudio · ${profile.name}`,
+  title: "Hangar · Caso de estudio",
   description: content.introduction,
   alternates: { canonical: caseUrl },
   openGraph: {
-    title: `Hangar · Caso de estudio · ${profile.name}`,
+    title: "Hangar · Caso de estudio",
     description: content.introduction,
     type: "article",
     url: caseUrl ?? undefined,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     creator: null,
-    title: `Hangar · Caso de estudio · ${profile.name}`,
+    title: `Hangar · Caso de estudio · ${profile.displayName}`,
     description: content.introduction,
     images: publicSiteUrl ? [`${publicSiteUrl}/og-hangar.svg`] : [],
   },
@@ -220,7 +220,7 @@ export default function HangarCaseStudy() {
       <div className="project-actions">
         {hangar.repository?.visibility === "public" && <a className="text-link" href={hangar.repository.href}>{content.closing.repositoryAction}<Icon name="external" /></a>}
         <Link className="text-link" href={content.closing.otherCase.href}>{content.closing.otherCase.label}<Icon name="arrow" /></Link>
-        <Link className="button" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
       </div>
     </footer>
   </>;
