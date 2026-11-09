@@ -376,5 +376,4 @@
     dl > div { display: grid; gap: 0.25rem 1.5rem; padding-block: 0.75rem; border-bottom: 1px solid var(--line); @media (width >= 40rem) { grid-template-columns: 12rem 1fr; } }
     dt { color: var(--text); }
   }
-  .legal-pending { padding: 0 0.25rem; font-family: var(--font-mono); font-size: 0.875em; color: var(--text); background: transparent; outline: 1px dashed var(--line-strong); }
 }

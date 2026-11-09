@@ -19,7 +19,7 @@ export default function Cookies() {
         <header className="mb-[4rem] border-b border-border pb-[1.5rem]">
           <h1 className="text-display">Política de cookies</h1>
           <p className="mt-[1rem] text-label text-muted">
-            Última actualización: 29 de octubre de 2026. Pendiente de revisión por un profesional legal.
+            Última actualización: 8 de noviembre de 2026.
           </p>
         </header>
 
@@ -72,12 +72,6 @@ export default function Cookies() {
             </p>
           </section>
 
-          <section className="mt-[2rem] border-t border-border pt-[1.5rem]">
-            <h3 className="text-title">Revisión legal pendiente</h3>
-            <p className="text-body text-muted">
-              Este documento usa como base los datos proporcionados por el responsable del sitio. Antes de publicar, debe ser revisado por un profesional legal o por el propio responsable para confirmar su adecuación a la legislación aplicable (México). Los campos que faltan completar se indican con [POR COMPLETAR: ...].
-            </p>
-          </section>
         </article>
         <footer className="mt-[4rem] border-t border-border pt-[1.5rem] pb-[1.5rem]">
           <LinkPreferenciasCookies />

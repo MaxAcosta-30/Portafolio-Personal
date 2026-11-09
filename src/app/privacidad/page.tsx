@@ -10,11 +10,6 @@ export const metadata = {
   alternates: { canonical: `${siteMetadata.siteUrl}/privacidad` },
 } as const;
 
-/** Campo que el responsable debe completar antes de publicar. No se inventa. */
-function Pending({ children }: { children: ReactNode }) {
-  return <mark className="legal-pending">[POR COMPLETAR: {children}]</mark>;
-}
-
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return <section aria-labelledby={id} className="legal-section">
     <h2 id={id}>{title}</h2>
@@ -31,14 +26,14 @@ export default function AvisoDePrivacidad() {
       <header>
         <p className="mono-label">Ley Federal de Protección de Datos Personales en Posesión de los Particulares</p>
         <h1>Aviso de privacidad</h1>
-        <p className="legal-meta">Última actualización: 5 de noviembre de 2026. Pendiente de revisión por un profesional legal antes de publicarse.</p>
+        <p className="legal-meta">Última actualización: 8 de noviembre de 2026.</p>
       </header>
 
       <article>
         <Section id="responsable" title="Responsable">
           <p>{profile.name}, persona física, es responsable del tratamiento de los datos personales que proporcionas en este sitio.</p>
           <dl>
-            <div><dt>Domicilio</dt><dd><Pending>domicilio para oír y recibir notificaciones</Pending></dd></div>
+            <div><dt>Domicilio</dt><dd>Culiacán, Sinaloa, México. Cualquier solicitud o notificación sobre tus datos se atiende en el correo de contacto.</dd></div>
             <div><dt>Correo de contacto</dt><dd><a className="text-link" href={contact.email?.href}>{email}</a></dd></div>
           </dl>
         </Section>
@@ -63,7 +58,7 @@ export default function AvisoDePrivacidad() {
             <li>Preparar y enviarte una propuesta o cotización.</li>
             <li>Dar seguimiento a la conversación sobre tu proyecto.</li>
           </ul>
-          <p>Tus datos no se usan para publicidad ni para enviarte boletines. <Pending>confirmar que no habrá finalidades secundarias</Pending></p>
+          <p>Tus datos no se usan para publicidad ni para enviarte boletines, y no hay finalidades secundarias.</p>
         </Section>
 
         <Section id="encargados" title="Con quién se comparten">
@@ -78,7 +73,7 @@ export default function AvisoDePrivacidad() {
         </Section>
 
         <Section id="conservacion" title="Cuánto tiempo se conservan">
-          <p><Pending>plazo de conservación de los mensajes recibidos</Pending></p>
+          <p>Los mensajes recibidos por el formulario se conservan hasta 12 meses desde su recepción y después se eliminan.</p>
         </Section>
 
         <Section id="arco" title="Tus derechos (ARCO) y revocación del consentimiento">

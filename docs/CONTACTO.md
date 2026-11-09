@@ -46,6 +46,6 @@ Wrangler se usa `.dev.vars`, ya ignorado por Git.
 ## Privacidad
 
 Aviso de privacidad (LFPDPPP) en `/privacidad`, enlazado desde el pie y desde el formulario.
-`/legal/privacidad` redirige con 301 (`public/_redirects`). Campos marcados `[POR COMPLETAR]`:
-domicilio, plazo de conservación y confirmación de que no hay finalidades secundarias.
-Pendiente de revisión legal.
+`/legal/privacidad` redirige con 301 (`public/_redirects`). Completado el 8 nov 2026 con datos de Max:
+domicilio «Culiacán, Sinaloa, México» + correo, conservación de 12 meses y sin finalidades
+secundarias. Recomendable una revisión legal profesional (orientación, no asesoría legal).
