@@ -16,15 +16,6 @@ test.beforeEach(async ({ page }) => {
 test("contenido, accesibilidad y capturas de la portada", async ({ page }, testInfo) => {
   await expect(page).toHaveTitle(`${profile.displayName} · ${profile.role}`);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(homeDesign.headline);
-  for (const project of projects) {
-    await expect(page.getByRole("heading", { name: project.name, exact: true })).toBeVisible();
-  }
-  for (const system of projects.filter((p) => p.kind === "engineering-system")) {
-    if (system.repository) {
-      await expect(page.locator(`#${system.id}`).getByRole("link", { name: /Ver repositorio/ })).toHaveAttribute("href", system.repository.href);
-    }
-  }
-  await expect(page.locator("#proyectos")).not.toContainText("Outlier");
   const accessibility = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(accessibility.violations).toEqual([]);
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -48,6 +39,20 @@ test("contenido, accesibilidad y capturas de la portada", async ({ page }, testI
     return { text: pseudo.color, background: pseudo.backgroundColor, accent };
   });
   expect(selection.text).toBe("rgb(5, 5, 5)");
+  await page.evaluate(() => window.getSelection()?.removeAllRanges());
+  // Proyectos vive en su propia página.
+  await page.goto("/proyectos");
+  for (const project of projects) {
+    await expect(page.getByRole("heading", { name: project.name, exact: true })).toBeVisible();
+  }
+  for (const system of projects.filter((p) => p.kind === "engineering-system")) {
+    if (system.repository) {
+      await expect(page.locator(`#${system.id}`).getByRole("link", { name: /Ver repositorio/ })).toHaveAttribute("href", system.repository.href);
+    }
+  }
+  await expect(page.locator("#proyectos")).not.toContainText("Outlier");
+  expect((await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()).violations).toEqual([]);
+  await page.goto("/");
   expect(selection.background).toBe(selection.accent);
   await page.screenshot({ path: `${captureDirectory}/portfolio-${testInfo.project.name}-selection.png` });
   await page.evaluate(() => window.getSelection()?.removeAllRanges());
@@ -59,17 +64,18 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   await expect(page.getByRole("link", { name: "Saltar al contenido" })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("main")).toBeFocused();
-  for (const label of ["Proyectos", "Proceso", "Sobre mí"]) {
+  // Cada apartado es una página: el enlace lleva a ella y la marca como actual.
+  for (const [label, path] of [["Proyectos", "/proyectos"], ["Servicios", "/servicios"], ["Sobre mí", "/sobre-mi"]]) {
     if (testInfo.project.name === "mobile") await page.getByRole("button", { name: "Abrir menú" }).press("Enter");
-    const link = page.getByRole("navigation").getByRole("link", { name: label, exact: true });
+    const link = page.getByRole("navigation", { name: testInfo.project.name === "mobile" ? "Menú principal" : "Navegación principal" }).getByRole("link", { name: label, exact: true });
     await link.focus();
     await expect(link).toHaveCSS("outline-style", "solid");
-    const href = await link.getAttribute("href");
     await page.keyboard.press("Enter");
-    expect(new URL(page.url()).hash).toBe(href);
-    const top = await page.locator(href!).evaluate((element) => element.getBoundingClientRect().top);
-    expect(top).toBeGreaterThanOrEqual(0);
+    await page.waitForURL(new RegExp(`${path}/?$`));
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    if (testInfo.project.name !== "mobile") await expect(page.locator(".nav-pill").getByRole("link", { name: label, exact: true })).toHaveAttribute("aria-current", "page");
   }
+  await page.goto("/contacto");
   const openState = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(openState.violations).toEqual([]);
   // El formulario es la acción principal; el correo queda como alternativa.
@@ -79,7 +85,7 @@ test("navegación, detalles, contacto y targets accesibles", async ({ page }, te
   await expect(page.getByRole("link", { name: "Descargar CV" })).toHaveCount(0);
   const brokenAnchors = await page.locator('a[href^="#"]').evaluateAll((links) => links.map((link) => link.getAttribute("href")!).filter((href) => !document.getElementById(href.slice(1))));
   expect(brokenAnchors).toEqual([]);
-  const smallTargets = await page.locator("a, summary").evaluateAll((elements) => elements.filter((element) => {
+  const smallTargets = await page.locator("a:not(.skip-link), summary").evaluateAll((elements) => elements.filter((element) => {
     const box = element.getBoundingClientRect();
     return box.width > 0 && (box.width < 44 || box.height < 44);
   }).map((element) => element.textContent));
@@ -125,22 +131,37 @@ test("sin desbordamientos en móvil estrecho, tablet y pantalla grande", async (
 });
 
 
-test("consentimiento y preferencias sin cubrir el contenido", async ({ page }) => {
-  const panel = page.getByRole("complementary", { name: "Tú decides sobre la medición" });
-  await expect(panel).toBeVisible();
-  await expect(panel).toHaveCSS("position", "static");
-  await page.getByRole("button", { name: "Rechazar", exact: true }).click();
-  await expect(panel).toHaveCount(0);
-  expect(await page.evaluate(() => localStorage.getItem("cookie_consent_v1"))).toBe("false");
-  await page.getByRole("button", { name: "Preferencias de cookies", exact: true }).click();
-  await expect(panel).toBeVisible();
-  await page.getByRole("button", { name: "Aceptar", exact: true }).click();
-  expect(await page.evaluate(() => localStorage.getItem("cookie_consent_v1"))).toBe("true");
-  await page.getByRole("button", { name: "Preferencias de cookies", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Tú decides sobre la medición" })).toBeFocused();
-  await page.getByRole("button", { name: "Rechazar", exact: true }).click();
-  await page.reload();
-  await expect(panel).toHaveCount(0);
+test.describe("primera visita", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+  test("aviso de cookies en ventana emergente y preferencias", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.reload();
+    const dialog = page.getByRole("dialog", { name: "Tú decides sobre la medición" });
+    await expect(dialog).toBeVisible();
+    // Centrado sobre la página, como ventana emergente.
+    const box = (await dialog.boundingBox())!;
+    const viewport = page.viewportSize()!;
+    expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThan(2);
+    expect(Math.abs(box.y + box.height / 2 - viewport.height / 2)).toBeLessThan(2);
+    expect((await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze()).violations).toEqual([]);
+    await page.getByRole("button", { name: "Rechazar", exact: true }).click();
+    await expect(dialog).toBeHidden();
+    expect(await page.evaluate(() => localStorage.getItem("cookie_consent_v1"))).toBe("false");
+    await page.getByRole("button", { name: "Preferencias de cookies", exact: true }).click();
+    await expect(dialog).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Tú decides sobre la medición" })).toBeFocused();
+    await page.getByRole("button", { name: "Aceptar", exact: true }).click();
+    expect(await page.evaluate(() => localStorage.getItem("cookie_consent_v1"))).toBe("true");
+    // Escape cierra sin guardar nada; Preferencias lo vuelve a abrir.
+    await page.getByRole("button", { name: "Preferencias de cookies", exact: true }).click();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    expect(await page.evaluate(() => localStorage.getItem("cookie_consent_v1"))).toBeNull();
+    await page.getByRole("button", { name: "Preferencias de cookies", exact: true }).click();
+    await page.getByRole("button", { name: "Rechazar", exact: true }).click();
+    await page.reload();
+    await expect(dialog).toBeHidden();
+  });
 });
 
 test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ page }, testInfo) => {
@@ -150,8 +171,9 @@ test("hero: marca, métricas reales, escena 3D con alternativa y CTA", async ({ 
   await expect(page.locator(".hero-title em")).toHaveText("tu negocio");
   await expect(page.locator(".hero-metrics dd")).toHaveText(["103", String(Object.keys(repositories).length), "Hito, en vivo"]);
   await expect(page.getByRole("navigation", { name: "Elige un proyecto" }).getByRole("link")).toHaveCount(4);
-  await expect(page.locator(".hero-actions").getByRole("link", { name: "Cotiza tu proyecto" })).toHaveAttribute("href", "#contacto");
-  await expect(page.locator(".hero-actions").getByRole("link", { name: "Ver casos" })).toHaveAttribute("href", "#proyectos");
+  await expect(page.locator(".hero-actions").getByRole("link", { name: "Cotiza tu proyecto" })).toHaveAttribute("href", "/contacto");
+  await expect(page.locator(".hero-actions").getByRole("link", { name: "Ver casos" })).toHaveAttribute("href", "/proyectos");
+  await expect(page.locator(".picker-caps")).toHaveCSS("text-transform", "uppercase");
   // La alternativa SVG está en el HTML; la escena WebGL la sustituye cuando carga.
   await expect(page.locator(".hero-fallback")).toHaveCount(1);
   // La escena 3D se monta con la primera interacción (no bloquea la carga).
@@ -180,25 +202,24 @@ test("ahorro de datos: con Save-Data el 3D no se descarga y queda la alternativa
   expect(chunks.filter((_, i) => sources[i].includes("WebGLRenderer"))).toEqual([]);
 });
 
-test("R2: secciones, navegación activa, filas completas y borde del pie", async ({ page }) => {
+test("R2: apartados, navegación activa, filas completas y borde del pie", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.getByText("Borrador para revisión", { exact: true })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Otros proyectos", exact: true })).toBeVisible();
+  await page.goto("/sobre-mi");
   for (const label of ["Backend", "Tiempo real", "Datos", "Seguridad", "Infraestructura", "Calidad y pruebas"]) {
     await expect(page.locator(".technology-groups dt").filter({ hasText: new RegExp(`^${label}$`) })).toBeVisible();
   }
-  for (const id of ["proyectos", "proceso", "sobre-mi"]) {
-    await page.locator(`#${id}`).scrollIntoViewIfNeeded();
-    await page.locator(`#${id}`).evaluate(element => element.scrollIntoView());
-    await expect(page.locator(`.nav-pill a[href="#${id}"]`)).toHaveAttribute("aria-current", "location");
-  }
-  const footer = await page.locator(".home-footer").evaluate(element => ({
-    padding: getComputedStyle(element).paddingInlineStart,
-    inset: getComputedStyle(element, "::before").left,
-    width: element.getBoundingClientRect().width,
-  }));
-  expect(footer.inset).toBe(footer.padding);
-  expect(footer.width).toBe(await page.locator("main .page-container").first().evaluate(element => element.getBoundingClientRect().width));
+  await page.goto("/servicios");
+  await expect(page.getByRole("heading", { name: "Proceso", exact: true })).toBeVisible();
+  await expect(page.locator(".strip-proof").first()).toBeVisible();
+  await page.goto("/proyectos");
+  await expect(page.getByRole("heading", { name: "Otros proyectos", exact: true })).toBeVisible();
+  if (page.viewportSize()!.width >= 768) await expect(page.locator('.nav-pill a[href="/proyectos"]')).toHaveAttribute("aria-current", "page");
+  // Pie en columnas: navegación, proyectos y contacto, alineado con el contenido.
+  const footer = page.locator(".site-footer");
+  for (const name of ["Navegación", "Proyectos", "Contacto"]) await expect(footer.getByRole("heading", { name, exact: true })).toBeVisible();
+  await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/MaxAcosta-30");
+  expect(await footer.locator(".page-container").evaluate(element => element.getBoundingClientRect().width)).toBe(await page.locator("main .page-container").first().evaluate(element => element.getBoundingClientRect().width));
   expect(await page.locator("a a").count()).toBe(0);
   await page.locator("#hangar .row-primary").focus();
   await expect(page.locator("#hangar")).toHaveCSS("outline-style", "solid");
@@ -211,6 +232,7 @@ test("R2: secciones, navegación activa, filas completas y borde del pie", async
 });
 
 test("R2: copiar correo confirma éxito y permite recuperarse de un rechazo", async ({ page }) => {
+  await page.goto("/contacto");
   await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async (value: string) => { Object.assign(window, { copiedEmail: value }); } } }));
   await page.getByRole("button", { name: "Copiar correo", exact: true }).click();
   await expect(page.locator(".copy-email [role=status]")).toHaveText("Correo copiado.");
@@ -222,14 +244,39 @@ test("R2: copiar correo confirma éxito y permite recuperarse de un rechazo", as
   await expect(page.getByRole("button", { name: "Copiar correo", exact: true })).toBeEnabled();
 });
 
-test("navegación: cada enlace lleva a su sección y la marca vuelve al inicio", async ({ page }, testInfo) => {
+test("navegación: el selector lleva a cada proyecto y la marca vuelve al inicio", async ({ page }) => {
   await page.goto("/");
-  const offset = testInfo.project.name === "desktop" ? 88 : 24;
-  for (const id of ["proceso", "servicios", "sobre-mi", "proyectos"]) {
-    if (testInfo.project.name === "mobile") await page.getByRole("button", { name: "Abrir menú" }).click();
-    await page.locator(`${testInfo.project.name === "mobile" ? ".mobile-menu" : ".nav-pill"} a[href="#${id}"]`).click();
-    await expect.poll(() => page.locator(`#${id}`).evaluate(element => Math.round(element.getBoundingClientRect().top)), { timeout: 4000 }).toBe(offset);
+  for (const id of ["hito", "sistemas-backend"]) {
+    await page.goto("/");
+    await page.getByRole("navigation", { name: "Elige un proyecto" }).locator(`a[href="/proyectos#${id}"]`).click();
+    await page.waitForURL(new RegExp(`/proyectos/?#${id}$`));
+    await expect.poll(() => page.locator(`#${id}`).evaluate(element => Math.round(element.getBoundingClientRect().top)), { timeout: 4000 }).toBeLessThan(200);
   }
-  await page.getByRole("link", { name: "Max Acosta" }).click();
-  await expect.poll(() => page.evaluate(() => scrollY), { timeout: 4000 }).toBe(0);
+  await page.getByRole("link", { name: "Max Acosta, inicio" }).click();
+  await page.waitForURL(/127\.0\.0\.1:3100\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+});
+
+test("cambiar de apartado siempre abre la página desde arriba", async ({ page }, testInfo) => {
+  const go = async (label: string, path: string) => {
+    if (testInfo.project.name === "mobile") {
+      await page.getByRole("button", { name: "Abrir menú" }).click();
+      await page.getByRole("navigation", { name: "Menú principal" }).getByRole("link", { name: label, exact: true }).click();
+    } else {
+      await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: label, exact: true }).click();
+    }
+    await page.waitForURL(new RegExp(`${path}/?$`));
+    await page.waitForTimeout(1200);
+    expect(await page.evaluate(() => scrollY), `${label} debe abrir arriba`).toBe(0);
+  };
+  await page.goto("/servicios");
+  for (const [label, path] of [["Proyectos", "/proyectos"], ["Servicios", "/servicios"], ["Sobre mí", "/sobre-mi"], ["Proyectos", "/proyectos"]]) {
+    // Con la página a medias o hasta abajo, y con la rueda (activa el scroll suave).
+    await page.mouse.move(300, 300);
+    await page.mouse.wheel(0, 1500);
+    await page.waitForTimeout(300);
+    await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+    await page.waitForTimeout(200);
+    await go(label, path);
+  }
 });

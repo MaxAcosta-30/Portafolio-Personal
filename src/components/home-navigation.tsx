@@ -1,35 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { navigation, portfolioLabels } from "@/content/site";
 
-export function HomeNavigation({ homeLinks = false }: { homeLinks?: boolean }) {
-  const [active, setActive] = useState<string | null>(null);
+/** El apartado actual se marca con aria-current="page"; los casos (/proyectos/…) cuentan como Proyectos. */
+export function isCurrent(pathname: string | null, href: string) {
+  const path = (pathname ?? "/").replace(/\/+$/, "") || "/";
+  return path === href || path.startsWith(`${href}/`);
+}
 
-  useEffect(() => {
-    if (homeLinks) return;
-    const sections = navigation.items.map(item => document.getElementById(item.sectionId));
-    let frame = 0;
-    function update() {
-      frame = 0;
-      // Keep the current section selected across its supporting sections.
-      const current = sections.filter(section => section && section.getBoundingClientRect().top <= innerHeight / 3).at(-1);
-      setActive(current?.id ?? null);
-    }
-    function schedule() {
-      if (!frame) frame = requestAnimationFrame(update);
-    }
-    update();
-    addEventListener("scroll", schedule, { passive: true });
-    addEventListener("resize", schedule);
-    return () => {
-      removeEventListener("scroll", schedule);
-      removeEventListener("resize", schedule);
-      cancelAnimationFrame(frame);
-    };
-  }, [homeLinks]);
-
+export function HomeNavigation() {
+  const pathname = usePathname();
   return <nav className="nav-pill" aria-label={portfolioLabels.navigation}>{navigation.items.map(item =>
-    <a key={item.sectionId} className="nav-pill-link" href={`${homeLinks ? "/" : ""}#${item.sectionId}`} aria-current={active === item.sectionId ? "location" : undefined}>{item.label}</a>
+    <Link key={item.href} className="nav-pill-link" href={item.href} aria-current={isCurrent(pathname, item.href) ? "page" : undefined}>{item.label}</Link>
   )}</nav>;
 }

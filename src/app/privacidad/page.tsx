@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { LinkPreferenciasCookies } from "@/components/cookie-consent";
-import { SiteHeader } from "@/components/portfolio";
+import { SiteFooter, SiteHeader } from "@/components/portfolio";
 import { contact, profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 
@@ -21,7 +21,7 @@ export default function AvisoDePrivacidad() {
   const email = contact.email?.label ?? "";
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
-    <SiteHeader homeLinks />
+    <SiteHeader />
     <main id="contenido" tabIndex={-1} className="page-container legal-page">
       <header>
         <p className="mono-label">Ley Federal de Protección de Datos Personales en Posesión de los Particulares</p>
@@ -97,5 +97,6 @@ export default function AvisoDePrivacidad() {
         </Section>
       </article>
     </main>
+      <SiteFooter />
   </>;
 }

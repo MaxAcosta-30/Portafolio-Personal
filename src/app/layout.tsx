@@ -5,6 +5,7 @@ import { profile } from "@/content/profile";
 import { siteMetadata } from "@/content/site";
 import { Analytics } from "@/components/analytics";
 import { CookieConsent } from "@/components/cookie-consent";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { headScript } from "@/lib/head-script";
 import "./globals.css";
 
@@ -64,13 +65,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={siteMetadata.language} className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang={siteMetadata.language} data-scroll-behavior="smooth" className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         {/* Bloqueante e inline a propósito: aplica el tema y marca html.js antes de pintar. */}
         <script dangerouslySetInnerHTML={{ __html: headScript }} />
       </head>
       <body className="antialiased">
         <Analytics />
+        <ScrollToTop />
         {children}
         <CookieConsent />
         <script

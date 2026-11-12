@@ -1,17 +1,16 @@
 import { contact, profile, resume } from "./profile";
 import { cvEvidence, supported } from "./evidence";
 
-/** Section targets implemented on the homepage. */
+/** Un apartado por página (antes, anclas de una sola página larga). */
 export const navigation = {
   brand: { label: profile.displayName, href: "/" },
   items: [
-    { label: "Servicios", sectionId: "servicios" },
-    { label: "Proyectos", sectionId: "proyectos" },
-    { label: "Proceso", sectionId: "proceso" },
-    { label: "Sobre mí", sectionId: "sobre-mi" },
+    { label: "Proyectos", href: "/proyectos" },
+    { label: "Servicios", href: "/servicios" },
+    { label: "Sobre mí", href: "/sobre-mi" },
   ],
   /** CTA principal del sitio (único texto: "Cotiza tu proyecto"). Lleva al formulario de contacto. */
-  cta: { label: "Cotiza tu proyecto", sectionId: "contacto" },
+  cta: { label: "Cotiza tu proyecto", href: "/contacto" },
   resumeLabel: resume.label,
 };
 
@@ -23,8 +22,8 @@ export const homepage = {
     headline: "Desarrollo Full Stack con foco en backend y APIs.",
     introduction: profile.introduction,
     specialty: profile.focus,
-    primaryAction: { label: "Cotiza tu proyecto", sectionId: "contacto" },
-    secondaryAction: { label: "Ver casos", sectionId: "proyectos" },
+    primaryAction: { label: "Cotiza tu proyecto", href: "/contacto" },
+    secondaryAction: { label: "Ver casos", href: "/proyectos" },
   },
   projects: {
     id: "proyectos",
@@ -62,7 +61,7 @@ export const portfolioLabels = {
   architecture: "Arquitectura",
   stack: "Tecnologías",
   profiles: "También puedes encontrarme en",
-  backToTop: "Volver al inicio",
+  backToTop: "Volver arriba",
   footer: "Desarrollo Full Stack · Backend y APIs",
 };
 

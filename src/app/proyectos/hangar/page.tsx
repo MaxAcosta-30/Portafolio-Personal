@@ -6,10 +6,10 @@ import { CodeExcerpt } from "@/components/code-excerpt";
 import { hangarSnippets } from "@/content/hangar-snippets";
 import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import type { ReactNode } from "react";
-import { SiteHeader } from "@/components/portfolio";
+import { SiteFooter, SiteHeader } from "@/components/portfolio";
 import { FlowDiagram, IsolationDiagram } from "@/components/hangar-diagrams";
 import { Icon } from "@/components/ui";
-import { hangarCaseStudy as content, hangarSources } from "@/content/hangar-case-study";
+import { hangarCaseStudy as content } from "@/content/hangar-case-study";
 import { hangar } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { portfolioLabels, siteMetadata } from "@/content/site";
@@ -63,9 +63,9 @@ function Configuration({ items }: { items: readonly { label: string; value: stri
 export default function HangarCaseStudy() {
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
-    <SiteHeader homeLinks />
+    <SiteHeader />
     <main id="contenido" tabIndex={-1} className="page-container hangar-case">
-      <Link href="/#proyectos" className="text-link mt-6 text-label">{content.back}</Link>
+      <Link href="/proyectos" className="text-link mt-6 text-label">{content.back}</Link>
       <header className="py-8 lg:py-12">
         <div className="grid gap-6 md:grid-cols-12 md:gap-gutter">
           <div className="md:col-span-4">
@@ -202,24 +202,18 @@ export default function HangarCaseStudy() {
             <ul className="case-limit-list">{content.limits.planned.map(item => <li key={item}>{item}</li>)}</ul>
             <SourceLinks sources={content.limits.evidence} />
           </CaseSection>
-          <CaseSection id="fuentes" title={content.sources.title}>
-            <p className="case-copy">{content.sources.description}</p>
-            <details className="project-details">
-              <summary>{content.sources.toggle}</summary>
-              <ul className="pb-4">{Object.values(hangarSources).map((source) => <li key={source.source}><a className="text-link" href={source.source}>{source.label}<Icon name="external" /></a></li>)}</ul>
-            </details>
-          </CaseSection>
         </div>
       </div>
     </main>
-    <footer className="page-container hangar-closing">
+    <section className="page-container hangar-closing" aria-label="Siguiente paso">
       <h2 className="max-w-measure text-heading">{content.closing.title}</h2>
       <p className="mt-4 max-w-measure text-muted">{content.closing.text}</p>
       <div className="project-actions">
         {hangar.repository?.visibility === "public" && <a className="text-link" href={hangar.repository.href}>{content.closing.repositoryAction}<Icon name="external" /></a>}
         <Link className="text-link" href={content.closing.otherCase.href}>{content.closing.otherCase.label}<Icon name="arrow" /></Link>
-        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="cta-link" href="/contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
       </div>
-    </footer>
+    </section>
+    <SiteFooter />
   </>;
 }

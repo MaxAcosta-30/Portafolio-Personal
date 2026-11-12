@@ -8,7 +8,7 @@ const captureDirectory = "screenshots";
 const reviewDirectory = ".impeccable/review";
 
 test("recorrido desde la portada, fuentes y navegación con teclado", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/proyectos");
   await page.getByRole("link", { name: "Leer caso de Hangar" }).click();
   await expect(page).toHaveURL(/\/proyectos\/hangar\/?$/);
   await expect(page).toHaveTitle(/Hangar · Caso de estudio/);
@@ -26,12 +26,6 @@ test("recorrido desde la portada, fuentes y navegación con teclado", async ({ p
     expect(new URL(page.url()).hash).toBe(`#${item.id}`);
     expect(await page.locator(`#${item.id}`).evaluate((el) => el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(0);
   }
-  await page.locator("summary").focus();
-  await page.keyboard.press("Enter");
-  await expect(page.locator("details")).toHaveAttribute("open", "");
-  for (const source of Object.values(hangarSources)) {
-    await expect(page.locator("details").getByRole("link", { name: source.label })).toHaveAttribute("href", source.source);
-  }
   await expect(page.getByRole("link", { name: content.repositoryLabel })).toHaveAttribute("href", "https://github.com/MaxAcosta-30/Setup-hangar");
   await expect(page.getByText(content.demoUnavailable, { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /demo/i })).toHaveCount(0);
@@ -39,10 +33,10 @@ test("recorrido desde la portada, fuentes y navegación con teclado", async ({ p
   await expect(page.getByText(content.isolation.limit, { exact: true })).toBeVisible();
   const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(result.violations).toEqual([]);
-  await page.locator('a[href="/#contacto"]').first().click();
-  await page.waitForURL(/\/#contacto$/);
-  expect(new URL(page.url()).pathname).toBe("/");
-  expect(new URL(page.url()).hash).toBe("#contacto");
+  // Sin sección «Fuentes» (pedido de revisión): las fuentes quedan junto a cada dato.
+  await expect(page.locator("#fuentes")).toHaveCount(0);
+  await page.locator('main a[href="/contacto"], footer a[href="/contacto"]').first().click();
+  await page.waitForURL(/\/contacto\/?$/);
   await expect(page.getByRole("textbox", { name: "Nombre" })).toBeVisible();
 });
 
@@ -97,9 +91,8 @@ test("lectura y fuentes disponibles sin JavaScript", async ({ browser }) => {
   const page = await context.newPage();
   await page.goto(`http://127.0.0.1:3100${content.href}`);
   await expect(page.getByRole("heading", { name: content.logs.title })).toBeVisible();
-  await page.locator("summary").click();
-  await expect(page.locator("details")).toHaveAttribute("open", "");
-  await expect(page.locator("details").getByRole("link", { name: hangarSources.tests.label })).toBeVisible();
+  // Las fuentes quedan junto a su dato, enlazadas sin necesidad de JavaScript.
+  await expect(page.locator(`main a[href="${hangarSources.tests.source}"]`).first()).toBeVisible();
   await context.close();
 });
 

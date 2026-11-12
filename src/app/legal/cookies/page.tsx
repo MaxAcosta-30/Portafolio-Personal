@@ -1,5 +1,4 @@
-import { LinkPreferenciasCookies } from "@/components/cookie-consent";
-import { SiteHeader } from "@/components/portfolio";
+import { SiteFooter, SiteHeader } from "@/components/portfolio";
 import { siteMetadata } from "@/content/site";
 
 export const metadata = {
@@ -14,7 +13,7 @@ export default function Cookies() {
   return (
     <>
       <a className="skip-link" href="#contenido">Saltar al contenido</a>
-      <SiteHeader homeLinks />
+      <SiteHeader />
       <main id="contenido" tabIndex={-1} className="page-container">
         <header className="mb-[4rem] border-b border-border pb-[1.5rem]">
           <h1 className="text-display">Política de cookies</h1>
@@ -73,10 +72,8 @@ export default function Cookies() {
           </section>
 
         </article>
-        <footer className="mt-[4rem] border-t border-border pt-[1.5rem] pb-[1.5rem]">
-          <LinkPreferenciasCookies />
-        </footer>
       </main>
+      <SiteFooter />
     </>
   );
 }

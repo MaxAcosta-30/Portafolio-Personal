@@ -6,10 +6,11 @@ import { caseStudySections, hangarFlow, homepage, navigation } from "../src/cont
 import { hangarCaseStudy } from "../src/content/hangar-case-study";
 
 test("navigation and project groups reference existing, unique content", () => {
-  const sections = ["servicios", "proceso", homepage.projects.id, homepage.about.id, homepage.contact.id];
-  expect(new Set(sections).size).toBe(sections.length);
-  for (const action of [...navigation.items, homepage.hero.primaryAction, homepage.hero.secondaryAction]) {
-    expect(sections).toContain(action.sectionId);
+  // Cada apartado es una página propia.
+  const pages = ["/proyectos", "/servicios", "/sobre-mi", "/contacto"];
+  for (const action of [...navigation.items, navigation.cta, homepage.hero.primaryAction, homepage.hero.secondaryAction]) {
+    expect(pages).toContain(action.href);
+    expect(existsSync(`src/app${action.href}/page.tsx`)).toBe(true);
   }
   const ids = projects.map((project) => project.id);
   expect(ids).toContain(hangarFlow.projectId);

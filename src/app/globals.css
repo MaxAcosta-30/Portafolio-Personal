@@ -210,7 +210,7 @@
     font-size: var(--text-ui); font-weight: 500; color: var(--muted); border-radius: 0;
     transition: color var(--duration-state) var(--ease-state), background-color var(--duration-state) var(--ease-state);
     @media (hover: hover) { &:hover { color: var(--text); } }
-    &[aria-current="location"] { color: var(--text); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong), inset 0 -2px 0 var(--accent-fill); }
+    &:is([aria-current="location"], [aria-current="page"]) { color: var(--text); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong), inset 0 -2px 0 var(--accent-fill); }
   }
   .header-actions { justify-self: end; display: flex; align-items: center; gap: 0.5rem; }
   /* En móvil estrecho el CTA pierde la flecha para que quepan marca, CTA, tema y menú. */
@@ -252,9 +252,61 @@
   html:not(.js) .theme-toggle { display: none; }
   .technology-line { @apply mt-4 flex flex-wrap gap-x-4 gap-y-2 font-mono text-label text-muted; }
   .project-actions { @apply mt-5 flex flex-wrap items-center gap-x-6 gap-y-2; font-size: var(--text-ui); }
-  .home-footer { @apply flex flex-wrap items-center justify-between gap-6 py-8 text-label; position: relative; &::before { content: ""; position: absolute; inset-inline: var(--spacing-page); top: 0; border-top: var(--border-width) solid var(--line); } p span { @apply mt-1 block text-muted; } > div { @apply flex flex-wrap gap-x-6 gap-y-2; } }
-  .consent-area { @apply mx-auto w-full max-w-site px-page pb-6; }
-  .consent-panel { @apply ml-auto max-w-consent border border-border bg-surface p-5; border-radius: var(--radius-surface); box-shadow: var(--shadow-floating); h2 { @apply text-body font-medium; } p { @apply mt-2 text-label text-muted; } .button { @apply text-label; } }
+  /* Pie: marca + 3 columnas de enlaces; barra inferior con avisos y derechos. */
+  .site-footer {
+    margin-top: clamp(3rem, 2rem + 3vw, 5rem); padding-block: clamp(3rem, 2.5rem + 2vw, 4.5rem) 1.5rem;
+    border-top: var(--border-width) solid var(--line); background: var(--bg);
+    h2 { margin-bottom: 1rem; font-family: var(--font-mono); font-size: var(--text-eyebrow); font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    ul a, .footer-email { display: inline-flex; align-items: center; min-height: var(--spacing-target); min-width: var(--spacing-target); font-size: var(--text-ui); color: var(--text); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: var(--underline-offset); transition: text-decoration-color var(--duration-state) var(--ease-state), color var(--duration-state) var(--ease-state); }
+    @media (hover: hover) { ul a:hover, .footer-email:hover { text-decoration-color: currentColor; } }
+  }
+  .footer-grid {
+    display: grid; gap: 2.5rem 2rem; grid-template-columns: repeat(2, minmax(0, 1fr));
+    @media (width >= 64rem) { grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 3rem; }
+    > * { min-width: 0; }
+    /* En celular el contacto ocupa el ancho completo: el correo no se parte. */
+    @media (width < 64rem) { > :last-child { grid-column: 1 / -1; } }
+  }
+  .footer-about {
+    grid-column: 1 / -1; max-width: 34ch;
+    @media (width >= 64rem) { grid-column: auto; }
+    p { margin-top: 1.25rem; font-size: var(--text-small); line-height: 1.6; color: var(--muted); }
+  }
+  .footer-brand {
+    display: inline-flex; align-items: center; gap: 0.875rem; min-height: var(--spacing-target);
+    strong { display: block; font-weight: 500; font-size: var(--text-body); color: var(--text); }
+    strong + span { display: block; font-size: var(--text-label); color: var(--muted); }
+  }
+  .footer-place { font-size: var(--text-ui); color: var(--muted); }
+  .footer-email { margin-top: 0.25rem; overflow-wrap: anywhere; text-decoration-color: var(--line-strong) !important; }
+  .footer-social {
+    display: flex; gap: 0.5rem; margin-top: 0.75rem;
+    a { justify-content: center; width: var(--spacing-target); height: var(--spacing-target); border: var(--border-width) solid var(--line); border-radius: 50%; color: var(--muted); }
+    @media (hover: hover) { a:hover { color: var(--text); border-color: var(--text); } }
+    svg { width: 1.125rem; height: 1.125rem; fill: currentColor; }
+  }
+  .footer-bottom {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem;
+    margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); padding-top: 1.25rem; border-top: var(--border-width) solid var(--line);
+    font-size: var(--text-label); color: var(--muted);
+    ul { display: flex; flex-wrap: wrap; column-gap: 1.5rem; }
+    ul a, ul button { min-height: var(--spacing-target); font-size: var(--text-label); font-weight: 400; color: var(--muted); text-decoration-color: transparent; }
+    @media (hover: hover) { ul a:hover, ul button:hover { color: var(--text); } }
+  }
+  /* Aviso de cookies: ventana emergente centrada sobre un velo (pedido de revisión, 2026-11-11). */
+  .consent-dialog {
+    width: min(26rem, calc(100% - 2 * var(--spacing-page))); max-width: none; margin: auto; padding: 1.5rem;
+    color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-surface); box-shadow: var(--shadow-floating);
+    &[open] { display: grid; gap: 0.75rem; justify-items: start; }
+    &::backdrop { background: color-mix(in oklab, black 60%, transparent); }
+    h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--text-title); line-height: 1.25; outline: none; }
+    p { color: var(--muted); font-size: var(--text-small); line-height: 1.55; }
+    .consent-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; width: 100%; margin-top: 0.5rem; }
+    .button { justify-content: center; font-size: var(--text-label); }
+    @media (prefers-reduced-motion: no-preference) { &[open] { animation: consent-in 260ms cubic-bezier(0.23, 1, 0.32, 1); } &[open]::backdrop { animation: consent-veil 260ms ease-out; } }
+  }
+  @keyframes consent-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
+  @keyframes consent-veil { from { opacity: 0; } }
 }
 
 @layer components {

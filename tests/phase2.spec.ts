@@ -10,11 +10,11 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("CTA únicos: 'Cotiza tu proyecto' y 'Ver casos'; sin 'Escríbeme' ni 'Agendar'", async ({ page }) => {
-  for (const path of ["/", "/proyectos/hangar", "/proyectos/taskflow-pro", "/privacidad"]) {
+  for (const path of ["/", "/proyectos", "/servicios", "/sobre-mi", "/contacto", "/proyectos/hangar", "/proyectos/taskflow-pro", "/privacidad"]) {
     await page.goto(path);
     const text = await page.locator("body").innerText();
     expect(text, path).not.toMatch(/Escríbeme|Agenda una llamada|Agendar/i);
-    await expect(page.locator(".site-header").getByRole("link", { name: "Cotiza tu proyecto" })).toHaveAttribute("href", path === "/" ? "#contacto" : "/#contacto");
+    await expect(page.locator(".site-header").getByRole("link", { name: "Cotiza tu proyecto" })).toHaveAttribute("href", "/contacto");
   }
 });
 
@@ -25,7 +25,7 @@ test("formulario: valida al salir del campo, envía y muestra éxito", async ({ 
     await new Promise(resolve => setTimeout(resolve, 400));
     await route.fulfill({ json: { ok: true } });
   });
-  await page.goto("/#contacto");
+  await page.goto("/contacto");
   const name = page.getByRole("textbox", { name: "Nombre" });
   await name.focus();
   await page.getByRole("textbox", { name: "Correo" }).focus();
@@ -58,7 +58,7 @@ test("formulario: valida al salir del campo, envía y muestra éxito", async ({ 
 
 test("formulario: muestra error con el correo como alternativa", async ({ page }) => {
   await page.route("**/api/contact", route => route.fulfill({ status: 429, json: { ok: false, error: "rate-limit" } }));
-  await page.goto("/#contacto");
+  await page.goto("/contacto");
   await page.getByRole("textbox", { name: "Nombre" }).fill("Ana López");
   await page.getByRole("textbox", { name: "Correo" }).fill("ana@negocio.com");
   await page.getByRole("combobox", { name: "Qué necesitas" }).selectOption("API");
@@ -113,7 +113,8 @@ test("tema con movimiento reducido: cambio instantáneo y contraste AA en ambos 
 
 test("aviso de privacidad: enlazado desde el pie y el formulario, accesible", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".home-footer").getByRole("link", { name: "Aviso de privacidad" })).toHaveAttribute("href", "/privacidad");
+  await expect(page.locator(".site-footer").getByRole("link", { name: "Aviso de privacidad" })).toHaveAttribute("href", "/privacidad");
+  await page.goto("/contacto");
   await expect(page.locator("#contacto form").getByRole("link", { name: "aviso de privacidad" })).toHaveAttribute("href", "/privacidad");
   await page.goto("/privacidad");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Aviso de privacidad");
@@ -170,11 +171,13 @@ test("View Transition: el título del caso viaja de la tarjeta a la página del 
     requestAnimationFrame(poll);
   });
   const seen = () => page.evaluate(() => [...(window as unknown as { __vt: Set<string> }).__vt]);
+  // De la portada a Proyectos con la escena 3D montada (sus raíces no deben romper la navegación).
   await page.goto("/");
-  // Con la escena 3D montada (sus raíces no deben cancelar la transición).
   await page.mouse.move(200, 300);
   await page.mouse.move(400, 320);
   await expect(page.locator(".hero-visual")).toHaveAttribute("data-ready", "true", { timeout: 30_000 });
+  await page.locator('.hero-actions a[href="/proyectos"]').click();
+  await page.waitForURL("**/proyectos");
   await page.locator("#hangar").scrollIntoViewIfNeeded();
   await page.waitForTimeout(1000); // prefetch del caso
   await watch();
