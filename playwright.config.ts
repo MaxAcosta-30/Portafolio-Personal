@@ -12,6 +12,9 @@ export default defineConfig({
       executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
     },
     trace: "retain-on-failure",
+    // El aviso de cookies es una ventana modal: las pruebas parten con la preferencia ya guardada.
+    // La prueba del aviso la quita con test.use({ storageState: … }).
+    storageState: { cookies: [], origins: [{ origin: "http://127.0.0.1:3100", localStorage: [{ name: "cookie_consent_v1", value: "false" }] }] },
   },
   projects: [
     { name: "content", testMatch: ["content.spec.ts", "contact-function.spec.ts"] },

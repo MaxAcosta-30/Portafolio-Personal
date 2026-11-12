@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ViewTransition } from "react";
 import type { ReactNode } from "react";
 import { SequenceList } from "@/components/sequence-list";
-import { SiteHeader } from "@/components/portfolio";
+import { SiteFooter, SiteHeader } from "@/components/portfolio";
 import { Showcase } from "@/components/showcase";
 import { Icon } from "@/components/ui";
 import { hitoCaseStudy as content, hitoSources } from "@/content/hito-case-study";
@@ -36,6 +36,7 @@ function CaseSection({ id, title, children }: { id: string; title: string; child
 }
 
 function SourceLinks({ sources }: { sources: readonly { label: string; source: string }[] }) {
+  if (sources.length === 0) return null;
   return <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-label">
     {sources.map(source => <a key={source.source} className="text-link" href={source.source}>
       <span className="sr-only">{content.sources.label}: </span>{source.label}<Icon name="external" />
@@ -46,9 +47,9 @@ function SourceLinks({ sources }: { sources: readonly { label: string; source: s
 export default function HitoCaseStudy() {
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
-    <SiteHeader homeLinks />
+    <SiteHeader />
     <main id="contenido" tabIndex={-1} className="page-container">
-      <Link href="/#proyectos" className="text-link mt-6 text-label">{content.back}</Link>
+      <Link href="/proyectos" className="text-link mt-6 text-label">{content.back}</Link>
       <header className="py-8 lg:py-12">
         <div className="grid gap-6 md:grid-cols-12 md:gap-gutter">
           <div className="md:col-span-4">
@@ -126,7 +127,7 @@ export default function HitoCaseStudy() {
                 </dl>
               </article>)}
             </div>
-            <SourceLinks sources={[hitoSources.instructions, hitoSources.decisions]} />
+            <SourceLinks sources={[hitoSources.decisions]} />
           </CaseSection>
           <CaseSection id="pruebas" title={content.testing.title}>
             <p className="case-copy">{content.testing.text}</p>
@@ -141,20 +142,17 @@ export default function HitoCaseStudy() {
             <ul className="case-copy list-disc space-y-2 pl-5">{content.limits.items.map(item => <li key={item}>{item}</li>)}</ul>
             <SourceLinks sources={content.limits.evidence} />
           </CaseSection>
-          <CaseSection id="fuentes" title={content.sources.title}>
-            <p className="case-copy">{content.sources.description}</p>
-            <ul className="mt-4">{Object.values(hitoSources).map(source => <li key={source.source}><a className="text-link" href={source.source}>{source.label}<Icon name="external" /></a></li>)}</ul>
-          </CaseSection>
         </div>
       </div>
     </main>
-    <footer className="page-container hangar-closing">
+    <section className="page-container hangar-closing" aria-label="Siguiente paso">
       <h2 className="max-w-measure text-heading">{content.closing.title}</h2>
       <p className="mt-4 max-w-measure text-muted">{content.closing.text}</p>
       <div className="project-actions">
-        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
-        <Link className="text-link" href="/#proyectos">{content.back}</Link>
+        <Link className="cta-link" href="/contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="text-link" href="/proyectos">{content.back}</Link>
       </div>
-    </footer>
+    </section>
+    <SiteFooter />
   </>;
 }

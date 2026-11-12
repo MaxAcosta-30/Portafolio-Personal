@@ -4,7 +4,6 @@ import { repositories } from "./repositories";
 const base = `https://github.com/MaxAcosta-30/${repositories.hito.name}/blob/${repositories.hito.revision}`;
 export const hitoSources = {
   readme: { label: "README.md", source: `${base}/README.md` },
-  instructions: { label: "CLAUDE.md (alcance y decisiones)", source: `${base}/CLAUDE.md` },
   domain: { label: "src/Hito.Domain", source: `https://github.com/MaxAcosta-30/${repositories.hito.name}/tree/${repositories.hito.revision}/src/Hito.Domain` },
   decisions: { label: "docs/decisiones (ADR)", source: `https://github.com/MaxAcosta-30/${repositories.hito.name}/tree/${repositories.hito.revision}/docs/decisiones` },
 } as const;
@@ -26,14 +25,13 @@ export const hitoCaseStudy = {
     { id: "decisiones", label: "Decisiones" },
     { id: "pruebas", label: "Pruebas" },
     { id: "limites", label: "Límites" },
-    { id: "fuentes", label: "Fuentes" },
   ],
   problem: {
     title: "Los acuerdos se pierden en el chat",
     text: "El alcance de un proyecto freelance suele vivir en mensajes de WhatsApp: cambia sin registro, nadie sabe qué está aprobado y el cobro se discute al final.",
     objective: "Hito separa lo acordado de lo que pasa después: el alcance aceptado queda congelado, cada entrega se aprueba o se rechaza con un comentario y el panel dice qué se debe.",
     contributionTitle: "Mi aportación",
-    evidence: [hitoSources.readme, hitoSources.instructions],
+    evidence: [hitoSources.readme],
   },
   journey: {
     title: "El recorrido completo",
@@ -46,7 +44,7 @@ export const hitoCaseStudy = {
       { title: "Aprobar o pedir cambios", detail: "Pedir cambios exige un comentario." },
       { title: "Registrar el pago", detail: "Solo sobre un hito aprobado y sin pagar de más." },
     ],
-    evidence: [hitoSources.instructions],
+    evidence: [],
   },
   rules: {
     title: "Reglas de estado en el dominio",
@@ -63,7 +61,7 @@ export const hitoCaseStudy = {
       { title: "Aprobado", detail: "Ya se puede cobrar." },
       { title: "Pagado", detail: "El pago no puede exceder el monto." },
     ],
-    evidence: [hitoSources.domain, hitoSources.instructions],
+    evidence: [hitoSources.domain],
   },
   architecture: {
     title: "Arquitectura",
@@ -100,14 +98,14 @@ export const hitoCaseStudy = {
     evidence: [hitoSources.readme],
   },
   limits: {
-    title: "Límites declarados",
+    title: "Límites",
     items: [
       "Es una demo de portafolio: Render Free se duerme y la interfaz avisa mientras despierta.",
       "Supabase Free no incluye respaldos automáticos.",
       "Kubernetes se prueba en kind dentro de CI; no es un despliegue en producción.",
       "No hay cobros con tarjeta, facturación ni correos: están fuera del alcance.",
     ],
-    evidence: [hitoSources.instructions],
+    evidence: [],
   },
   sources: { title: "Fuentes", label: "Fuente", description: "Archivos del repositorio público, fijados a la revisión que se revisó." },
   closing: {

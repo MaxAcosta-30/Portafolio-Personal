@@ -3,7 +3,7 @@ import { ViewTransition } from "react";
 import { SequenceList } from "@/components/sequence-list";
 import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import type { ReactNode } from "react";
-import { SiteHeader } from "@/components/portfolio";
+import { SiteFooter, SiteHeader } from "@/components/portfolio";
 import { TaskFlowDiagram, ObservabilityStack, SecurityStack } from "@/components/taskflow-diagrams";
 import { Icon } from "@/components/ui";
 import { taskFlowCaseStudy as content, taskFlowSources } from "@/content/taskflow-case-study";
@@ -66,9 +66,9 @@ function Configuration({ items }: { items: readonly { label: string; value: stri
 export default function TaskFlowCaseStudy() {
   return <>
     <a className="skip-link" href="#contenido">{portfolioLabels.skip}</a>
-    <SiteHeader homeLinks />
+    <SiteHeader />
     <main id="contenido" tabIndex={-1} className="page-container">
-      <Link href="/#proyectos" className="text-link mt-6 text-label">{content.back}</Link>
+      <Link href="/proyectos" className="text-link mt-6 text-label">{content.back}</Link>
       <header className="py-8 lg:py-12">
         <div className="grid gap-6 md:grid-cols-12 md:gap-gutter">
           <div className="md:col-span-4">
@@ -213,23 +213,17 @@ export default function TaskFlowCaseStudy() {
             <p className="case-copy mt-3">{content.testing.result}</p>
             <SourceLinks sources={content.testing.evidence} />
           </CaseSection>
-          <CaseSection id="fuentes" title={content.sources.title}>
-            <p className="case-copy">{content.sources.description}</p>
-            <details className="project-details">
-              <summary>{content.sources.toggle}</summary>
-              <ul className="pb-4">{Object.values(taskFlowSources).map((source) => <li key={source.source}><a className="text-link" href={source.source}>{source.label}<Icon name="external" /></a></li>)}</ul>
-            </details>
-          </CaseSection>
         </div>
       </div>
     </main>
-    <footer className="page-container hangar-closing">
+    <section className="page-container hangar-closing" aria-label="Siguiente paso">
       <h2 className="max-w-measure text-heading">{content.closing.title}</h2>
       <p className="mt-4 max-w-measure text-muted">{content.closing.text}</p>
       <div className="project-actions">
-        <Link className="cta-link" href="/#contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
-        <Link className="text-link" href="/#proyectos">{content.back}</Link>
+        <Link className="cta-link" href="/contacto">{content.closing.action}<span className="button-arrow" aria-hidden="true">→</span></Link>
+        <Link className="text-link" href="/proyectos">{content.back}</Link>
       </div>
-    </footer>
+    </section>
+    <SiteFooter />
   </>;
 }

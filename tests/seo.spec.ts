@@ -4,6 +4,10 @@ import { expect, test } from "@playwright/test";
 // robots.txt que no bloquea y sitemap con las páginas públicas.
 const pages = [
   { path: "/", og: "og-image.png" },
+  { path: "/proyectos", og: "og-image.png" },
+  { path: "/servicios", og: "og-image.png" },
+  { path: "/sobre-mi", og: "og-image.png" },
+  { path: "/contacto", og: "og-image.png" },
   { path: "/proyectos/hito", og: "og-hito.png" },
   { path: "/proyectos/hangar", og: "og-hangar.png" },
   { path: "/proyectos/taskflow-pro", og: "og-taskflow.png" },
