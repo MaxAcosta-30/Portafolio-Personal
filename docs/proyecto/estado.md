@@ -46,3 +46,10 @@ Pedido de Max: menos scroll, un apartado por página; y correcciones del revisor
 ## Pendientes
 
 - Publicar: Cloudflare Pages + `NEXT_PUBLIC_SITE_URL`, luego Search Console, Bing Webmaster Tools, Analytics y sitemap (ver `docs/SEO_SETUP.md`).
+
+## Rama `rendimiento/practicas` (2026-11-20)
+
+- Next.js 16.4.3 → 16.4.6 (y `@next/*`, `eslint-config-next`): `npm audit` marcaba 7 avisos moderados (16.0.0–16.4.4) y el build se detenía. Tras subir: 0 vulnerabilidades.
+- El log del hero usa `content-visibility: auto`: fuera de pantalla no se pinta y su bucle se pausa, sin JS.
+- `npm run perf:red-lenta -- <url> [4g|3g]` (`scripts/medir-red-lenta.mjs`): CPU 4× y red emulada a 390 px. Medido el 2026-11-20 sobre el build local: 4G lenta, LCP 0.58–0.66 s y CLS ≤ 0.059; 3G, LCP 1.10–1.24 s y la portada baja de 542 a 287 KB porque no descarga el 3D. Es laboratorio, no datos de campo.
+- **Pendiente (Max):** medir usuarios reales tras publicar, activando Cloudflare Web Analytics (gratis, sin cookies) en el panel de Pages, y agregar su dominio a la CSP si no se inyecta solo.
