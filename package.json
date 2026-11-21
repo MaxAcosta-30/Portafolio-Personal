@@ -10,7 +10,8 @@
     "test": "playwright test",
     "typecheck": "next typegen && tsc --noEmit",
     "images": "node scripts/optimize-images.mjs",
-    "analyze": "ANALYZE=true next build --webpack"
+    "analyze": "ANALYZE=true next build --webpack",
+    "perf:red-lenta": "node scripts/medir-red-lenta.mjs"
   },
   "overrides": {
     "serve": {
@@ -21,19 +22,19 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@next/third-parties": "^16.4.3",
+    "@next/third-parties": "^16.4.6",
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.2",
     "gsap": "^3.15.0",
     "lenis": "^1.3.27",
-    "next": "16.4.3",
+    "next": "16.4.6",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "three": "^0.187.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
-    "@next/bundle-analyzer": "16.4.3",
+    "@next/bundle-analyzer": "16.4.6",
     "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "22.20.1",
@@ -41,7 +42,7 @@
     "@types/react-dom": "19.2.4",
     "@types/three": "^0.187.0",
     "eslint": "9.39.5",
-    "eslint-config-next": "16.4.3",
+    "eslint-config-next": "16.4.6",
     "serve": "14.2.6",
     "sharp": "0.35.5",
     "tailwindcss": "4.3.3",
